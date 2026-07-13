@@ -1,0 +1,26 @@
+scenarios:
+  - name: baseline
+    demand_multiplier: 1.0
+    capacity_multiplier: 1.0
+    extra_assessment_minutes: 0
+    dna_relative_reduction: 0.0
+  - name: add_one_assessment_clinic
+    demand_multiplier: 1.0
+    capacity_multiplier: 1.0
+    extra_assessment_minutes: 540
+    dna_relative_reduction: 0.0
+  - name: demand_up_10pct
+    demand_multiplier: 1.1
+    capacity_multiplier: 1.0
+    extra_assessment_minutes: 0
+    dna_relative_reduction: 0.0
+  - name: reduce_dna_20pct
+    demand_multiplier: 1.0
+    capacity_multiplier: 1.0
+    extra_assessment_minutes: 0
+    dna_relative_reduction: 0.2
+  - name: clinician_absence_10pct
+    demand_multiplier: 1.0
+    capacity_multiplier: 0.9
+    extra_assessment_minutes: 0
+    dna_relative_reduction: 0.0
