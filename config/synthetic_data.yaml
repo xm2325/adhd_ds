@@ -1,0 +1,14 @@
+seed: 20260713
+start_date: 2024-01-01
+weeks: 84
+base_weekly_referrals: 50
+weekly_growth_rate: 0.004
+private_share: 0.34
+adult_share: 0.78
+acceptance_rate_private: 0.97
+acceptance_rate_nhs: 0.93
+assessment_duration_minutes: 90
+follow_up_duration_minutes: 35
+base_assessment_capacity_minutes: 5700
+base_follow_up_capacity_minutes: 7200
+forecast_horizon_weeks: 12

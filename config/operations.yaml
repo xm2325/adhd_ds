@@ -1,0 +1,24 @@
+# Portfolio defaults for the synthetic operating process.
+# These are not Care ADHD targets or clinical service standards.
+thresholds:
+  p90_assessment_wait_days: 90
+  backlog_review_patients: 1000
+  completed_per_accepted_review_rate: 0.75
+  data_quality_error_tolerance: 0
+workflow:
+  daily_refresh_time: "08:00"
+  daily_huddle_time: "09:00"
+  weekly_capacity_review: "Tuesday"
+  monthly_model_review: true
+appointment_support:
+  default_weekly_outreach_capacity: 100
+  permitted_actions:
+    - standard_reminder
+    - extra_reminder
+    - confirm_and_offer_easy_reschedule
+  prohibited_actions:
+    - diagnosis
+    - treatment_selection
+    - eligibility_decision
+    - automatic_cancellation
+    - lower_care_priority

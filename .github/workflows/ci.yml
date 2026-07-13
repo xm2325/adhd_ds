@@ -1,0 +1,48 @@
+name: test-and-build
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install project
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e .[dev]
+      - name: Run automated tests
+        run: pytest
+      - name: Build synthetic analytics products
+        run: python -m adhd_ops.pipeline --root .
+      - name: Check dashboard outputs
+        run: |
+          test -s reports/operations_dashboard.html
+          test -s docs/index.html
+          grep -q "Interactive scenario planner" reports/operations_dashboard.html
+          grep -q "Synthetic service simulation" reports/operations_dashboard.html
+      - name: Publish workflow summary
+        run: |
+          echo "## ADHD DS build" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Automated tests passed" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Interactive dashboard generated" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Data-quality, pathway, forecast, capacity and model outputs generated" >> "$GITHUB_STEP_SUMMARY"
+          echo "- All data and results are synthetic" >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: adhd-ds-synthetic-dashboard
+          retention-days: 14
+          path: |
+            reports/
+            docs/index.html
+            results/
+            tableau/exports/
