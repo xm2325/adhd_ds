@@ -29,6 +29,9 @@ package-dir = {"" = "src"}
 [tool.setuptools.packages.find]
 where = ["src"]
 
+[tool.setuptools.package-data]
+adhd_ops = ["assets/*.html", "assets/*.css", "assets/*.js"]
+
 [tool.pytest.ini_options]
 pythonpath = ["src"]
 addopts = "-q"
