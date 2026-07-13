@@ -28,21 +28,29 @@ jobs:
         run: |
           test -s reports/operations_dashboard.html
           test -s docs/index.html
+          test -s results/operational_action_queue.csv
           grep -q "Interactive scenario planner" reports/operations_dashboard.html
           grep -q "Synthetic service simulation" reports/operations_dashboard.html
+          grep -q "exportSupport" reports/operations_dashboard.html
       - name: Publish workflow summary
         run: |
           echo "## ADHD DS build" >> "$GITHUB_STEP_SUMMARY"
           echo "- Automated tests passed" >> "$GITHUB_STEP_SUMMARY"
-          echo "- Interactive dashboard generated" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Interactive dashboard generated and checked" >> "$GITHUB_STEP_SUMMARY"
           echo "- Data-quality, pathway, forecast, capacity and model outputs generated" >> "$GITHUB_STEP_SUMMARY"
           echo "- All data and results are synthetic" >> "$GITHUB_STEP_SUMMARY"
-      - uses: actions/upload-artifact@v4
+      - name: Upload compact review pack
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
         with:
-          name: adhd-ds-synthetic-dashboard
-          retention-days: 14
+          name: adhd-ds-review-pack
+          retention-days: 7
+          compression-level: 9
           path: |
-            reports/
             docs/index.html
-            results/
-            tableau/exports/
+            reports/weekly_operational_brief.md
+            reports/data_quality_report.html
+            results/run_summary.json
+            results/operational_action_queue.csv
+            results/capacity_scenarios.csv
+            results/attendance_model_metrics.csv
