@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ADHD DS Operations Dashboard</title><style>{{CSS}}</style></head><body>
+<div class="app">
+<aside class="sidebar">
+  <div class="brand"><div class="brand-mark">DS</div><div><h1>ADHD DS</h1><p>Service operations workspace</p></div></div>
+  <div class="nav-label">Workspace</div>
+  <button class="nav-btn active" data-view="command"><span class="nav-icon">⌂</span>Command centre</button>
+  <button class="nav-btn" data-view="pathway"><span class="nav-icon">⇢</span>Patient pathway</button>
+  <button class="nav-btn" data-view="capacity"><span class="nav-icon">⌁</span>Demand & capacity</button>
+  <button class="nav-btn" data-view="attendance"><span class="nav-icon">✓</span>Appointment support</button>
+  <button class="nav-btn" data-view="governance"><span class="nav-icon">◫</span>Data & model controls</button>
+  <div class="side-foot"><div><span class="status-dot"></span>Pipeline output loaded</div><div>Synthetic portfolio environment</div><div>Not for clinical decisions</div></div>
+</aside>
+<div class="shell">
+<header class="topbar"><div class="toprow">
+  <div style="display:flex;gap:10px;align-items:center"><button id="mobileMenu" class="btn mobile-menu">☰</button><div class="page-title"><h2 id="pageHeading">Operations command centre</h2><p id="pageSubheading">Daily view of flow, risk and decisions</p></div></div>
+  <div class="filterbar">
+    <div class="filter"><label>Funding route</label><select id="routeFilter"><option value="all">All routes</option><option value="nhs_right_to_choose">NHS Right to Choose</option><option value="private">Private</option></select></div>
+    <div class="filter"><label>Service</label><select id="serviceFilter"><option value="all">All services</option><option value="adult">Adult</option><option value="under_18">Under 18</option></select></div>
+    <div class="filter"><label>From cohort</label><select id="startMonth"></select></div>
+    <div class="filter"><label>To cohort</label><select id="endMonth"></select></div>
+    <div class="refresh">Last generated<br><b id="generatedAt"></b></div>
+  </div>
+</div></header>
+<main class="content">
+<div class="banner"><div><strong>Synthetic service simulation</strong><small>No real patient or company data are used. Thresholds, alerts and recommendations demonstrate an operating process; they are not clinical or company estimates.</small></div><span class="badge synthetic">Demo environment</span></div>
+
+<section class="view active" id="view-command">
+  <div class="kpis">
+    <div class="kpi" id="k-referrals"><div class="k-label">Referrals</div><div class="k-value"></div><div class="k-sub"></div></div>
+    <div class="kpi positive" id="k-accepted"><div class="k-label">Acceptance rate</div><div class="k-value"></div><div class="k-sub"></div></div>
+    <div class="kpi" id="k-completed"><div class="k-label">Completed / accepted</div><div class="k-value"></div><div class="k-sub"></div></div>
+    <div class="kpi" id="k-treated"><div class="k-label">Treatment / completed</div><div class="k-value"></div><div class="k-sub"></div></div>
+    <div class="kpi attention" id="k-median"><div class="k-label">Median assessment wait</div><div class="k-value"></div><div class="k-sub"></div></div>
+    <div class="kpi risky" id="k-p90"><div class="k-label">P90 assessment wait</div><div class="k-value"></div><div class="k-sub"></div></div>
+    <div class="kpi" id="k-attendance"><div class="k-label">Appointment attendance</div><div class="k-value"></div><div class="k-sub"></div></div>
+    <div class="kpi positive" id="k-data"><div class="k-label">Data quality gate</div><div class="k-value"></div><div class="k-sub"></div></div>
+  </div>
+  <div class="grid two">
+    <div class="panel"><div class="panel-head"><div><div class="panel-title">Referral demand</div><div class="panel-sub">Weekly intake for the selected cohort and service filters</div></div><span class="badge info">Operational trend</span></div><div class="panel-body"><div id="commandTrend" class="chart"></div></div></div>
+    <div class="panel"><div class="panel-head"><div><div class="panel-title">Decision queue</div><div class="panel-sub">Rules turn dashboard signals into an owner and a next check</div></div><span class="badge warn">Action review</span></div><div id="decisionList" class="decision-list"></div></div>
+  </div>
+  <div class="grid two">
+    <div class="panel"><div class="panel-head"><div><div class="panel-title">Patient pathway conversion</div><div class="panel-sub">Referral receipt through treatment start</div></div></div><div class="panel-body"><div id="commandFunnel" class="chart tall"></div></div></div>
+    <div class="panel"><div class="panel-head"><div><div class="panel-title">Stored scenario outcomes</div><div class="panel-sub">End-of-horizon backlog; lower is better in this synthetic model</div></div></div><div class="panel-body"><div id="scenarioOutcome" class="chart tall"></div></div></div>
+  </div>
+  <div class="panel"><div class="panel-head"><div><div class="panel-title">How this dashboard fits the operating week</div><div class="panel-sub">The analytical product is part of a control loop, not a one-off report</div></div></div><div class="workflow">
+    <div class="flow-step"><div class="num">1</div><h4>08:00 data refresh</h4><p>Load referral, scheduling, communication and capacity records.</p></div>
+    <div class="flow-step"><div class="num">2</div><h4>08:15 quality gate</h4><p>Stop publication when identifiers, timestamps or status rules fail.</p></div>
+    <div class="flow-step"><div class="num">3</div><h4>09:00 operations huddle</h4><p>Review long waits, backlog direction and named case queues.</p></div>
+    <div class="flow-step"><div class="num">4</div><h4>Weekly capacity review</h4><p>Test demand, clinic and absence assumptions before roster sign-off.</p></div>
+    <div class="flow-step"><div class="num">5</div><h4>Monthly controls</h4><p>Review forecast error, calibration and group-level model behaviour.</p></div>
+  </div></div>
+</section>
+
+<section class="view" id="view-pathway">
+  <h3 class="section-title">Patient pathway control</h3><p class="section-lead">Use the pathway view to separate referral handling, booking, attendance and clinical completion. The case queue shows where a manager would assign follow-up rather than treating all waits as one problem.</p>
+  <div class="grid two"><div class="panel"><div class="panel-head"><div><div class="panel-title">Flow and non-progression</div><div class="panel-sub">Sankey links show progression and the count that has not reached the next recorded stage</div></div></div><div class="panel-body"><div id="pathwaySankey" class="chart tall"></div></div></div><div class="panel"><div class="panel-head"><div><div class="panel-title">Waiting-time distribution</div><div class="panel-sub">Median alone can hide the long-wait tail</div></div></div><div class="panel-body"><div id="waitDistribution" class="chart tall"></div></div></div></div>
+  <div class="grid two"><div class="panel"><div class="panel-head"><div><div class="panel-title">Cohort completion heatmap</div><div class="panel-sub">Share of each referral cohort completing assessment within 30, 60 or 90 days</div></div></div><div class="panel-body"><div id="cohortHeatmap" class="chart"></div></div></div><div class="panel"><div class="panel-head"><div><div class="panel-title">Segment service levels</div><div class="panel-sub">Comparison is descriptive; it does not establish cause</div></div></div><div class="table-wrap"><table id="segmentTable"></table></div></div></div>
+  <div class="panel"><div class="panel-head"><div><div class="panel-title">Open-case exception queue</div><div class="panel-sub">Synthetic accepted referrals without a recorded treatment start, ordered by time open</div></div><span class="badge warn">Role-based in production</span></div><div class="table-wrap"><table id="exceptionTable"></table></div><div class="legend-note">A real implementation would apply access controls, suppress unnecessary identifiers and let owners record disposition, due date and reason codes.</div></div>
+</section>
+
+<section class="view" id="view-capacity">
+  <h3 class="section-title">Demand and capacity planning</h3><p class="section-lead">The validated forecast supplies a planning range. Stored scenarios support repeatable reporting; the interactive planner lets operations test assumptions before a decision is recorded.</p>
+  <div class="grid equal"><div class="panel"><div class="panel-head"><div><div class="panel-title">Referral forecast</div><div class="panel-sub">Service-wide synthetic history, selected model and P10–P90 planning range</div></div><span class="badge info">Rolling backtest</span></div><div class="panel-body"><div id="demandForecast" class="chart"></div></div></div><div class="panel"><div class="panel-head"><div><div class="panel-title">Stored scenario trajectories</div><div class="panel-sub">Baseline, extra clinic, demand increase, DNA reduction and clinician absence</div></div></div><div class="panel-body"><div id="scenarioLines" class="chart"></div></div></div></div>
+  <div class="planner">
+    <div class="control-panel"><h3>Interactive scenario planner</h3><p>Change one or more assumptions. Calculations run in the browser using the same queue equation as the Python model.</p>
+      <div class="slider"><div class="slider-head"><span>Referral demand change</span><b id="planDemandVal"></b></div><input id="planDemand" type="range" min="-20" max="30" value="0" step="1"></div>
+      <div class="slider"><div class="slider-head"><span>Base capacity change</span><b id="planCapacityVal"></b></div><input id="planCapacity" type="range" min="-25" max="30" value="0" step="1"></div>
+      <div class="slider"><div class="slider-head"><span>Extra weekly clinic minutes</span><b id="planExtraVal"></b></div><input id="planExtra" type="range" min="0" max="1200" value="0" step="30"></div>
+      <div class="slider"><div class="slider-head"><span>Relative DNA reduction</span><b id="planDnaVal"></b></div><input id="planDna" type="range" min="0" max="40" value="0" step="1"></div>
+      <div class="planner-result"><div class="mini"><span>End backlog</span><b id="planBacklog"></b></div><div class="mini"><span>Wait proxy</span><b id="planWait"></b></div><div class="mini"><span>Weekly throughput</span><b id="planThroughput"></b></div><div class="mini"><span>Vs baseline</span><b id="planDelta"></b></div></div>
+      <div class="assumption" id="plannerMessage"></div><div class="assumption"><b>Model boundary:</b> this is a queue planning model. It does not estimate clinical outcomes, staffing cost or causal effects of reminders.</div>
+    </div>
+    <div class="panel"><div class="panel-head"><div><div class="panel-title">Custom scenario trajectory</div><div class="panel-sub">Use the result to frame a decision request, then record the approved assumptions</div></div><span class="badge synthetic">Synthetic calculation</span></div><div class="panel-body"><div id="plannerChart" class="chart tall"></div></div></div>
+  </div>
+  <div class="panel" style="margin-top:14px"><div class="panel-head"><div><div class="panel-title">Scenario decision table</div><div class="panel-sub">Comparable outputs for the weekly capacity meeting</div></div></div><div class="table-wrap"><table id="scenarioTable"></table></div></div>
+</section>
+
+<section class="view" id="view-attendance">
+  <h3 class="section-title">Appointment support workflow</h3><p class="section-lead">The model does not determine eligibility or care priority. It ranks appointments for an additional reminder, confirmation or easier rescheduling when outreach capacity is limited.</p>
+  <div class="toolbar"><label>Weekly outreach capacity <b id="outreachCapacityVal"></b></label><input id="outreachCapacity" type="range" min="10" max="200" value="100" step="10" style="width:220px"><label>Minimum risk <b id="riskThresholdVal"></b></label><input id="riskThreshold" type="range" min="0" max="80" value="0" step="5" style="width:180px"><button class="btn primary" id="exportSupport">Export displayed queue</button></div>
+  <div class="kpis" style="grid-template-columns:repeat(4,1fr)"><div class="kpi" id="a-selected"><div class="k-label">Selected for support</div><div class="k-value"></div><div class="k-sub"></div></div><div class="kpi" id="a-expected"><div class="k-label">Expected DNAs in selected</div><div class="k-value"></div><div class="k-sub"></div></div><div class="kpi" id="a-observed"><div class="k-label">Observed synthetic DNAs</div><div class="k-value"></div><div class="k-sub"></div></div><div class="kpi" id="a-recall"><div class="k-label">Synthetic outcome capture</div><div class="k-value"></div><div class="k-sub"></div></div></div>
+  <div class="grid two"><div class="panel"><div class="panel-head"><div><div class="panel-title">Risk distribution</div><div class="panel-sub">Use outreach capacity and a threshold together; do not interpret bands as clinical risk</div></div></div><div class="panel-body"><div id="riskDistribution" class="chart"></div></div></div><div class="panel"><div class="panel-head"><div><div class="panel-title">Probability calibration</div><div class="panel-sub">Predicted probability should track the observed rate in later synthetic data</div></div></div><div class="panel-body"><div id="calibrationChart" class="chart"></div></div></div></div>
+  <div class="grid equal"><div class="panel"><div class="panel-head"><div><div class="panel-title">Group monitoring</div><div class="panel-sub">Observed and predicted DNA rates by funding route and service group</div></div></div><div class="panel-body"><div id="subgroupAudit" class="chart"></div></div></div><div class="panel"><div class="panel-head"><div><div class="panel-title">Operating control</div><div class="panel-sub">A safe workflow logs both action and outcome</div></div></div><div class="workflow" style="grid-template-columns:repeat(3,1fr)"><div class="flow-step"><div class="num">1</div><h4>Score</h4><p>Use information known before the appointment only.</p></div><div class="flow-step"><div class="num">2</div><h4>Apply policy</h4><p>Cap contacts, exclude inappropriate cases and provide an override.</p></div><div class="flow-step"><div class="num">3</div><h4>Record outcome</h4><p>Log delivery, response, reschedule and attendance for monitoring.</p></div></div><div class="legend-note"><b>Prohibited use:</b> diagnosis, treatment selection, service eligibility, automatic cancellation or lower care priority.</div></div></div>
+  <div class="panel"><div class="panel-head"><div><div class="panel-title">Synthetic appointment support queue</div><div class="panel-sub">Top rows after global filters, outreach capacity and risk threshold</div></div><span class="badge warn">Human review required</span></div><div class="table-wrap"><table id="supportTable"></table></div></div>
+</section>
+
+<section class="view" id="view-governance">
+  <h3 class="section-title">Data and model controls</h3><p class="section-lead">A dashboard is publishable only after data gates pass. Forecast and appointment models then need separate monitoring because their errors lead to different operational risks.</p>
+  <div class="kpis" style="grid-template-columns:repeat(4,1fr)"><div class="kpi positive" id="g-pass"><div class="k-label">Data checks passed</div><div class="k-value"></div><div class="k-sub"></div></div><div class="kpi" id="g-fail"><div class="k-label">Checks requiring review</div><div class="k-value"></div><div class="k-sub"></div></div><div class="kpi" id="g-model"><div class="k-label">Appointment model</div><div class="k-value" style="font-size:18px"></div><div class="k-sub"></div></div><div class="kpi" id="g-forecast"><div class="k-label">Forecast model</div><div class="k-value" style="font-size:18px"></div><div class="k-sub"></div></div></div>
+  <div class="grid equal"><div class="panel"><div class="panel-head"><div><div class="panel-title">Appointment model comparison</div><div class="panel-sub">PR-AUC is higher when ranking improves; Brier score is lower when probabilities improve</div></div></div><div class="panel-body"><div id="modelCompare" class="chart"></div></div></div><div class="panel"><div class="panel-head"><div><div class="panel-title">Forecast model comparison</div><div class="panel-sub">Rolling-origin mean WAPE; lower is better</div></div></div><div class="panel-body"><div id="forecastCompare" class="chart"></div></div></div></div>
+  <div class="panel"><div class="panel-head"><div><div class="panel-title">Automated data-quality rules</div><div class="panel-sub">Publication should stop on any error-level failure</div></div></div><div class="table-wrap"><table id="qualityTable"></table></div></div>
+  <div class="panel" style="margin-top:14px"><div class="panel-head"><div><div class="panel-title">Operating control schedule</div><div class="panel-sub">Example ownership and evidence expected in an enterprise workflow</div></div></div><div class="runbook"><div class="head">Cadence</div><div class="head">Control</div><div class="head">Owner</div><div class="head">Evidence</div><div>Every refresh</div><div>Primary keys, foreign keys, timestamp order and allowed status checks</div><div>Data engineering</div><div>Rule log</div><div>Weekly</div><div>Demand error, backlog direction and open-case exception review</div><div>Operations + data</div><div>Meeting note</div><div>Monthly</div><div>Calibration, group metrics, outreach use and override review</div><div>Model owner</div><div>Monitoring pack</div><div>On metric change</div><div>Approve definition, effective date and dashboard version</div><div>Metric owner</div><div>Decision register</div></div></div>
+  <div class="governance-grid"><div class="gov-card"><b>Data minimisation</b><span>Use only fields required for the stated decision and avoid free-text clinical content in operational reports.</span></div><div class="gov-card"><b>Access control</b><span>Executive views should be aggregated; identifiable case queues should be role-restricted and audited.</span></div><div class="gov-card"><b>Human decision</b><span>Named owners review exceptions and model suggestions. The model does not make clinical or eligibility decisions.</span></div><div class="gov-card"><b>Change control</b><span>Version metrics, assumptions, model artefacts and dashboard releases so results can be reproduced.</span></div></div>
+</section>
+</main></div></div>
+{{PLOTLY_TAG}}<script>window.DASHBOARD_DATA={{DATA_JSON}};</script><script>{{DASHBOARD_JS}}</script></body></html>
