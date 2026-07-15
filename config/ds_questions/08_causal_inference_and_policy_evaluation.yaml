@@ -1,0 +1,122 @@
+questions:
+- id: Q51
+  category: causal_inference_and_policy_evaluation
+  stakeholder: Executive / product
+  question: Did the intervention cause the observed improvement?
+  why_asked: Leaders need impact, not correlation.
+  answer_key: extended_q51
+  method: Specify target trial or randomized design; otherwise use a defensible quasi-experiment with assumptions.
+  required_inputs: Eligibility, treatment timing, comparator, outcomes, confounders.
+  deliverable: Causal estimand, design diagram and sensitivity analysis.
+  risk_if_wrong: A coincident trend is credited to the intervention.
+  next_action: Do not claim impact until identification assumptions are reviewed.
+  claim_type: causal
+  evidence_topics:
+  - causal_inference
+  - target_trial
+- id: Q52
+  category: causal_inference_and_policy_evaluation
+  stakeholder: Operations lead
+  question: Can a simple before-after comparison be trusted?
+  why_asked: Seasonality and secular trends can mimic effects.
+  answer_key: extended_q52
+  method: Use controlled or interrupted time series with adequate pre/post points and concurrent-change review.
+  required_inputs: Longitudinal outcome, intervention date, control series, contextual events.
+  deliverable: Trend-level and slope-change estimates.
+  risk_if_wrong: Regression to the mean is reported as success.
+  next_action: Add control series or downgrade to descriptive evidence.
+  claim_type: causal
+  evidence_topics:
+  - interrupted_time_series
+  - causal_inference
+- id: Q53
+  category: causal_inference_and_policy_evaluation
+  stakeholder: Data scientist
+  question: Which confounders must be controlled and which should not be adjusted?
+  why_asked: Bad adjustment can create or amplify bias.
+  answer_key: extended_q53
+  method: Draw a causal diagram, define time zero and distinguish confounders, mediators and colliders.
+  required_inputs: Domain knowledge, variable timing and treatment process.
+  deliverable: Causal DAG and adjustment set.
+  risk_if_wrong: Controlling a mediator or collider biases the estimate.
+  next_action: Review DAG with clinical and operational experts.
+  claim_type: causal
+  evidence_topics:
+  - causal_inference
+  - confounding
+- id: Q54
+  category: causal_inference_and_policy_evaluation
+  stakeholder: Product / clinical lead
+  question: Who received the intervention and why?
+  why_asked: Selection into treatment can dominate apparent effect.
+  answer_key: extended_q54
+  method: Model treatment assignment, check overlap and compare eligible untreated controls.
+  required_inputs: Eligibility, assignment rules, uptake and baseline covariates.
+  deliverable: Selection and positivity diagnostics.
+  risk_if_wrong: Effect estimate extrapolates beyond supported patients.
+  next_action: Restrict estimand to overlap population or randomize.
+  claim_type: causal
+  evidence_topics:
+  - target_trial
+  - confounding
+- id: Q55
+  category: causal_inference_and_policy_evaluation
+  stakeholder: Operations / network lead
+  question: Could the intervention affect patients or staff outside the treated group?
+  why_asked: Shared capacity and staff create interference.
+  answer_key: extended_q55
+  method: Map resource and communication spillovers; randomize by cluster if individual independence is implausible.
+  required_inputs: Team, clinic, time and shared-resource identifiers.
+  deliverable: Interference map and cluster design recommendation.
+  risk_if_wrong: Control patients are indirectly treated and effects dilute.
+  next_action: Use cluster or stepped-wedge design where justified.
+  claim_type: causal
+  evidence_topics:
+  - causal_inference
+  - randomized_trial
+- id: Q56
+  category: causal_inference_and_policy_evaluation
+  stakeholder: Equality / product lead
+  question: Does the intervention work differently for different groups?
+  why_asked: Average effects can hide harm or non-response.
+  answer_key: extended_q56
+  method: Pre-specify effect modifiers, use interactions or honest heterogeneous-effect methods, and control multiplicity.
+  required_inputs: Treatment, outcome, subgroup variables and sufficient events.
+  deliverable: Subgroup effect estimates with uncertainty.
+  risk_if_wrong: Post-hoc subgroup mining creates spurious personalization.
+  next_action: Confirm important heterogeneity prospectively.
+  claim_type: causal
+  evidence_topics:
+  - heterogeneous_effects
+  - multiple_testing
+- id: Q57
+  category: causal_inference_and_policy_evaluation
+  stakeholder: Clinical / product
+  question: Through what mechanism might the intervention work?
+  why_asked: Mechanism affects transportability and redesign.
+  answer_key: extended_q57
+  method: Separate total effect from mediation questions and collect process measures prospectively.
+  required_inputs: Treatment, mediator timing, outcome and confounders.
+  deliverable: Mechanism hypothesis and mediation analysis plan.
+  risk_if_wrong: A mediator association is mistaken for a causal pathway.
+  next_action: Use process data for learning, not unsupported attribution.
+  claim_type: causal
+  evidence_topics:
+  - causal_inference
+  - experimentation
+- id: Q58
+  category: causal_inference_and_policy_evaluation
+  stakeholder: Data science lead
+  question: How would we emulate the target trial using routine data?
+  why_asked: Observational analyses often misalign eligibility, treatment and time zero.
+  answer_key: extended_q58
+  method: 'Write the trial protocol first: eligibility, strategies, assignment, follow-up, outcome, contrast and
+    analysis.'
+  required_inputs: Longitudinal records with treatment and outcome timing.
+  deliverable: Target-trial specification and clone/censor/weight plan if needed.
+  risk_if_wrong: Immortal-time and selection bias invalidate the estimate.
+  next_action: Audit time zero and positivity before estimation.
+  claim_type: causal
+  evidence_topics:
+  - target_trial
+  - observational_data

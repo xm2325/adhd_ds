@@ -1,0 +1,152 @@
+questions:
+- id: Q69
+  category: fairness_safety_and_human_factors
+  stakeholder: Equality lead
+  question: Does performance differ across protected or operationally important groups?
+  why_asked: Aggregate metrics can hide subgroup failure.
+  answer_key: extended_q69
+  method: Report n, event count, calibration, discrimination and policy outcomes with uncertainty.
+  required_inputs: Group labels, predictions, outcomes and selection decisions.
+  deliverable: Subgroup performance and reliability table.
+  risk_if_wrong: A model that works overall harms a smaller group.
+  next_action: Pause or constrain use where evidence is inadequate.
+  claim_type: safety
+  evidence_topics:
+  - fairness
+  - validation
+- id: Q70
+  category: fairness_safety_and_human_factors
+  stakeholder: Executive / equality lead
+  question: Should fairness mean equal selection, equal error or equal benefit?
+  why_asked: Fairness definitions can conflict.
+  answer_key: extended_q70
+  method: Start from the harm model and service objective; compare multiple metrics rather than optimizing one parity
+    target blindly.
+  required_inputs: Outcome need, intervention capacity, harms and group context.
+  deliverable: Fairness objective and trade-off record.
+  risk_if_wrong: A mathematically equal policy produces unequal benefit or harm.
+  next_action: Agree fairness objective with governance and patient input.
+  claim_type: safety
+  evidence_topics:
+  - fairness
+  - decision_analysis
+- id: Q71
+  category: fairness_safety_and_human_factors
+  stakeholder: Data scientist
+  question: Could a feature be an unfair proxy?
+  why_asked: Removing protected attributes does not remove encoded disadvantage.
+  answer_key: extended_q71
+  method: Review causal and institutional meaning, test proxy relationships and compare outcomes with/without feature.
+  required_inputs: Feature lineage, group variables and outcome definition.
+  deliverable: Proxy-risk assessment.
+  risk_if_wrong: Historic access or cost is used as a proxy for health need.
+  next_action: Replace proxy outcome or feature and reassess.
+  claim_type: safety
+  evidence_topics:
+  - proxy_bias
+  - fairness
+- id: Q72
+  category: fairness_safety_and_human_factors
+  stakeholder: Patient support / product
+  question: Could digital contact exclude some patients?
+  why_asked: SMS, apps and portals do not reach everyone equally.
+  answer_key: extended_q72
+  method: Measure delivery, response and completion by channel and subgroup; offer non-digital alternatives.
+  required_inputs: Contact channel, delivery status, accessibility needs and outcomes.
+  deliverable: Digital inclusion dashboard and fallback policy.
+  risk_if_wrong: The intervention widens access inequalities.
+  next_action: Maintain accessible alternatives and monitor uptake.
+  claim_type: safety
+  evidence_topics:
+  - fairness
+  - implementation
+- id: Q73
+  category: fairness_safety_and_human_factors
+  stakeholder: Clinical / operations
+  question: When and how can staff override the model?
+  why_asked: Human oversight must be meaningful rather than ceremonial.
+  answer_key: extended_q73
+  method: Define override reasons, escalation, documentation and review; analyse override outcomes.
+  required_inputs: Prediction, recommendation, override, reason and final action.
+  deliverable: Override policy and audit table.
+  risk_if_wrong: Staff either follow blindly or ignore the system entirely.
+  next_action: Review high-frequency and high-harm override patterns.
+  claim_type: safety
+  evidence_topics:
+  - human_factors
+  - clinical_safety
+- id: Q74
+  category: fairness_safety_and_human_factors
+  stakeholder: Operations lead
+  question: Will the tool create alert fatigue?
+  why_asked: Too many low-value alerts reduce attention to important cases.
+  answer_key: extended_q74
+  method: Measure alert volume, acknowledgement, action, duplication and marginal value by threshold.
+  required_inputs: Alert logs, workflow actions and outcomes.
+  deliverable: Alert burden and action-rate report.
+  risk_if_wrong: Important alerts are ignored.
+  next_action: Raise threshold, deduplicate or redesign workflow.
+  claim_type: safety
+  evidence_topics:
+  - human_factors
+  - workflow
+- id: Q75
+  category: fairness_safety_and_human_factors
+  stakeholder: Clinical safety officer
+  question: What are the harms of false positives and false negatives?
+  why_asked: Metric optimization obscures asymmetric consequences.
+  answer_key: extended_q75
+  method: Create a harm table for each error type, affected user and mitigation; connect to threshold policy.
+  required_inputs: Confusion matrix, workflow consequence and patient impact.
+  deliverable: Error-harm matrix and safety controls.
+  risk_if_wrong: A statistically good model causes operational or patient harm.
+  next_action: Set thresholds and human review from harm analysis.
+  claim_type: safety
+  evidence_topics:
+  - clinical_safety
+  - decision_analysis
+- id: Q76
+  category: fairness_safety_and_human_factors
+  stakeholder: Clinical lead
+  question: Could users become over-reliant on the recommendation?
+  why_asked: Automation bias can change decisions even when the model is wrong.
+  answer_key: extended_q76
+  method: Test human-AI performance, disagreement cases, explanations and no-AI control workflow.
+  required_inputs: User study logs, decisions, confidence and outcomes.
+  deliverable: Human-factors evaluation.
+  risk_if_wrong: The system reduces independent judgement.
+  next_action: Redesign interface and training; restrict use if needed.
+  claim_type: safety
+  evidence_topics:
+  - human_factors
+  - evaluation
+- id: Q77
+  category: fairness_safety_and_human_factors
+  stakeholder: Patient representative
+  question: Is the tool acceptable and understandable to patients and staff?
+  why_asked: Technical accuracy does not ensure adoption or trust.
+  answer_key: extended_q77
+  method: Use interviews, usability testing, observed workflow and acceptability measures.
+  required_inputs: Representative participants, prototypes and task scenarios.
+  deliverable: Usability and acceptability report.
+  risk_if_wrong: A safe model is unused or causes distress.
+  next_action: Iterate with users before scaling.
+  claim_type: safety
+  evidence_topics:
+  - human_factors
+  - implementation
+- id: Q78
+  category: fairness_safety_and_human_factors
+  stakeholder: Governance / DS
+  question: What should we do when subgroup sample sizes are too small?
+  why_asked: Silence and unstable estimates are both risky.
+  answer_key: extended_q78
+  method: Report uncertainty, suppress unsafe comparisons, pool time carefully and collect targeted evidence.
+  required_inputs: Counts, events, uncertainty and data-collection options.
+  deliverable: Evidence sufficiency classification.
+  risk_if_wrong: Noisy estimates are over-interpreted or minority groups are ignored.
+  next_action: Declare evidence gap and create collection plan.
+  claim_type: safety
+  evidence_topics:
+  - fairness
+  - uncertainty

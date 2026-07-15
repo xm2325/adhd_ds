@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.7.0 — evidence-backed DS operating handbook
+
+- Expanded the question library from 42 to 106 questions across 13 categories.
+- Added a 34-source literature, reporting-guideline and official-standard registry.
+- Added seven official NHS/ONS external-data sources for contextual validation.
+- Added claim types, decision-readiness states, evidence boundaries and evidence-gap records.
+- Added KPI uncertainty intervals and subgroup reliability classifications.
+- Added a method-selection matrix and generated evidence-backed handbook.
+- Added a tenth Evidence and methods dashboard workspace.
+- Added evidence, coverage, gap and uncertainty API endpoints.
+- Added CI gates requiring literature and project-data support for every question.
+
 ## 0.6.0 — data scientist scenario lab and diagnostic playbooks
 
 - Added 42 structured healthcare data-science questions with run-specific synthetic answers.

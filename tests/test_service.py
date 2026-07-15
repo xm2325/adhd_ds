@@ -39,3 +39,6 @@ def test_api_exposes_ds_questions_and_diagnostics(built_project):
     policies = client.get("/v1/diagnostics/threshold-policy?weekly_capacity=100")
     assert policies.status_code == 200
     assert all(row["weekly_capacity"] == 100 for row in policies.json())
+    assert len(client.get("/v1/evidence").json()) >= 30
+    assert len(client.get("/v1/evidence/coverage").json()) >= 13
+    assert client.get("/v1/statistics/kpi-uncertainty").status_code == 200

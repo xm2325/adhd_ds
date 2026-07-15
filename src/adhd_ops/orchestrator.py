@@ -21,6 +21,12 @@ from adhd_ops.diagnostics import (
     build_threshold_policy_grid,
 )
 from adhd_ops.question_casebook import build_answer_map, build_question_catalog, write_casebook
+from adhd_ops.evidence import (
+    build_method_selection_matrix, enrich_question_catalog, validate_evidence_coverage,
+    write_evidence_handbook,
+)
+from adhd_ops.evidence_dashboard import augment_evidence_dashboard
+from adhd_ops.statistical_evidence import build_kpi_uncertainty, build_subgroup_reliability
 from adhd_ops.scenario_dashboard import augment_scenario_dashboard
 from adhd_ops.config import load_yaml
 from adhd_ops.contracts import assert_contracts, build_source_profiles, validate_data_contracts
@@ -46,6 +52,9 @@ def run(root: str | Path) -> dict:
         root / "config/operations.yaml",
         root / "config/data_contracts.yaml",
         root / "config/ds_questions.yaml",
+        root / "config/evidence_registry.yaml",
+        root / "config/evidence_policy.yaml",
+        root / "config/external_data_registry.yaml",
         *sorted((root / "config/ds_questions").glob("*.yaml")),
     ]
     synthetic_config = load_yaml(config_paths[0])
@@ -53,6 +62,7 @@ def run(root: str | Path) -> dict:
     contract_config = load_yaml(config_paths[3])
     run_context = create_run_context(root, int(synthetic_config["seed"]), config_paths)
 
+    # The contract gate intentionally runs before the core analytical pipeline.
     tables = generate_synthetic_data(synthetic_config, root / "data/synthetic")
     contract_status = validate_data_contracts(tables, contract_config)
     source_profiles = build_source_profiles(tables)
@@ -77,6 +87,7 @@ def run(root: str | Path) -> dict:
     )
     incident_register.to_csv(root / "results/incident_register.csv", index=False)
 
+    # v0.6 diagnostic workbench: answer real stakeholder questions with explicit evidence boundaries.
     pathway = pd.read_csv(root / "results/patient_pathway.csv")
     stage_summary = pd.read_csv(root / "results/stage_summary.csv")
     group_summary = pd.read_csv(root / "results/group_summary.csv")
@@ -126,6 +137,11 @@ def run(root: str | Path) -> dict:
     for name, frame in diagnostic_outputs.items():
         frame.to_csv(root / f"results/{name}.csv", index=False)
 
+    kpi_uncertainty = build_kpi_uncertainty(tables, pathway, seed=int(synthetic_config["seed"]))
+    subgroup_reliability = build_subgroup_reliability(scored_test)
+    kpi_uncertainty.to_csv(root / "results/kpi_uncertainty.csv", index=False)
+    subgroup_reliability.to_csv(root / "results/subgroup_reliability.csv", index=False)
+
     summary.update(
         {
             "run_id": run_context["run_id"],
@@ -167,10 +183,31 @@ def run(root: str | Path) -> dict:
         incident_register=incident_register,
         data_lineage=data_lineage,
         operations_config=operations_config,
+        config_root=root / "config",
+        kpi_uncertainty=kpi_uncertainty,
+        subgroup_reliability=subgroup_reliability,
     )
     question_catalog = build_question_catalog(root / "config/ds_questions.yaml", answers)
+    question_catalog, evidence_coverage, evidence_gaps, evidence_registry, external_data_registry = enrich_question_catalog(
+        question_catalog,
+        registry_path=root / "config/evidence_registry.yaml",
+        policy_path=root / "config/evidence_policy.yaml",
+        external_registry_path=root / "config/external_data_registry.yaml",
+        root=root,
+    )
+    method_matrix = build_method_selection_matrix()
+    validate_evidence_coverage(question_catalog, evidence_registry)
     question_catalog.to_csv(root / "results/ds_question_catalog.csv", index=False)
+    evidence_coverage.to_csv(root / "results/evidence_coverage.csv", index=False)
+    evidence_gaps.to_csv(root / "results/evidence_gap_register.csv", index=False)
+    evidence_registry.to_csv(root / "results/evidence_registry.csv", index=False)
+    external_data_registry.to_csv(root / "results/external_data_registry.csv", index=False)
+    method_matrix.to_csv(root / "results/method_selection_matrix.csv", index=False)
     write_casebook(question_catalog, root / "reports/ds_question_casebook.md")
+    write_evidence_handbook(
+        question_catalog, evidence_registry, evidence_coverage, evidence_gaps, method_matrix, external_data_registry,
+        root / "reports/evidence_backed_ds_handbook.md",
+    )
 
     summary.update(
         {
@@ -182,6 +219,11 @@ def run(root: str | Path) -> dict:
                 ).iloc[0]["hypothesis"]
             ),
             "largest_pathway_stage": str(stage_duration.iloc[0]["stage_key"]),
+            "literature_sources": int(len(evidence_registry)),
+            "external_public_data_sources": int(len(external_data_registry)),
+            "questions_with_literature_support": int((question_catalog["literature_source_count"] >= 1).sum()),
+            "questions_with_data_support": int((question_catalog["available_data_outputs"] >= 1).sum()),
+            "evidence_categories": int(question_catalog["category"].nunique()),
         }
     )
     (root / "results/run_summary.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
@@ -202,6 +244,13 @@ def run(root: str | Path) -> dict:
         "source_freshness.csv",
         "missingness_audit.csv",
         "root_cause_scorecard.csv",
+        "kpi_uncertainty.csv",
+        "subgroup_reliability.csv",
+        "evidence_coverage.csv",
+        "evidence_gap_register.csv",
+        "evidence_registry.csv",
+        "external_data_registry.csv",
+        "method_selection_matrix.csv",
         "ds_question_catalog.csv",
     ]:
         shutil.copyfile(root / "results" / filename, root / "tableau/exports" / filename)
@@ -232,6 +281,17 @@ def run(root: str | Path) -> dict:
             period_comparison=period_comparison,
             default_capacity=int(operations_config["appointment_support"]["default_weekly_outreach_capacity"]),
         )
+        augment_evidence_dashboard(
+            output,
+            evidence_registry=evidence_registry,
+            external_data_registry=external_data_registry,
+            evidence_coverage=evidence_coverage,
+            evidence_gaps=evidence_gaps,
+            method_matrix=method_matrix,
+            kpi_uncertainty=kpi_uncertainty,
+            subgroup_reliability=subgroup_reliability,
+            question_catalog=question_catalog,
+        )
 
     _append_once(
         root / "reports/weekly_operational_brief.md",
@@ -247,6 +307,7 @@ Run **{summary['run_id']}** passed **{summary['contract_rules_passed']} contract
 
 Run **{summary['run_id']}** records configuration hashes, source fingerprints, output hashes and a replay command. The contract and coded quality gates passed. Incident records and queue-policy evidence are linked to the same run ID.""",
     )
+
     _append_once(
         root / "reports/weekly_operational_brief.md",
         "## Data scientist scenario diagnosis",
@@ -260,6 +321,21 @@ The v0.6 workbench covers **{summary['ds_questions_covered']} stakeholder questi
         f"""## Diagnostic and question coverage
 
 The run generated a period comparison, pathway-stage decomposition, wait-definition sensitivity, DNA change decomposition, threshold/workload grid, predictive feature explanation and **{summary['ds_questions_covered']}** question-specific answers. Reviewers should preserve the distinction between descriptive, predictive, scenario and causal evidence.""",
+    )
+
+    _append_once(
+        root / "reports/weekly_operational_brief.md",
+        "## Evidence coverage and uncertainty",
+        f"""## Evidence coverage and uncertainty
+
+The v0.7 handbook covers **{summary['ds_questions_covered']} questions across {summary['evidence_categories']} categories**, with **{summary['literature_sources']} literature or standards sources**. Every question has at least one generated project-data dependency and one literature source. Point estimates are accompanied by uncertainty where supported; causal, predictive, safety and governance decisions remain explicitly gated.""",
+    )
+    _append_once(
+        root / "reports/monthly_control_pack.md",
+        "## Evidence-backed decision readiness",
+        f"""## Evidence-backed decision readiness
+
+The build generated an evidence registry, method-selection matrix, KPI uncertainty table, subgroup reliability table and evidence-gap register. Literature supports method choice and governance controls but does not validate provider-specific intervention effects. **{summary['questions_with_literature_support']}/{summary['ds_questions_covered']}** questions have literature support and **{summary['questions_with_data_support']}/{summary['ds_questions_covered']}** have run-specific data support.""",
     )
 
     output_paths = sorted((root / "results").glob("*")) + sorted((root / "reports").glob("*")) + [root / "docs/index.html"]

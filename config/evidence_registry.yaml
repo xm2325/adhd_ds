@@ -1,0 +1,540 @@
+registry_version: 1.0.0
+synthetic_project: true
+sources:
+- id: TRIPOD_AI_2024
+  title: 'TRIPOD+AI statement: updated guidance for reporting clinical prediction
+    models that use regression or machine learning methods'
+  authors: Collins GS et al.
+  year: 2024
+  source_type: reporting_guideline
+  venue: BMJ
+  url: https://doi.org/10.1136/bmj-2023-078378
+  topics:
+  - prediction
+  - reporting
+  - validation
+  - transparency
+  use_in_project: Model cards, validation reporting, data provenance and intended-use
+    documentation.
+  limitations: Reporting guidance does not by itself establish model quality or clinical
+    benefit.
+- id: PROBAST_2019
+  title: 'PROBAST: A Tool to Assess the Risk of Bias and Applicability of Prediction
+    Model Studies'
+  authors: Wolff RF et al.
+  year: 2019
+  source_type: risk_of_bias_tool
+  venue: Annals of Internal Medicine
+  url: https://doi.org/10.7326/M18-1376
+  topics:
+  - prediction
+  - bias
+  - validation
+  - sample_size
+  use_in_project: Risk-of-bias checks for participants, predictors, outcomes and analysis.
+  limitations: Designed for appraisal; local implementation still needs domain review.
+- id: DECIDE_AI_2022
+  title: 'Reporting guideline for the early-stage clinical evaluation of decision
+    support systems driven by artificial intelligence: DECIDE-AI'
+  authors: Vasey B et al.
+  year: 2022
+  source_type: reporting_guideline
+  venue: BMJ
+  url: https://doi.org/10.1136/bmj-2022-070904
+  topics:
+  - deployment
+  - human_factors
+  - workflow
+  - safety
+  - evaluation
+  use_in_project: Human-in-the-loop workflow, usability, failure-mode and early deployment
+    evaluation.
+  limitations: Early-stage reporting guidance is not a substitute for definitive impact
+    evaluation.
+- id: CONSORT_AI_2020
+  title: 'Reporting guidelines for clinical trial reports for interventions involving
+    artificial intelligence: the CONSORT-AI extension'
+  authors: Liu X et al.
+  year: 2020
+  source_type: reporting_guideline
+  venue: Nature Medicine
+  url: https://doi.org/10.1038/s41591-020-1034-x
+  topics:
+  - experimentation
+  - randomized_trial
+  - ai
+  - reporting
+  use_in_project: Trial reporting for AI-supported interventions and human-AI interaction.
+  limitations: Applies to trial reporting, not pre-trial model development.
+- id: SPIRIT_AI_2020
+  title: 'Guidelines for clinical trial protocols for interventions involving artificial
+    intelligence: the SPIRIT-AI extension'
+  authors: Rivera SC et al.
+  year: 2020
+  source_type: reporting_guideline
+  venue: Nature Medicine
+  url: https://doi.org/10.1038/s41591-020-1037-7
+  topics:
+  - experimentation
+  - protocol
+  - randomized_trial
+  - ai
+  use_in_project: Prospective protocol specification, version control and failure
+    handling.
+  limitations: Protocol completeness does not remove bias from execution or analysis.
+- id: FUTURE_AI_2025
+  title: 'FUTURE-AI: International consensus guideline for trustworthy and deployable artificial intelligence in healthcare'
+  authors: Lekadir K et al.
+  year: 2025
+  source_type: consensus_guideline
+  venue: BMJ
+  url: https://doi.org/10.1136/bmj-2024-081554
+  topics:
+  - fairness
+  - deployment
+  - monitoring
+  - robustness
+  - explainability
+  - human_factors
+  - governance
+  use_in_project: Lifecycle checks for fairness, universality, traceability, usability, robustness and explainability from design through monitoring.
+  limitations: Consensus best practices guide lifecycle controls but do not establish effectiveness for a specific service or model.
+- id: WHO_AI_ETHICS_2021
+  title: Ethics and governance of artificial intelligence for health
+  authors: World Health Organization
+  year: 2021
+  source_type: official_guidance
+  venue: WHO
+  url: https://www.who.int/publications/i/item/9789240029200
+  topics:
+  - ethics
+  - governance
+  - human_rights
+  - safety
+  - fairness
+  use_in_project: Purpose limitation, accountability, transparency, inclusiveness
+    and human oversight.
+  limitations: High-level governance principles require local operational controls.
+- id: NICE_ESF_2022
+  title: Evidence standards framework for digital health technologies
+  authors: National Institute for Health and Care Excellence
+  year: 2022
+  source_type: official_guidance
+  venue: NICE
+  url: https://www.nice.org.uk/corporate/ecd7
+  topics:
+  - evidence
+  - digital_health
+  - economics
+  - effectiveness
+  - deployment
+  use_in_project: Evidence tiering, effectiveness, value and implementation requirements.
+  limitations: Evidence requirements depend on intended purpose and risk classification.
+- id: NIST_AI_RMF_2023
+  title: Artificial Intelligence Risk Management Framework (AI RMF 1.0)
+  authors: National Institute of Standards and Technology
+  year: 2023
+  source_type: official_guidance
+  venue: NIST
+  url: https://doi.org/10.6028/NIST.AI.100-1
+  topics:
+  - risk_management
+  - monitoring
+  - governance
+  - robustness
+  - documentation
+  use_in_project: Govern-map-measure-manage lifecycle and risk register structure.
+  limitations: General AI framework; healthcare-specific clinical safety remains necessary.
+- id: ICO_AI_DP_GUIDANCE
+  title: Guidance on AI and data protection
+  authors: Information Commissioner's Office
+  year: 2020
+  source_type: official_guidance
+  venue: ICO
+  url: https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/artificial-intelligence/
+  topics:
+  - privacy
+  - data_protection
+  - fairness
+  - transparency
+  - security
+  use_in_project: Data minimisation, fairness, accountability, explainability and
+    individual rights.
+  limitations: Legal interpretation and organisational policy require qualified review.
+- id: DCB0129
+  title: 'DCB0129 Clinical Risk Management: its Application in the Manufacture of
+    Health IT Systems'
+  authors: NHS England
+  year: 2018
+  source_type: official_standard
+  venue: NHS England
+  url: https://digital.nhs.uk/data-and-information/information-standards/information-standards-and-data-collections-including-extractions/publications-and-notifications/standards-and-collections/dcb0129-clinical-risk-management-its-application-in-the-manufacture-of-health-it-systems
+  topics:
+  - clinical_safety
+  - hazard_log
+  - development
+  - deployment
+  use_in_project: Clinical safety case, hazard identification and controlled change.
+  limitations: Applicability depends on whether the product is health IT used for clinical care; NHS England is reviewing DCB0129 and DCB0160, so deployment must verify the latest release.
+- id: DCB0160
+  title: 'DCB0160 Clinical Risk Management: its Application in the Deployment and
+    Use of Health IT Systems'
+  authors: NHS England
+  year: 2018
+  source_type: official_standard
+  venue: NHS England
+  url: https://digital.nhs.uk/data-and-information/information-standards/information-standards-and-data-collections-including-extractions/publications-and-notifications/standards-and-collections/dcb0160-clinical-risk-management-its-application-in-the-deployment-and-use-of-health-it-systems
+  topics:
+  - clinical_safety
+  - deployment
+  - operations
+  - hazard_log
+  use_in_project: Local deployment safety, ownership, incident management and rollback.
+  limitations: Requires an organisational clinical safety management system; NHS England is reviewing DCB0129 and DCB0160, so deployment must verify the latest release.
+- id: KAHN_DQ_2016
+  title: A harmonized data quality assessment terminology and framework for the secondary
+    use of electronic health record data
+  authors: Kahn MG et al.
+  year: 2016
+  source_type: methods_paper
+  venue: eGEMs
+  url: https://doi.org/10.13063/2327-9214.1244
+  topics:
+  - data_quality
+  - completeness
+  - conformance
+  - plausibility
+  use_in_project: Contract and quality checks organised as conformance, completeness
+    and plausibility.
+  limitations: Framework does not determine whether a variable is clinically fit for
+    a specific use.
+- id: STERNE_MI_2009
+  title: 'Multiple imputation for missing data in epidemiological and clinical research:
+    potential and pitfalls'
+  authors: Sterne JAC et al.
+  year: 2009
+  source_type: methods_paper
+  venue: BMJ
+  url: https://doi.org/10.1136/bmj.b2393
+  topics:
+  - missing_data
+  - imputation
+  - sensitivity_analysis
+  use_in_project: Missingness mechanism review, imputation scope and sensitivity analysis.
+  limitations: Imputation cannot rescue variables missing not at random without untestable
+    assumptions.
+- id: RUBIN_MI_1976
+  title: Inference and missing data
+  authors: Rubin DB
+  year: 1976
+  source_type: methods_paper
+  venue: Biometrika
+  url: https://doi.org/10.1093/biomet/63.3.581
+  topics:
+  - missing_data
+  - mechanisms
+  - inference
+  use_in_project: MCAR, MAR and MNAR reasoning and explicit missingness assumptions.
+  limitations: Missingness mechanisms are generally not fully testable from observed
+    data.
+- id: KAPLAN_MEIER_1958
+  title: Nonparametric estimation from incomplete observations
+  authors: Kaplan EL and Meier P
+  year: 1958
+  source_type: methods_paper
+  venue: Journal of the American Statistical Association
+  url: https://doi.org/10.1080/01621459.1958.10501452
+  topics:
+  - survival_analysis
+  - censoring
+  - waiting_time
+  use_in_project: Mature cohort and time-to-event estimates when follow-up is censored.
+  limitations: Requires non-informative censoring assumptions for standard interpretation.
+- id: FINE_GRAY_1999
+  title: A proportional hazards model for the subdistribution of a competing risk
+  authors: Fine JP and Gray RJ
+  year: 1999
+  source_type: methods_paper
+  venue: Journal of the American Statistical Association
+  url: https://doi.org/10.1080/01621459.1999.10474144
+  topics:
+  - competing_risks
+  - survival_analysis
+  - pathway
+  use_in_project: Competing pathway outcomes such as completion, rejection and withdrawal.
+  limitations: Subdistribution hazards require careful interpretation and are not
+    causal effects.
+- id: BERNAL_ITS_2017
+  title: 'Interrupted time series regression for the evaluation of public health interventions:
+    a tutorial'
+  authors: Bernal JL, Cummins S, Gasparrini A
+  year: 2017
+  source_type: methods_paper
+  venue: International Journal of Epidemiology
+  url: https://doi.org/10.1093/ije/dyw098
+  topics:
+  - causal_inference
+  - interrupted_time_series
+  - policy_evaluation
+  use_in_project: Evaluation of a clearly timed service change with pre/post trends
+    and autocorrelation.
+  limitations: Concurrent changes and anticipation can invalidate causal attribution.
+- id: HERNAN_TARGET_TRIAL_2016
+  title: Using Big Data to Emulate a Target Trial When a Randomized Trial Is Not Available
+  authors: Hernán MA and Robins JM
+  year: 2016
+  source_type: methods_paper
+  venue: American Journal of Epidemiology
+  url: https://doi.org/10.1093/aje/kwv254
+  topics:
+  - causal_inference
+  - target_trial
+  - observational_data
+  - confounding
+  use_in_project: Explicit eligibility, treatment strategies, time zero, outcomes
+    and estimand.
+  limitations: Observational emulation still depends on no unmeasured confounding
+    and positivity.
+- id: VICKERS_DCA_2006
+  title: 'Decision curve analysis: a novel method for evaluating prediction models'
+  authors: Vickers AJ and Elkin EB
+  year: 2006
+  source_type: methods_paper
+  venue: Medical Decision Making
+  url: https://doi.org/10.1177/0272989X06295361
+  topics:
+  - decision_analysis
+  - clinical_utility
+  - thresholds
+  - prediction
+  use_in_project: Threshold policy evaluation using consequences rather than accuracy
+    alone.
+  limitations: Net benefit depends on a defensible mapping between threshold and relative
+    harm.
+- id: VAN_CALSTER_CALIBRATION_2019
+  title: 'Calibration: the Achilles heel of predictive analytics'
+  authors: Van Calster B et al.
+  year: 2019
+  source_type: methods_paper
+  venue: BMC Medicine
+  url: https://doi.org/10.1186/s12916-019-1466-7
+  topics:
+  - calibration
+  - prediction
+  - validation
+  - monitoring
+  use_in_project: Calibration-in-the-large, slope, plots and recalibration decisions.
+  limitations: Good calibration does not guarantee usefulness or fairness.
+- id: RILEY_SAMPLE_SIZE_2020
+  title: Calculating the sample size required for developing a clinical prediction
+    model
+  authors: Riley RD et al.
+  year: 2020
+  source_type: methods_paper
+  venue: BMJ
+  url: https://doi.org/10.1136/bmj.m441
+  topics:
+  - sample_size
+  - prediction
+  - overfitting
+  - validation
+  use_in_project: Sample-size planning based on events, parameters and anticipated
+    model fit.
+  limitations: Requires plausible prior information and does not replace external
+    validation.
+- id: OBERMEYER_BIAS_2019
+  title: Dissecting racial bias in an algorithm used to manage the health of populations
+  authors: Obermeyer Z et al.
+  year: 2019
+  source_type: empirical_study
+  venue: Science
+  url: https://doi.org/10.1126/science.aax2342
+  topics:
+  - fairness
+  - proxy_bias
+  - health_equity
+  - outcomes
+  use_in_project: Proxy-outcome review and distinction between equal prediction and
+    equal need.
+  limitations: Specific mechanism and setting should not be assumed in other systems.
+- id: SAITO_PR_2015
+  title: The precision-recall plot is more informative than the ROC plot when evaluating
+    binary classifiers on imbalanced datasets
+  authors: Saito T and Rehmsmeier M
+  year: 2015
+  source_type: methods_paper
+  venue: PLOS ONE
+  url: https://doi.org/10.1371/journal.pone.0118432
+  topics:
+  - class_imbalance
+  - precision_recall
+  - prediction
+  - evaluation
+  use_in_project: PR-AUC and capacity-constrained precision/recall reporting for DNA
+    prediction.
+  limitations: PR curves still do not encode intervention costs or benefits.
+- id: GNEITING_SCORING_2007
+  title: Strictly proper scoring rules, prediction, and estimation
+  authors: Gneiting T and Raftery AE
+  year: 2007
+  source_type: methods_paper
+  venue: Journal of the American Statistical Association
+  url: https://doi.org/10.1198/016214506000001437
+  topics:
+  - forecasting
+  - probability
+  - scoring_rules
+  - uncertainty
+  use_in_project: Proper evaluation of probabilistic predictions and forecast distributions.
+  limitations: A proper score summarises performance but may obscure subgroup harm.
+- id: HYNDMAN_MASE_2006
+  title: Another look at measures of forecast accuracy
+  authors: Hyndman RJ and Koehler AB
+  year: 2006
+  source_type: methods_paper
+  venue: International Journal of Forecasting
+  url: https://doi.org/10.1016/j.ijforecast.2006.03.001
+  topics:
+  - forecasting
+  - accuracy
+  - baseline
+  - time_series
+  use_in_project: Forecast error comparison against simple baselines and scale-free
+    metrics.
+  limitations: Aggregate accuracy does not guarantee adequate peak-demand performance.
+- id: LITTLE_LAW_1961
+  title: 'A Proof for the Queuing Formula: L = λW'
+  authors: Little JDC
+  year: 1961
+  source_type: methods_paper
+  venue: Operations Research
+  url: https://doi.org/10.1287/opre.9.3.383
+  topics:
+  - queueing
+  - capacity
+  - backlog
+  - waiting_time
+  use_in_project: Consistency checks linking work in progress, throughput and time
+    in system.
+  limitations: Steady-state assumptions may fail during rapid growth, policy change
+    or disruption.
+- id: LUNDBERG_SHAP_2017
+  title: A Unified Approach to Interpreting Model Predictions
+  authors: Lundberg SM and Lee SI
+  year: 2017
+  source_type: methods_paper
+  venue: NeurIPS
+  url: https://proceedings.neurips.cc/paper/2017/hash/8a20a8621978632d76c43dfd28b67767-Abstract.html
+  topics:
+  - explainability
+  - prediction
+  - feature_attribution
+  use_in_project: Local and global predictive attribution with an explicit non-causal
+    warning.
+  limitations: Attributions depend on model and background distribution and are not
+    mechanisms.
+- id: HASVOLD_REMINDERS_2011
+  title: 'Use of telephone and SMS reminders to improve attendance at hospital appointments:
+    a systematic review'
+  authors: Hasvold PE and Wootton R
+  year: 2011
+  source_type: systematic_review
+  venue: Journal of Telemedicine and Telecare
+  url: https://doi.org/10.1258/jtt.2011.110707
+  topics:
+  - appointments
+  - reminders
+  - attendance
+  - implementation
+  use_in_project: Plausibility of reminder interventions and need for local effect
+    estimation.
+  limitations: Effects vary by setting, population, message design and baseline workflow.
+- id: ANGELPOULOS_CONFORMAL_2021
+  title: A Gentle Introduction to Conformal Prediction and Distribution-Free Uncertainty
+    Quantification
+  authors: Angelopoulos AN and Bates S
+  year: 2021
+  source_type: methods_paper
+  venue: arXiv
+  url: https://doi.org/10.48550/arXiv.2107.07511
+  topics:
+  - uncertainty
+  - conformal_prediction
+  - prediction_intervals
+  use_in_project: Coverage-oriented uncertainty sets when exchangeability is plausible.
+  limitations: Coverage can fail under distribution shift and may not hold conditionally
+    for subgroups.
+- id: ATHEY_IMBENS_2016
+  title: Recursive partitioning for heterogeneous causal effects
+  authors: Athey S and Imbens G
+  year: 2016
+  source_type: methods_paper
+  venue: PNAS
+  url: https://doi.org/10.1073/pnas.1510489113
+  topics:
+  - causal_inference
+  - heterogeneous_effects
+  - policy_learning
+  use_in_project: Pre-specified or honest exploration of treatment-effect heterogeneity.
+  limitations: Requires credible treatment assignment assumptions and adequate sample
+    size.
+- id: BENJAMINI_HOCHBERG_1995
+  title: 'Controlling the false discovery rate: a practical and powerful approach
+    to multiple testing'
+  authors: Benjamini Y and Hochberg Y
+  year: 1995
+  source_type: methods_paper
+  venue: Journal of the Royal Statistical Society Series B
+  url: https://doi.org/10.1111/j.2517-6161.1995.tb02031.x
+  topics:
+  - multiple_testing
+  - inference
+  - false_discovery
+  use_in_project: Control of false discoveries across exploratory subgroup and metric
+    screens.
+  limitations: FDR control does not remove selective reporting or dependence concerns.
+- id: RECORD_2015
+  title: The REporting of studies Conducted using Observational Routinely-collected
+    health Data (RECORD) Statement
+  authors: Benchimol EI et al.
+  year: 2015
+  source_type: reporting_guideline
+  venue: PLOS Medicine
+  url: https://doi.org/10.1371/journal.pmed.1001885
+  topics:
+  - observational_data
+  - reporting
+  - data_provenance
+  - coding
+  use_in_project: Transparent reporting of codes, linkage, selection and data cleaning.
+  limitations: Reporting quality does not eliminate confounding or measurement error.
+- id: SQUIRE_2016
+  title: 'SQUIRE 2.0: Standards for QUality Improvement Reporting Excellence'
+  authors: Ogrinc G et al.
+  year: 2016
+  source_type: reporting_guideline
+  venue: BMJ Quality & Safety
+  url: https://doi.org/10.1136/bmjqs-2015-004411
+  topics:
+  - quality_improvement
+  - implementation
+  - context
+  - evaluation
+  use_in_project: Service-change rationale, context, intervention description and
+    learning.
+  limitations: Quality-improvement reporting is not a causal identification strategy.
+- id: CHEERS_2022
+  title: Consolidated Health Economic Evaluation Reporting Standards 2022
+  authors: Husereau D et al.
+  year: 2022
+  source_type: reporting_guideline
+  venue: BMJ
+  url: https://doi.org/10.1136/bmj-2021-067975
+  topics:
+  - economics
+  - cost_effectiveness
+  - decision_model
+  - reporting
+  use_in_project: Transparent cost, perspective, time horizon, uncertainty and assumptions.
+  limitations: Economic evaluation quality depends on credible effectiveness and cost
+    inputs.

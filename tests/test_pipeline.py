@@ -16,4 +16,8 @@ def test_full_pipeline(built_project):
     assert (target / "results/root_cause_scorecard.csv").exists()
     assert (target / "results/ds_question_catalog.csv").exists()
     assert (target / "reports/ds_question_casebook.md").exists()
-    assert summary["ds_questions_covered"] == 42
+    assert (target / "reports/evidence_backed_ds_handbook.md").exists()
+    assert (target / "results/evidence_registry.csv").exists()
+    assert (target / "results/evidence_coverage.csv").exists()
+    assert (target / "results/kpi_uncertainty.csv").exists()
+    assert summary["ds_questions_covered"] == 106

@@ -1,0 +1,138 @@
+questions:
+- id: Q98
+  category: product_economics_and_implementation
+  stakeholder: Executive / procurement
+  question: Should we build, buy or partner?
+  why_asked: Technical feasibility is only one decision dimension.
+  answer_key: extended_q98
+  method: Compare strategic differentiation, data access, integration, regulatory burden, total cost and exit risk.
+  required_inputs: Requirements, vendor evidence, internal capability and costs.
+  deliverable: Build-buy-partner decision matrix.
+  risk_if_wrong: A low purchase price creates long-term lock-in or safety risk.
+  next_action: Run proof of value with exit criteria.
+  claim_type: decision
+  evidence_topics:
+  - economics
+  - deployment
+- id: Q99
+  category: product_economics_and_implementation
+  stakeholder: Finance / executive
+  question: What is the expected return and cost-effectiveness?
+  why_asked: Benefits and costs occur across different teams and times.
+  answer_key: extended_q99
+  method: Define perspective, time horizon, incremental costs, outcomes and uncertainty; avoid counting assumed
+    benefits as observed.
+  required_inputs: Resource costs, intervention effect, downstream outcomes and uncertainty.
+  deliverable: Economic model with sensitivity analysis.
+  risk_if_wrong: A speculative effect is monetised as guaranteed savings.
+  next_action: Update economics after causal evidence.
+  claim_type: decision
+  evidence_topics:
+  - economics
+  - cost_effectiveness
+- id: Q100
+  category: product_economics_and_implementation
+  stakeholder: Product lead
+  question: Will users adopt and correctly use the tool?
+  why_asked: No adoption means no impact.
+  answer_key: extended_q100
+  method: Measure exposure, active use, completion, override, abandonment and qualitative barriers.
+  required_inputs: User events, workflow steps and interviews.
+  deliverable: Adoption funnel and barrier analysis.
+  risk_if_wrong: Model performance is reported despite no meaningful use.
+  next_action: Redesign workflow before optimizing the model.
+  claim_type: decision
+  evidence_topics:
+  - implementation
+  - human_factors
+- id: Q101
+  category: product_economics_and_implementation
+  stakeholder: Operations / engineering
+  question: How does the tool fit the existing workflow?
+  why_asked: Extra clicks and unclear ownership create failure.
+  answer_key: extended_q101
+  method: Map current and future state, handoffs, exceptions, peak load and fallback.
+  required_inputs: Process map, user roles and system constraints.
+  deliverable: Service blueprint and responsibility matrix.
+  risk_if_wrong: The product shifts workload to an unprepared team.
+  next_action: Pilot with real users and measure workload.
+  claim_type: decision
+  evidence_topics:
+  - workflow
+  - implementation
+- id: Q102
+  category: product_economics_and_implementation
+  stakeholder: Executive / product
+  question: Which problem should be prioritised first?
+  why_asked: Not every measurable issue deserves a model.
+  answer_key: extended_q102
+  method: Score patient impact, service pressure, actionability, evidence gap, effort and risk.
+  required_inputs: Problem inventory, baseline metrics and stakeholder priorities.
+  deliverable: Prioritisation matrix.
+  risk_if_wrong: The team solves an interesting but low-value problem.
+  next_action: Select the smallest high-value controllable problem.
+  claim_type: decision
+  evidence_topics:
+  - decision_analysis
+  - implementation
+- id: Q103
+  category: product_economics_and_implementation
+  stakeholder: Product / DS
+  question: What is the minimum viable analytical product?
+  why_asked: Large platforms delay learning.
+  answer_key: extended_q103
+  method: Build the smallest metric, queue or experiment that changes a named decision.
+  required_inputs: Decision owner, action, data availability and success criterion.
+  deliverable: MVP specification and learning plan.
+  risk_if_wrong: Complex infrastructure is built before value is demonstrated.
+  next_action: Release to a controlled cohort with stop rules.
+  claim_type: decision
+  evidence_topics:
+  - implementation
+  - evaluation
+- id: Q104
+  category: product_economics_and_implementation
+  stakeholder: Operations / finance
+  question: Can the intervention scale without moving the bottleneck?
+  why_asked: Local success can create downstream congestion.
+  answer_key: extended_q104
+  method: Model end-to-end capacity, resource constraints, demand elasticity and queue spillover.
+  required_inputs: Pathway stages, staffing, throughput and uptake.
+  deliverable: Scale scenario and bottleneck map.
+  risk_if_wrong: The intervention improves one stage and worsens the next.
+  next_action: Scale gradually with pathway-wide monitoring.
+  claim_type: decision
+  evidence_topics:
+  - queueing
+  - capacity
+  - implementation
+- id: Q105
+  category: product_economics_and_implementation
+  stakeholder: Implementation lead
+  question: How will we evaluate implementation, not only effectiveness?
+  why_asked: Delivery quality explains why effects vary.
+  answer_key: extended_q105
+  method: Measure reach, fidelity, adoption, workload, context and maintenance alongside outcomes.
+  required_inputs: Process measures, user data and qualitative evidence.
+  deliverable: Implementation evaluation plan.
+  risk_if_wrong: A failed implementation is mistaken for an ineffective intervention.
+  next_action: Separate intervention failure from delivery failure.
+  claim_type: decision
+  evidence_topics:
+  - implementation
+  - quality_improvement
+- id: Q106
+  category: product_economics_and_implementation
+  stakeholder: Executive / governance
+  question: When should we stop, continue, scale or redesign?
+  why_asked: Projects need explicit decision rules.
+  answer_key: extended_q106
+  method: Predefine evidence thresholds, safety guardrails, costs, adoption and learning milestones.
+  required_inputs: Outcome, safety, process, cost and equity metrics.
+  deliverable: Stage-gate decision record.
+  risk_if_wrong: Sunk-cost bias keeps a weak or harmful product alive.
+  next_action: Apply stop/continue criteria at each review.
+  claim_type: decision
+  evidence_topics:
+  - decision_analysis
+  - risk_management

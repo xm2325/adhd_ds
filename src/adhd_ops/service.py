@@ -25,7 +25,7 @@ def _read_json(path: Path) -> dict:
 def create_app(root: str | Path | None = None) -> FastAPI:
     project_root = Path(root or os.getenv("ADHD_DS_ROOT", ".")).resolve()
     results = project_root / "results"
-    app = FastAPI(title="ADHD DS synthetic operations API", version="0.6.0")
+    app = FastAPI(title="ADHD DS synthetic operations API", version="0.7.0")
 
     @app.get("/health")
     def health() -> dict:
@@ -85,6 +85,29 @@ def create_app(root: str | Path | None = None) -> FastAPI:
     @app.get("/v1/diagnostics/metric-sensitivity")
     def diagnostic_metric_sensitivity() -> list[dict]:
         return _records(results / "metric_definition_sensitivity.csv")
+
+    @app.get("/v1/evidence")
+    def evidence_registry(topic: str | None = None) -> list[dict]:
+        rows = _records(results / "evidence_registry.csv")
+        return [row for row in rows if topic is None or topic in str(row.get("topics", ""))]
+
+    @app.get("/v1/evidence/coverage")
+    def evidence_coverage() -> list[dict]:
+        return _records(results / "evidence_coverage.csv")
+
+    @app.get("/v1/evidence/gaps")
+    def evidence_gaps(claim_type: str | None = None) -> list[dict]:
+        rows = _records(results / "evidence_gap_register.csv")
+        return [row for row in rows if claim_type is None or row.get("claim_type") == claim_type]
+
+    @app.get("/v1/statistics/kpi-uncertainty")
+    def kpi_uncertainty() -> list[dict]:
+        return _records(results / "kpi_uncertainty.csv")
+
+    @app.get("/v1/statistics/subgroup-reliability")
+    def subgroup_reliability(status: str | None = None) -> list[dict]:
+        rows = _records(results / "subgroup_reliability.csv")
+        return [row for row in rows if status is None or row.get("reliability_status") == status]
 
     @app.get("/v1/appointment-support")
     def appointment_support(
