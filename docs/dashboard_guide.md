@@ -92,3 +92,17 @@ The public portfolio dashboard uses synthetic identifiers. A real provider shoul
 - model-development datasets with approved purpose and retention.
 
 Role-based access, audit logs, data minimisation, retention, versioning and human review are required before a patient-level queue is used.
+
+## 7. Decision and impact workspace
+
+The impact workspace compares stored scenarios using configured resource assumptions. Reviewers should treat the output as an option-comparison tool, not a cost or savings claim.
+
+The decision register lets a reviewer edit owner, due date, status and rationale in the browser. Export is available for demonstration. A production service requires authenticated writes and audit history.
+
+## 8. Role views
+
+Role profiles change the visible workspaces and whether the synthetic patient-level queues are shown. This demonstrates information separation only. Security must be implemented in the application and data platform.
+
+## 9. Monitoring alerts
+
+Monthly attendance-model monitoring excludes small groups from automated alert generation, but still displays them. Rolling forecast checks are dated by forecast origin. Review levels are configuration values and must be approved before production use.

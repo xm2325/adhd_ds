@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ADHD DS Operations Dashboard</title><style>{{CSS}}</style></head><body>
+<div class="app">
+<aside class="sidebar">
+  <div class="brand"><div class="brand-mark">DS</div><div><h1>ADHD DS</h1><p>Service operations workspace</p></div></div>
+  <div class="nav-label">Workspace</div>
+  <button class="nav-btn active" data-view="command"><span class="nav-icon">⌂</span>Command centre</button>
+  <button class="nav-btn" data-view="pathway"><span class="nav-icon">⇢</span>Patient pathway</button>
+  <button class="nav-btn" data-view="capacity"><span class="nav-icon">⌁</span>Demand & capacity</button>
+  <button class="nav-btn" data-view="attendance"><span class="nav-icon">✓</span>Appointment support</button>
+  <button class="nav-btn" data-view="impact"><span class="nav-icon">£</span>Decision & impact</button>
+  <button class="nav-btn" data-view="governance"><span class="nav-icon">◫</span>Data & model controls</button>
+  <div class="side-foot"><div><span class="status-dot"></span>Pipeline output loaded</div><div>Synthetic portfolio environment</div><div>Not for clinical decisions</div></div>
+</aside>
+<div class="shell">
+<header class="topbar"><div class="toprow">
+  <div style="display:flex;gap:10px;align-items:center"><button id="mobileMenu" class="btn mobile-menu">☰</button><div class="page-title"><h2 id="pageHeading">Operations command centre</h2><p id="pageSubheading">Daily view of flow, risk and decisions</p></div></div>
+  <div class="filterbar">
+    <div class="filter role-filter"><label>Role view</label><select id="roleFilter"><option value="operations">Operations</option><option value="executive">Executive</option><option value="patient_support">Patient support</option><option value="data_model">Data and model</option></select></div>
+    <div class="filter"><label>Funding route</label><select id="routeFilter"><option value="all">All routes</option><option value="nhs_right_to_choose">NHS Right to Choose</option><option value="private">Private</option></select></div>
+    <div class="filter"><label>Service</label><select id="serviceFilter"><option value="all">All services</option><option value="adult">Adult</option><option value="under_18">Under 18</option></select></div>
+    <div class="filter"><label>From cohort</label><select id="startMonth"></select></div>
+    <div class="filter"><label>To cohort</label><select id="endMonth"></select></div>
+    <div class="refresh">Last generated<br><b id="generatedAt"></b></div>
+  </div>
+</div></header>
+<main class="content">
+<div class="banner"><div><strong>Synthetic service simulation</strong><small>No real patient or company data are used. Thresholds, alerts and recommendations demonstrate an operating process; they are not clinical or company estimates.</small></div><div style="display:flex;gap:8px;align-items:center"><span class="role-pill" id="roleContext">Operations view</span><span class="badge synthetic">Demo environment</span></div></div>
+
+<section class="view active" id="view-command">
+  <div class="kpis">
+    <div class="kpi" id="k-referrals"><div class="k-label">Referrals</div><div class="k-value"></div><div class="k-sub"></div></div>
+    <div class="kpi positive" id="k-accepted"><div class="k-label">Acceptance rate</div><div class="k-value"></div><div class="k-sub"></div></div>
+    <div class="kpi" id="k-completed"><div class="k-label">Completed / accepted</div><div class="k-value"></div><div class="k-sub"></div></div>
+    <div class="kpi" id="k-treated"><div class="k-label">Treatment / completed</div><div class="k-value"></div><div class="k-sub"></div></div>
+    <div class="kpi attention" id="k-median"><div class="k-label">Median assessment wait</div><div class="k-value"></div><div class="k-sub"></div></div>
+    <div class="kpi risky" id="k-p90"><div class="k-label">P90 assessment wait</div><div class="k-value"></div><div class="k-sub"></div></div>
+    <div class="kpi" id="k-attendance"><div class="k-label">Appointment attendance</div><div class="k-value"></div><div class="k-sub"></div></div>
+    <div class="kpi positive" id="k-data"><div class="k-label">Data quality gate</div><div class="k-value"></div><div class="k-sub"></div></div>
+  </div>
+  <div class="grid two">
+    <div class="panel"><div class="panel-head"><div><div class="panel-title">Referral demand</div><div class="panel-sub">Weekly intake for the selected cohort and service filters</div></div><span class="badge info">Operational trend</span></div><div class="panel-body"><div id="commandTrend" class="chart"></div></div></div>
+    <div class="panel"><div class="panel-head"><div><div class="panel-title">Decision queue</div><div class="panel-sub">Rules turn dashboard signals into an owner and a next check</div></div><span class="badge warn">Action review</span></div><div id="decisionList" class="decision-list"></div></div>
+  </div>
+  <div class="grid two">
+    <div class="panel"><div class="panel-head"><div><div class="panel-title">Patient pathway conversion</div><div class="panel-sub">Referral receipt through treatment start</div></div></div><div class="panel-body"><div id="commandFunnel" class="chart tall"></div></div></div>
+    <div class="panel"><div class="panel-head"><div><div class="panel-title">Stored scenario outcomes</div><div class="panel-sub">End-of-horizon backlog; lower is better in this synthetic model</div></div></div><div class="panel-body"><div id="scenarioOutcome" class="chart tall"></div></div></div>
+  </div>
+  <div class="panel"><div class="panel-head"><div><div class="panel-title">How this dashboard fits the operating week</div><div class="panel-sub">The analytical product is part of a control loop, not a one-off report</div></div></div><div class="workflow">
+    <div class="flow-step"><div class="num">1</div><h4>08:00 data refresh</h4><p>Load referral, scheduling, communication and capacity records.</p></div>
+    <div class="flow-step"><div class="num">2</div><h4>08:15 quality gate</h4><p>Stop publication when identifiers, timestamps or status rules fail.</p></div>
+    <div class="flow-step"><div class="num">3</div><h4>09:00 operations huddle</h4><p>Review long waits, backlog direction and named case queues.</p></div>
+    <div class="flow-step"><div class="num">4</div><h4>Weekly capacity review</h4><p>Test demand, clinic and absence assumptions before roster sign-off.</p></div>
+    <div class="flow-step"><div class="num">5</div><h4>Monthly controls</h4><p>Review forecast error, calibration and group-level model behaviour.</p></div>
+  </div></div>
+</section>
+

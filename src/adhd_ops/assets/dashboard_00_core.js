@@ -6,7 +6,9 @@ const plotCfg = {responsive:true, displaylogo:false, modeBarButtonsToRemove:['la
 const baseLayout = {paper_bgcolor:'rgba(0,0,0,0)',plot_bgcolor:'rgba(0,0,0,0)',font:{family:'Inter, system-ui, sans-serif',color:'#334155',size:11},margin:{l:48,r:18,t:25,b:42},hoverlabel:{bgcolor:'#102a43',font:{color:'#fff'}}};
 let activeView = 'command';
 
+function esc(value){return String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));}
 function fmt(n,d=0){ if(n===null||n===undefined||Number.isNaN(Number(n))) return '—'; return Number(n).toLocaleString(undefined,{minimumFractionDigits:d,maximumFractionDigits:d}); }
+function gbp(n,d=0){if(n===null||n===undefined||Number.isNaN(Number(n)))return '—';return new Intl.NumberFormat('en-GB',{style:'currency',currency:'GBP',maximumFractionDigits:d,minimumFractionDigits:d}).format(Number(n));}
 function pct(n,d=1){ return n===null||n===undefined||Number.isNaN(Number(n))?'—':`${(Number(n)*100).toFixed(d)}%`; }
 function median(values){const x=values.filter(v=>v!==null&&Number.isFinite(Number(v))).map(Number).sort((a,b)=>a-b);if(!x.length)return null;const m=Math.floor(x.length/2);return x.length%2?x[m]:(x[m-1]+x[m])/2;}
 function quantile(values,q){const x=values.filter(v=>v!==null&&Number.isFinite(Number(v))).map(Number).sort((a,b)=>a-b);if(!x.length)return null;const p=(x.length-1)*q,b=Math.floor(p),r=p-b;return x[b+1]!==undefined?x[b]+r*(x[b+1]-x[b]):x[b];}

@@ -107,7 +107,8 @@ def train_attendance_models(appointments: pd.DataFrame, model_path: str | Path |
         ["confirm_and_offer_easy_reschedule", "extra_reminder", "standard_reminder"],
         default="routine_process",
     )
-    support_queue = scored.sort_values("predicted_dna_probability", ascending=False).head(200)
+    scored = scored.sort_values("predicted_dna_probability", ascending=False).reset_index(drop=True)
+    support_queue = scored.head(200).copy()
 
     calibration_frame = pd.DataFrame({"probability": probability, "outcome": y_test.to_numpy()})
     calibration_frame["bin"] = pd.qcut(calibration_frame["probability"], q=10, duplicates="drop")
@@ -145,6 +146,7 @@ def train_attendance_models(appointments: pd.DataFrame, model_path: str | Path |
         "metrics": metrics,
         "selected_model": selected,
         "support_queue": support_queue,
+        "scored_test": scored,
         "calibration": calibration,
         "subgroup_audit": subgroup_audit,
         "model": model,
