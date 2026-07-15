@@ -22,6 +22,32 @@ function renderSegmentTable(cases){
 }
 function ownerAction(stage){return {referral_accepted:['Referral operations','Complete first contact'],first_contact:['Scheduling','Offer an assessment slot'],assessment_booked:['Patient support','Confirm attendance or reschedule'],assessment_attended:['Clinical team','Complete and record assessment'],assessment_completed:['Clinical operations','Review next-step status']}[stage]||['Referral operations','Review referral status'];}
 function renderExceptionQueue(cases){
+  const table=document.getElementById('exceptionTable');
+  if(!hasPatientAccess()){
+    table.innerHTML='<tbody><tr><td><div class="restricted"><b>Patient-level queue hidden for this role.</b><br>Switch to Operations or Patient support to demonstrate a restricted workflow. In production, access must be enforced outside the browser.</div></td></tr></tbody>';
+    return;
+  }
   const open=cases.filter(x=>x.accepted&&!x.treatment).sort((a,b)=>(b.days_open||0)-(a.days_open||0)).slice(0,25);
-  document.getElementById('exceptionTable').innerHTML=`<thead><tr><th>Referral</th><th>Route</th><th>Service</th><th>Current stage</th><th>Days open</th><th>Suggested owner</th><th>Next check</th></tr></thead><tbody>${open.map(x=>{const oa=ownerAction(x.current_stage);return `<tr><td>${x.referral_id}</td><td>${x.funding_route==='private'?'Private':'NHS RTC'}</td><td>${x.service_group==='adult'?'Adult':'Under 18'}</td><td>${humanStage(x.current_stage)}</td><td class="cell-risk">${fmt(x.days_open,0)}</td><td>${oa[0]}</td><td>${oa[1]}</td></tr>`}).join('')}</tbody>`;
+  table.innerHTML=`<thead><tr><th>Referral</th><th>Route</th><th>Service</th><th>Current stage</th><th>Days open</th><th>Suggested owner</th><th>Next check</th></tr></thead><tbody>${open.map(x=>{const oa=ownerAction(x.current_stage);return `<tr class="clickable-row" data-referral="${x.referral_id}"><td>${x.referral_id}</td><td>${x.funding_route==='private'?'Private':'NHS RTC'}</td><td>${x.service_group==='adult'?'Adult':'Under 18'}</td><td>${humanStage(x.current_stage)}</td><td class="cell-risk">${fmt(x.days_open,0)}</td><td>${oa[0]}</td><td>${oa[1]}</td></tr>`}).join('')}</tbody>`;
+  table.querySelectorAll('[data-referral]').forEach(row=>row.addEventListener('click',()=>openCaseModal(row.dataset.referral)));
 }
+function timelineDate(value){return value?new Date(value).toLocaleDateString('en-GB'):'Not recorded';}
+function openCaseModal(referralId){
+  if(!hasPatientAccess())return;
+  const c=D.cases.find(x=>x.referral_id===referralId);if(!c)return;
+  const events=[
+    ['Referral received',c.referral_received_at,'referral_received'],
+    ['Accepted',c.accepted_at,'referral_accepted'],
+    ['First contact',c.first_contact_at,'first_contact'],
+    ['Assessment booked',c.scheduled_start,'assessment_booked'],
+    ['Assessment completed',c.assessment_completed_at,'assessment_completed'],
+    ['Treatment started',c.treatment_started_at,'treatment_started'],
+  ];
+  const currentIndex=Math.max(0,events.findIndex(x=>x[2]===c.current_stage));
+  document.getElementById('caseModalSub').textContent=`${c.referral_id} · ${c.funding_route==='private'?'Private':'NHS RTC'} · ${c.service_group==='adult'?'Adult':'Under 18'} · ${fmt(c.days_open,0)} days open`;
+  document.getElementById('caseTimeline').innerHTML=events.map((e,i)=>`<div class="timeline-step ${e[1]?'done':i===currentIndex?'current':''}"><b>${e[0]}</b><span>${timelineDate(e[1])}</span></div>`).join('');
+  const oa=ownerAction(c.current_stage);
+  document.getElementById('caseChecks').innerHTML=`<b>Operational review</b><br>Current recorded stage: ${humanStage(c.current_stage)}.<br>Suggested owner: ${oa[0]}.<br>Next check: ${oa[1]}.<br><br><b>Boundary:</b> this is a synthetic service-process drill-down, not a clinical record or clinical priority score.`;
+  const modal=document.getElementById('caseModal');modal.classList.add('open');modal.setAttribute('aria-hidden','false');
+}
+function closeCaseModal(){const modal=document.getElementById('caseModal');modal.classList.remove('open');modal.setAttribute('aria-hidden','true');}

@@ -1,15 +1,22 @@
 # Portfolio defaults for the synthetic operating process.
-# These are not Care ADHD targets or clinical service standards.
+# These are not Care ADHD targets, costs, or clinical service standards.
 thresholds:
   p90_assessment_wait_days: 90
   backlog_review_patients: 1000
   completed_per_accepted_review_rate: 0.75
   data_quality_error_tolerance: 0
+  attendance_calibration_gap: 0.05
+  forecast_wape_review: 0.12
+  minimum_monitoring_n: 50
 workflow:
   daily_refresh_time: "08:00"
   daily_huddle_time: "09:00"
   weekly_capacity_review: "Tuesday"
   monthly_model_review: true
+  action_due_days:
+    high: 2
+    medium: 5
+    recorded: 0
 appointment_support:
   default_weekly_outreach_capacity: 100
   permitted_actions:
@@ -22,3 +29,31 @@ appointment_support:
     - eligibility_decision
     - automatic_cancellation
     - lower_care_priority
+planning_cost_proxies:
+  clinician_hour_gbp: 85.0
+  patient_support_contact_gbp: 4.5
+  unused_assessment_slot_gbp: 135.0
+  horizon_weeks: 12
+  # Assumption used only by the impact calculator; it is not an estimated causal effect.
+  outreach_relative_dna_reduction: 0.15
+role_profiles:
+  executive:
+    label: Executive
+    default_view: command
+    allowed_views: [command, impact, governance]
+    patient_level_access: false
+  operations:
+    label: Operations
+    default_view: command
+    allowed_views: [command, pathway, capacity, impact, governance]
+    patient_level_access: true
+  patient_support:
+    label: Patient support
+    default_view: attendance
+    allowed_views: [attendance, pathway]
+    patient_level_access: true
+  data_model:
+    label: Data and model
+    default_view: governance
+    allowed_views: [command, capacity, attendance, impact, governance]
+    patient_level_access: false

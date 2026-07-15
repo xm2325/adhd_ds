@@ -7,7 +7,7 @@ on:
 
 jobs:
   test-and-build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     permissions:
       contents: read
     steps:
@@ -20,6 +20,9 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install -e .[dev]
+      - name: Check dashboard JavaScript syntax
+        run: |
+          for file in src/adhd_ops/assets/dashboard_*.js; do node --check "$file"; done
       - name: Run automated tests
         run: pytest
       - name: Build synthetic analytics products
@@ -32,12 +35,17 @@ jobs:
           grep -q "Interactive scenario planner" reports/operations_dashboard.html
           grep -q "Synthetic service simulation" reports/operations_dashboard.html
           grep -q "exportSupport" reports/operations_dashboard.html
+          grep -q "Operational decision register" reports/operations_dashboard.html
+          grep -q "exportDecisions" reports/operations_dashboard.html
+          grep -q "Role view" reports/operations_dashboard.html
+          test -s results/scenario_impact.csv
+          test -s results/attendance_monitoring.csv
       - name: Publish workflow summary
         run: |
           echo "## ADHD DS build" >> "$GITHUB_STEP_SUMMARY"
           echo "- Automated tests passed" >> "$GITHUB_STEP_SUMMARY"
           echo "- Interactive dashboard generated and checked" >> "$GITHUB_STEP_SUMMARY"
-          echo "- Data-quality, pathway, forecast, capacity and model outputs generated" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Data-quality, pathway, forecast, capacity, impact and monitoring outputs generated" >> "$GITHUB_STEP_SUMMARY"
           echo "- All data and results are synthetic" >> "$GITHUB_STEP_SUMMARY"
       - name: Upload compact review pack
         uses: actions/upload-artifact@v4
@@ -49,8 +57,13 @@ jobs:
           path: |
             docs/index.html
             reports/weekly_operational_brief.md
+            reports/monthly_control_pack.md
             reports/data_quality_report.html
             results/run_summary.json
             results/operational_action_queue.csv
             results/capacity_scenarios.csv
             results/attendance_model_metrics.csv
+            results/scenario_impact.csv
+            results/outreach_impact.csv
+            results/attendance_monitoring.csv
+            results/forecast_monitoring.csv
