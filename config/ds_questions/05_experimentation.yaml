@@ -1,0 +1,58 @@
+questions:
+- id: Q31
+  category: experimentation
+  stakeholder: Product / patient support
+  question: Do additional reminders actually reduce non-attendance?
+  why_asked: Model ranking performance is not intervention effectiveness.
+  answer_key: reminder_effect
+  method: Randomise the additional workflow where ethically and operationally feasible.
+  required_inputs: Eligible appointments, assignment, delivery, outcomes and guardrails.
+  deliverable: Intention-to-treat effect with confidence interval.
+  risk_if_wrong: Observational selection bias is called impact.
+  next_action: Run a controlled pilot before scaling.
+- id: Q32
+  category: experimentation
+  stakeholder: Product / finance
+  question: How large and how long must the pilot be?
+  why_asked: Small effect sizes require more observations than teams expect.
+  answer_key: pilot_size
+  method: Calculate two-arm sample size over plausible relative reductions.
+  required_inputs: Baseline event rate, alpha, power, effect and recruitment rate.
+  deliverable: Sample size and duration scenarios.
+  risk_if_wrong: An underpowered pilot is interpreted as proof of no effect.
+  next_action: Separate feasibility objectives from effectiveness objectives.
+- id: Q33
+  category: experimentation
+  stakeholder: Clinical / patient experience
+  question: What guardrails must be monitored during the pilot?
+  why_asked: Improving DNA could worsen complaints, opt-outs or late cancellations.
+  answer_key: pilot_guardrails
+  method: Pre-specify patient-experience, equity and workload metrics.
+  required_inputs: Communications, complaints, opt-outs, rescheduling and staffing.
+  deliverable: Guardrail dashboard and stopping rules.
+  risk_if_wrong: A narrow metric improves while patient experience deteriorates.
+  next_action: Approve guardrails before randomisation.
+- id: Q34
+  category: experimentation
+  stakeholder: Head of Data Science
+  question: When is an observational analysis acceptable instead of randomisation?
+  why_asked: Randomisation may not always be operationally possible.
+  answer_key: causal_design
+  method: Use target-trial thinking, adjustment and sensitivity analysis when randomisation
+    is unavailable.
+  required_inputs: Treatment assignment mechanism, confounders, timing and outcomes.
+  deliverable: Causal estimand, assumptions and limitations.
+  risk_if_wrong: Confounding is hidden behind a predictive model.
+  next_action: Prefer randomisation for low-risk workflow changes when feasible.
+- id: Q35
+  category: experimentation
+  stakeholder: Product / operations
+  question: How should we evaluate a phased rollout?
+  why_asked: Services often roll out by team or week rather than all at once.
+  answer_key: phased_rollout
+  method: Use stepped-wedge, difference-in-differences or interrupted time series
+    with pre-trends checks.
+  required_inputs: Rollout dates, units, outcomes and concurrent changes.
+  deliverable: Pre-specified evaluation plan and robustness checks.
+  risk_if_wrong: Time trends are attributed to the rollout.
+  next_action: Record rollout assignment before implementation.

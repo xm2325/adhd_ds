@@ -1,0 +1,98 @@
+questions:
+- id: Q09
+  category: patient_pathway
+  stakeholder: Pathway manager
+  question: Where are patients spending most of their time?
+  why_asked: The longest stage is the first candidate for process or capacity review.
+  answer_key: pathway_bottleneck
+  method: Decompose end-to-end time into operational stages.
+  required_inputs: Referral, contact, booking, appointment, assessment and treatment
+    timestamps.
+  deliverable: Stage-duration decomposition with median, P90 and share of total time.
+  risk_if_wrong: Investment targets the wrong part of the pathway.
+  next_action: Validate the dominant stage and test feasible changes.
+- id: Q10
+  category: patient_pathway
+  stakeholder: Clinical operations
+  question: Is the backlog mainly demand pressure or insufficient capacity?
+  why_asked: 'The response differs: intake control, staffing, scheduling or process
+    redesign.'
+  answer_key: backlog_driver
+  method: Triangulate referral change, effective capacity, throughput and backlog
+    scenarios.
+  required_inputs: Demand history, capacity minutes, appointment duration and queue
+    state.
+  deliverable: Root-cause scorecard with evidence strength and caveats.
+  risk_if_wrong: More reminders are funded when the true constraint is assessment
+    capacity.
+  next_action: Confirm operational assumptions before changing resource plans.
+- id: Q11
+  category: patient_pathway
+  stakeholder: Clinical / equality lead
+  question: Which service or funding groups experience the longest waits?
+  why_asked: Overall averages can hide unequal access.
+  answer_key: group_waits
+  method: Compare medians, P90s and cohort maturity by service and funding route.
+  required_inputs: Pathway timestamps, service group and funding route.
+  deliverable: Group comparison with sample sizes and uncertainty notes.
+  risk_if_wrong: Small groups are overinterpreted or genuine inequality is missed.
+  next_action: Review process differences and data completeness before attributing
+    cause.
+- id: Q12
+  category: patient_pathway
+  stakeholder: Operations manager
+  question: Is the delay caused by referral processing, booking or the appointment
+    queue?
+  why_asked: Each stage has a different owner and remedy.
+  answer_key: stage_owner
+  method: Map stage durations to accountable operational teams.
+  required_inputs: Ordered pathway event timestamps and ownership map.
+  deliverable: Stage-by-stage delay and owner table.
+  risk_if_wrong: A team is held accountable for delay outside its control.
+  next_action: Assign investigation to the owner of the validated dominant stage.
+- id: Q13
+  category: patient_pathway
+  stakeholder: Executive / pathway manager
+  question: Why did pathway completion fall?
+  why_asked: Lower completion can reflect case mix, immature cohorts or a real process
+    issue.
+  answer_key: completion_change
+  method: Use fixed-horizon cohorts, stage conversion and period decomposition.
+  required_inputs: Cohort dates, stage dates, service and funding segments.
+  deliverable: Completion-rate decomposition and maturity-adjusted cohort chart.
+  risk_if_wrong: Recent cohorts are treated as failures before they mature.
+  next_action: Separate maturity, composition and within-group conversion changes.
+- id: Q14
+  category: patient_pathway
+  stakeholder: Patient support
+  question: How many open cases require operational review now?
+  why_asked: Teams need a capacity-limited work queue.
+  answer_key: open_cases
+  method: Define overdue and incomplete-pathway rules, then generate a minimised queue.
+  required_inputs: Current stage, days open and last recorded event.
+  deliverable: Review queue with owner and next check.
+  risk_if_wrong: The queue becomes a clinical priority list without clinical governance.
+  next_action: Keep the queue operational and route clinical urgency separately.
+- id: Q15
+  category: patient_pathway
+  stakeholder: Operations / equality lead
+  question: Which queue allocation policy should we use?
+  why_asked: Oldest-first, readiness and balanced allocation optimise different objectives.
+  answer_key: queue_policy
+  method: Compare policies at identical weekly capacity.
+  required_inputs: Open queue, stage, wait, funding route and service group.
+  deliverable: Maximum wait, overdue clearance and selection-gap comparison.
+  risk_if_wrong: A policy is called fair without stating the objective it optimises.
+  next_action: Agree objective, guardrails and exception handling before deployment.
+- id: Q16
+  category: patient_pathway
+  stakeholder: Clinical operations / finance
+  question: What happens if we add one assessment clinic?
+  why_asked: Resource decisions need quantified backlog and wait implications.
+  answer_key: extra_clinic
+  method: Simulate the same demand under additional clinical minutes.
+  required_inputs: Forecast demand, appointment duration, effective capacity and DNA
+    assumption.
+  deliverable: Baseline-versus-clinic scenario with cost proxy and uncertainty.
+  risk_if_wrong: A deterministic scenario is presented as a guaranteed outcome.
+  next_action: Confirm feasibility, staffing and sensitivity before implementation.

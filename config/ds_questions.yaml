@@ -1,0 +1,9 @@
+question_set_version: 1.0.0
+synthetic_only: true
+includes:
+- ds_questions/01_data_and_metrics.yaml
+- ds_questions/02_patient_pathway.yaml
+- ds_questions/03_appointment_and_model.yaml
+- ds_questions/04_forecast_and_capacity.yaml
+- ds_questions/05_experimentation.yaml
+- ds_questions/06_governance_and_communication.yaml

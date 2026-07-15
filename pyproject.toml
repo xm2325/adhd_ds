@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "adhd-ds"
-version = "0.5.0"
-description = "Synthetic ADHD service data science and operations dashboard"
+version = "0.6.0"
+description = "Synthetic ADHD service data science scenario lab and operations platform"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [

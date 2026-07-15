@@ -1,0 +1,81 @@
+questions:
+- id: Q36
+  category: governance_and_communication
+  stakeholder: Information governance
+  question: Who can see appointment-level queues?
+  why_asked: Patient-level operational data requires least-privilege access.
+  answer_key: access_control
+  method: Separate aggregate and patient-level endpoints with server-side authorisation.
+  required_inputs: Role matrix, purpose, minimum fields and audit logs.
+  deliverable: Access-control design and data-minimised response schema.
+  risk_if_wrong: A visual role selector is mistaken for security.
+  next_action: Implement managed identity and database permissions in production.
+- id: Q37
+  category: governance_and_communication
+  stakeholder: Data scientist / auditor
+  question: Can this result be reproduced exactly?
+  why_asked: Decisions must be traceable to data and configuration.
+  answer_key: reproducibility
+  method: Record run ID, source fingerprints, configuration hashes and output hashes.
+  required_inputs: Source snapshots, code version and configuration.
+  deliverable: Replayable run manifest.
+  risk_if_wrong: A number cannot be defended after data refreshes.
+  next_action: Archive approved manifests and decision records.
+- id: Q38
+  category: governance_and_communication
+  stakeholder: Head of Data Science / operations
+  question: What happens when a metric or model control turns red?
+  why_asked: Alerts need an owner, investigation and rollback boundary.
+  answer_key: incident_response
+  method: Convert controls into run-linked incident records.
+  required_inputs: Signal, severity, owner, playbook and rollback trigger.
+  deliverable: Incident register and decision log.
+  risk_if_wrong: Red dashboards remain unactioned.
+  next_action: Triage, validate impact and suspend affected output when required.
+- id: Q39
+  category: governance_and_communication
+  stakeholder: Executive
+  question: What decision do you need from me today?
+  why_asked: Analysis without a decision request does not change operations.
+  answer_key: decision_request
+  method: Summarise conclusion, evidence, options, recommendation and uncertainty.
+  required_inputs: Validated metrics, feasible options and owner constraints.
+  deliverable: One-page decision brief.
+  risk_if_wrong: Stakeholders receive technical detail but no actionable choice.
+  next_action: Record the selected option, owner and review date.
+- id: Q40
+  category: governance_and_communication
+  stakeholder: Executive / panel interview
+  question: How would you explain the result to a non-technical audience?
+  why_asked: The role requires decisions across clinical, operational and product
+    teams.
+  answer_key: executive_message
+  method: Lead with the operational conclusion, then evidence, implication and decision.
+  required_inputs: Three validated metrics and one decision request.
+  deliverable: Pyramid-structured verbal and written summary.
+  risk_if_wrong: Model detail obscures the service issue.
+  next_action: Tailor depth to the audience and preserve caveats.
+- id: Q41
+  category: governance_and_communication
+  stakeholder: Hiring manager
+  question: What would you do in your first 30 days?
+  why_asked: The company needs delivery under ambiguity, not only modelling.
+  answer_key: first_30_days
+  method: Start with decision inventory, source map, metric definitions and quality
+    gates.
+  required_inputs: Stakeholder interviews, systems, current reports and pain points.
+  deliverable: Prioritised analytics backlog and first reliable operational view.
+  risk_if_wrong: A model is built before the decision and data are understood.
+  next_action: Select one measurable service problem for the first production iteration.
+- id: Q42
+  category: governance_and_communication
+  stakeholder: Any stakeholder
+  question: What must we not conclude from this analysis?
+  why_asked: Clear boundaries prevent overclaiming in healthcare analytics.
+  answer_key: non_conclusions
+  method: Separate descriptive, predictive, scenario and causal claims.
+  required_inputs: Analysis design and evidence class.
+  deliverable: Limitations and prohibited interpretation statement.
+  risk_if_wrong: Synthetic or observational results are treated as provider facts
+    or causal evidence.
+  next_action: State the evidence class on every decision surface.

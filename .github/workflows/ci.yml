@@ -28,52 +28,71 @@ jobs:
         run: pytest -q
       - name: Build synthetic analytics products
         run: python -m adhd_ops.orchestrator --root .
-      - name: Check dashboard, contracts, API and audit outputs
+      - name: Check dashboard, diagnostics, API and audit outputs
         run: |
           test -s reports/operations_dashboard.html
+          test -s reports/ds_question_casebook.md
           test -s docs/index.html
           test -s results/run_manifest.json
           test -s results/data_contract_status.csv
-          test -s results/source_profiles.csv
-          test -s results/queue_policy_comparison.csv
-          test -s results/incident_register.csv
-          test -s results/data_lineage.csv
-          test -s results/service_level_status.csv
-          test -s results/resource_optimisation.csv
-          grep -q "Audit, data contracts and service API" reports/operations_dashboard.html
-          grep -q "Controlled API surface" reports/operations_dashboard.html
-          grep -q "renderAudit" reports/operations_dashboard.html
+          test -s results/root_cause_scorecard.csv
+          test -s results/period_comparison.csv
+          test -s results/stage_duration_decomposition.csv
+          test -s results/metric_definition_sensitivity.csv
+          test -s results/dna_change_decomposition.csv
+          test -s results/threshold_policy_grid.csv
+          test -s results/model_feature_effects.csv
+          test -s results/ds_question_catalog.csv
+          grep -q "Data scientist scenario lab" reports/operations_dashboard.html
+          grep -q "Root-cause triage scorecard" reports/operations_dashboard.html
+          grep -q "renderScenarioLab" reports/operations_dashboard.html
+          grep -q "Q42" reports/ds_question_casebook.md
           python - <<'PY'
+          from pathlib import Path
           from fastapi.testclient import TestClient
           from adhd_ops.service import create_app
+
           client = TestClient(create_app('.'))
           assert client.get('/health').status_code == 200
+          assert len(client.get('/v1/ds-questions').json()) == 42
+          assert client.get('/v1/diagnostics/root-causes').status_code == 200
+          assert client.get('/v1/diagnostics/threshold-policy?weekly_capacity=100').status_code == 200
           assert client.get('/v1/appointment-support').status_code == 403
           assert client.get('/v1/appointment-support?limit=1', headers={'X-Role':'operations'}).status_code == 200
+
+          html = Path('reports/operations_dashboard.html').read_text(encoding='utf-8')
+          start = html.rfind('<script>\nwindow.SCENARIO_DATA=')
+          end = html.find('</script>', start)
+          Path('/tmp/scenario_v06.js').write_text(html[start + 8:end], encoding='utf-8')
           PY
+          node --check /tmp/scenario_v06.js
       - name: Publish workflow summary
         run: |
-          echo "## ADHD DS v0.5 build" >> "$GITHUB_STEP_SUMMARY"
+          echo "## ADHD DS v0.6 build" >> "$GITHUB_STEP_SUMMARY"
           echo "- Python tests and JavaScript checks passed" >> "$GITHUB_STEP_SUMMARY"
-          echo "- Eight-workspace interactive dashboard generated" >> "$GITHUB_STEP_SUMMARY"
-          echo "- Data contracts, source fingerprints, run manifest, queue policies, incidents and API checks generated" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Nine-workspace interactive dashboard generated" >> "$GITHUB_STEP_SUMMARY"
+          echo "- 42-question DS casebook and diagnostic products generated" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Contracts, API access, run manifest and evidence boundaries checked" >> "$GITHUB_STEP_SUMMARY"
           echo "- All data, costs, effects, identifiers and results are synthetic" >> "$GITHUB_STEP_SUMMARY"
       - name: Upload compact review pack
         uses: actions/upload-artifact@v4
         continue-on-error: true
         with:
-          name: adhd-ds-v05-review-pack
+          name: adhd-ds-v06-review-pack
           retention-days: 7
           compression-level: 9
           path: |
             docs/index.html
+            reports/ds_question_casebook.md
             reports/weekly_operational_brief.md
             reports/monthly_control_pack.md
             reports/data_quality_report.html
             results/run_summary.json
             results/run_manifest.json
-            results/data_contract_status.csv
-            results/source_profiles.csv
-            results/queue_policy_comparison.csv
-            results/incident_register.csv
-            results/service_level_status.csv
+            results/root_cause_scorecard.csv
+            results/period_comparison.csv
+            results/stage_duration_decomposition.csv
+            results/metric_definition_sensitivity.csv
+            results/dna_change_decomposition.csv
+            results/threshold_policy_grid.csv
+            results/ds_question_catalog.csv
