@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from pathlib import Path
+import hashlib
+import json
 
 import joblib
 import numpy as np
@@ -68,6 +70,10 @@ def train_attendance_models(appointments: pd.DataFrame, model_path: str | Path |
         ),
     }
     fitted, predictions, metric_rows = {}, {}, []
+    scored_model_rows = []
+    base_columns = [
+        "appointment_id", "patient_id", "scheduled_start", "appointment_type", "service_group", "funding_route"
+    ]
     for name, estimator in estimators.items():
         model = Pipeline([("preprocess", _preprocessor()), ("model", estimator)])
         model.fit(x_train, y_train)
@@ -87,6 +93,11 @@ def train_attendance_models(appointments: pd.DataFrame, model_path: str | Path |
         })
         fitted[name] = model
         predictions[name] = probability
+        model_frame = test[base_columns].copy()
+        model_frame["model"] = name
+        model_frame["observed_dna"] = y_test.to_numpy()
+        model_frame["predicted_dna_probability"] = probability
+        scored_model_rows.append(model_frame)
 
     metrics = pd.DataFrame(metric_rows)
     metrics["selection_score"] = metrics["pr_auc"] - 0.35 * metrics["brier_score"]
@@ -94,9 +105,7 @@ def train_attendance_models(appointments: pd.DataFrame, model_path: str | Path |
     selected = str(metrics.iloc[0]["model"])
     model, probability = fitted[selected], predictions[selected]
 
-    scored = test[[
-        "appointment_id", "patient_id", "scheduled_start", "appointment_type", "service_group", "funding_route"
-    ]].copy()
+    scored = test[base_columns].copy()
     scored["observed_dna"] = y_test.to_numpy()
     scored["predicted_dna_probability"] = probability
     scored["support_priority_band"] = pd.cut(
@@ -138,6 +147,23 @@ def train_attendance_models(appointments: pd.DataFrame, model_path: str | Path |
             })
     subgroup_audit = pd.DataFrame(subgroup_rows)
 
+    feature_signature = hashlib.sha256(
+        json.dumps({"numeric": NUMERIC, "categorical": CATEGORICAL}, sort_keys=True).encode("utf-8")
+    ).hexdigest()[:12]
+    training_end = pd.to_datetime(train["scheduled_start"]).max()
+    test_start = pd.to_datetime(test["scheduled_start"]).min()
+    test_end = pd.to_datetime(test["scheduled_start"]).max()
+    registry = metrics.copy()
+    registry["status"] = np.where(registry["model"].eq(selected), "champion", "challenger")
+    registry["feature_signature"] = feature_signature
+    registry["train_n"] = len(train)
+    registry["training_end"] = training_end
+    registry["test_start"] = test_start
+    registry["test_end"] = test_end
+    registry["model_version"] = registry["model"].map(
+        {"logistic_regression": "logreg-v1", "random_forest": "rf-v1"}
+    )
+
     if model_path is not None:
         path = Path(model_path)
         path.parent.mkdir(parents=True, exist_ok=True)
@@ -147,6 +173,8 @@ def train_attendance_models(appointments: pd.DataFrame, model_path: str | Path |
         "selected_model": selected,
         "support_queue": support_queue,
         "scored_test": scored,
+        "scored_models": pd.concat(scored_model_rows, ignore_index=True),
+        "model_registry": registry,
         "calibration": calibration,
         "subgroup_audit": subgroup_audit,
         "model": model,
