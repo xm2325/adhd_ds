@@ -10,6 +10,7 @@
   <button class="nav-btn" data-view="capacity"><span class="nav-icon">⌁</span>Demand & capacity</button>
   <button class="nav-btn" data-view="attendance"><span class="nav-icon">✓</span>Appointment support</button>
   <button class="nav-btn" data-view="impact"><span class="nav-icon">£</span>Decision & impact</button>
+  <button class="nav-btn" data-view="optimisation"><span class="nav-icon">◎</span>Optimisation & pilot</button>
   <button class="nav-btn" data-view="governance"><span class="nav-icon">◫</span>Data & model controls</button>
   <div class="side-foot"><div><span class="status-dot"></span>Pipeline output loaded</div><div>Synthetic portfolio environment</div><div>Not for clinical decisions</div></div>
 </aside>
@@ -38,6 +39,10 @@
     <div class="kpi risky" id="k-p90"><div class="k-label">P90 assessment wait</div><div class="k-value"></div><div class="k-sub"></div></div>
     <div class="kpi" id="k-attendance"><div class="k-label">Appointment attendance</div><div class="k-value"></div><div class="k-sub"></div></div>
     <div class="kpi positive" id="k-data"><div class="k-label">Data quality gate</div><div class="k-value"></div><div class="k-sub"></div></div>
+  </div>
+  <div class="grid two">
+    <div class="panel"><div class="panel-head"><div><div class="panel-title">Service-level control board</div><div class="panel-sub">Patient access, flow, data and model controls with declared review levels</div></div><span class="badge info">Control tower</span></div><div id="serviceLevelBoard" class="slo-grid"></div></div>
+    <div class="panel"><div class="panel-head"><div><div class="panel-title">Recent operational anomalies</div><div class="panel-sub">Robust rolling-median alerts; investigate before assigning cause</div></div><span class="badge warn">Triage only</span></div><div class="table-wrap compact-table"><table id="anomalyTable"></table></div></div>
   </div>
   <div class="grid two">
     <div class="panel"><div class="panel-head"><div><div class="panel-title">Referral demand</div><div class="panel-sub">Weekly intake for the selected cohort and service filters</div></div><span class="badge info">Operational trend</span></div><div class="panel-body"><div id="commandTrend" class="chart"></div></div></div>
