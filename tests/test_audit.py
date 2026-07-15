@@ -10,4 +10,5 @@ def test_manifest_and_incidents_link_to_run(built_project):
     assert manifest["contract_gate"] == "pass"
     assert manifest["quality_gate"] == "pass"
     assert len(manifest["output_sha256"]) >= 20
+    assert manifest["replay_command"] == "python -m adhd_ops.orchestrator --root ."
     assert incidents["run_id"].eq(summary["run_id"]).all()
