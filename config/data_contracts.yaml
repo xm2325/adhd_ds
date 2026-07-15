@@ -1,0 +1,83 @@
+contract_version: 1.0.0
+synthetic_only: true
+tables:
+  patients:
+    primary_key: patient_id
+    row_count: {min: 1000, max: 20000}
+    columns:
+      patient_id: {type: string, nullable: false}
+      age_band: {type: string, nullable: false, allowed: ["6-11", "12-17", "18-29", "30-44", "45-59", "60+"]}
+      service_group: {type: string, nullable: false, allowed: [adult, under_18]}
+      funding_route: {type: string, nullable: false, allowed: [private, nhs_right_to_choose]}
+      region_group: {type: string, nullable: false}
+      created_at: {type: datetime, nullable: false}
+      synthetic_record: {type: boolean, nullable: false}
+  referrals:
+    primary_key: referral_id
+    row_count: {min: 1000, max: 20000}
+    columns:
+      referral_id: {type: string, nullable: false}
+      patient_id: {type: string, nullable: false}
+      referral_received_at: {type: datetime, nullable: false}
+      referral_source: {type: string, nullable: false}
+      funding_route: {type: string, nullable: false, allowed: [private, nhs_right_to_choose]}
+      service_group: {type: string, nullable: false, allowed: [adult, under_18]}
+      referral_status: {type: string, nullable: false, allowed: [accepted, rejected]}
+      accepted_at: {type: datetime, nullable: true}
+      rejected_at: {type: datetime, nullable: true}
+      first_contact_at: {type: datetime, nullable: true}
+      source_system: {type: string, nullable: false}
+  appointments:
+    primary_key: appointment_id
+    row_count: {min: 2000, max: 40000}
+    columns:
+      appointment_id: {type: string, nullable: false}
+      patient_id: {type: string, nullable: false}
+      referral_id: {type: string, nullable: false}
+      appointment_type: {type: string, nullable: false}
+      booked_at: {type: datetime, nullable: false}
+      scheduled_start: {type: datetime, nullable: false}
+      scheduled_end: {type: datetime, nullable: false}
+      appointment_status: {type: string, nullable: false, allowed: [attended, cancelled_patient, cancelled_provider, did_not_attend]}
+      service_group: {type: string, nullable: false, allowed: [adult, under_18]}
+      funding_route: {type: string, nullable: false, allowed: [private, nhs_right_to_choose]}
+      source_system: {type: string, nullable: false}
+  assessments:
+    primary_key: assessment_id
+    row_count: {min: 500, max: 20000}
+    columns:
+      assessment_id: {type: string, nullable: false}
+      appointment_id: {type: string, nullable: false}
+      patient_id: {type: string, nullable: false}
+      assessment_started_at: {type: datetime, nullable: false}
+      assessment_completed_at: {type: datetime, nullable: true}
+      assessment_status: {type: string, nullable: false}
+  clinician_capacity:
+    primary_key: [week_start, service_type]
+    row_count: {min: 20, max: 1000}
+    columns:
+      week_start: {type: datetime, nullable: false}
+      service_type: {type: string, nullable: false}
+      available_minutes: {type: numeric, nullable: false}
+      absence_minutes: {type: numeric, nullable: false}
+      source_system: {type: string, nullable: false}
+  communications:
+    primary_key: communication_id
+    row_count: {min: 1000, max: 50000}
+    columns:
+      communication_id: {type: string, nullable: false}
+      patient_id: {type: string, nullable: false}
+      appointment_id: {type: string, nullable: false}
+      channel: {type: string, nullable: false}
+      sent_at: {type: datetime, nullable: false}
+      delivery_status: {type: string, nullable: false}
+  treatment_events:
+    primary_key: treatment_event_id
+    row_count: {min: 100, max: 20000}
+    columns:
+      treatment_event_id: {type: string, nullable: false}
+      patient_id: {type: string, nullable: false}
+      referral_id: {type: string, nullable: false}
+      event_type: {type: string, nullable: false}
+      event_at: {type: datetime, nullable: false}
+      status: {type: string, nullable: false}
