@@ -1,0 +1,41 @@
+name: materialize-v07
+
+on:
+  push:
+    branches:
+      - agent/evidence-backed-handbook-v07
+
+permissions:
+  contents: write
+
+jobs:
+  materialize:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/evidence-backed-handbook-v07
+          fetch-depth: 0
+          show-progress: false
+      - name: Reconstruct and validate payload
+        run: |
+          set -euxo pipefail
+          cat .v07_parts/* > /tmp/v07_payload.b64
+          echo "b23fd19304a2360d339d022f9ee373a0cbf11b37ce04e2e9066990c938b0f5e1  /tmp/v07_payload.b64" | sha256sum -c -
+          base64 -d /tmp/v07_payload.b64 > /tmp/v07_payload.tar.gz
+          echo "512a42cbea32a17b626f10c2c601d39f78b0bc952172ff59c996f23b1a03c3e7  /tmp/v07_payload.tar.gz" | sha256sum -c -
+          gzip -t /tmp/v07_payload.tar.gz
+          tar -tzf /tmp/v07_payload.tar.gz >/dev/null
+      - name: Materialize validated v0.7 source
+        run: |
+          set -euxo pipefail
+          tar -xzf /tmp/v07_payload.tar.gz
+          test -s config/evidence_registry.yaml
+          test -s src/adhd_ops/evidence.py
+          test -s tests/test_evidence.py
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add CHANGELOG.md README.md config docs/evidence_methodology.md pyproject.toml src tests
+          git diff --cached --quiet && { echo "no materialized changes"; exit 1; }
+          git commit -m "Materialize v0.7 evidence-backed handbook"
+          git push origin HEAD:agent/evidence-backed-handbook-v07
