@@ -8,6 +8,7 @@ on:
 jobs:
   test-and-build:
     runs-on: ubuntu-22.04
+    timeout-minutes: 20
     permissions:
       contents: read
     steps:
@@ -26,35 +27,42 @@ jobs:
       - name: Run automated tests
         run: pytest -q
       - name: Build synthetic analytics products
-        run: python -m adhd_ops.pipeline --root .
-      - name: Check dashboard and control-tower outputs
+        run: python -m adhd_ops.orchestrator --root .
+      - name: Check dashboard, contracts, API and audit outputs
         run: |
           test -s reports/operations_dashboard.html
           test -s docs/index.html
-          test -s results/operational_action_queue.csv
+          test -s results/run_manifest.json
+          test -s results/data_contract_status.csv
+          test -s results/source_profiles.csv
+          test -s results/queue_policy_comparison.csv
+          test -s results/incident_register.csv
+          test -s results/data_lineage.csv
           test -s results/service_level_status.csv
-          test -s results/weekly_anomalies.csv
           test -s results/resource_optimisation.csv
-          test -s results/budget_recommendations.csv
-          test -s results/experiment_design.csv
-          test -s results/model_registry.csv
-          test -s results/champion_challenger_monitoring.csv
-          grep -q "Resource optimisation and pilot design" reports/operations_dashboard.html
-          grep -q "Service-level control board" reports/operations_dashboard.html
-          grep -q "Champion–challenger monitoring" reports/operations_dashboard.html
-          grep -q "renderOptimisation" reports/operations_dashboard.html
+          grep -q "Audit, data contracts and service API" reports/operations_dashboard.html
+          grep -q "Controlled API surface" reports/operations_dashboard.html
+          grep -q "renderAudit" reports/operations_dashboard.html
+          python - <<'PY'
+          from fastapi.testclient import TestClient
+          from adhd_ops.service import create_app
+          client = TestClient(create_app('.'))
+          assert client.get('/health').status_code == 200
+          assert client.get('/v1/appointment-support').status_code == 403
+          assert client.get('/v1/appointment-support?limit=1', headers={'X-Role':'operations'}).status_code == 200
+          PY
       - name: Publish workflow summary
         run: |
-          echo "## ADHD DS v0.4 build" >> "$GITHUB_STEP_SUMMARY"
-          echo "- Automated tests and JavaScript checks passed" >> "$GITHUB_STEP_SUMMARY"
-          echo "- Seven-workspace interactive dashboard generated" >> "$GITHUB_STEP_SUMMARY"
-          echo "- Service controls, anomaly triage, optimisation, experiment and model-registry outputs generated" >> "$GITHUB_STEP_SUMMARY"
-          echo "- All data, costs, effects and results are synthetic" >> "$GITHUB_STEP_SUMMARY"
+          echo "## ADHD DS v0.5 build" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Python tests and JavaScript checks passed" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Eight-workspace interactive dashboard generated" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Data contracts, source fingerprints, run manifest, queue policies, incidents and API checks generated" >> "$GITHUB_STEP_SUMMARY"
+          echo "- All data, costs, effects, identifiers and results are synthetic" >> "$GITHUB_STEP_SUMMARY"
       - name: Upload compact review pack
         uses: actions/upload-artifact@v4
         continue-on-error: true
         with:
-          name: adhd-ds-v04-review-pack
+          name: adhd-ds-v05-review-pack
           retention-days: 7
           compression-level: 9
           path: |
@@ -63,9 +71,9 @@ jobs:
             reports/monthly_control_pack.md
             reports/data_quality_report.html
             results/run_summary.json
-            results/operational_action_queue.csv
+            results/run_manifest.json
+            results/data_contract_status.csv
+            results/source_profiles.csv
+            results/queue_policy_comparison.csv
+            results/incident_register.csv
             results/service_level_status.csv
-            results/weekly_anomalies.csv
-            results/budget_recommendations.csv
-            results/experiment_design.csv
-            results/model_registry.csv
