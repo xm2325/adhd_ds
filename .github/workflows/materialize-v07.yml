@@ -4,12 +4,16 @@ on:
   push:
     branches:
       - agent/evidence-backed-handbook-v07
+  pull_request:
+    branches:
+      - main
 
 permissions:
   contents: write
 
 jobs:
   materialize:
+    if: github.head_ref == 'agent/evidence-backed-handbook-v07' || github.ref_name == 'agent/evidence-backed-handbook-v07'
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
