@@ -9,7 +9,7 @@ from adhd_ops.capacity import simulate_capacity
 from adhd_ops.config import load_yaml
 from adhd_ops.forecasting import forecast_referrals
 from adhd_ops.pathway import analyse_pathway
-from adhd_ops.pipeline import run
+from adhd_ops.orchestrator import run
 from adhd_ops.synthetic import generate_synthetic_data
 from adhd_ops.validation import validate_tables
 

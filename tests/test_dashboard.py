@@ -18,6 +18,9 @@ def test_interactive_dashboard_contains_operational_views(built_project):
         "Resource optimisation and pilot design",
         "Service-level control board",
         "Champion–challenger monitoring",
+        "Audit, data contracts and service API",
+        "Controlled API surface",
+        "Operational queue-policy comparison",
         "window.DASHBOARD_DATA=",
     ]:
         assert marker in html
@@ -30,3 +33,7 @@ def test_interactive_dashboard_contains_operational_views(built_project):
     assert "renderOptimisation" in html
     assert "optimisationPareto" in html
     assert "serviceLevelBoard" in html
+
+    assert "renderAudit" in html
+    assert "contractTable" in html
+    assert "queuePolicyChart" in html
