@@ -1,0 +1,91 @@
+questions:
+- id: Q17
+  category: appointment_and_model
+  stakeholder: Patient support / data scientist
+  question: Why did the DNA rate increase?
+  why_asked: A prediction model does not explain a change in the observed rate.
+  answer_key: dna_change
+  method: Decompose observed change into case-mix and within-segment rate effects.
+  required_inputs: Appointment type, lead time, reminders, timing and outcomes.
+  deliverable: Ranked observed-change contribution table.
+  risk_if_wrong: Feature importance is incorrectly presented as root cause.
+  next_action: Investigate top contributions and test candidate interventions.
+- id: Q18
+  category: appointment_and_model
+  stakeholder: Clinical / operations stakeholder
+  question: Which features drive predictions, and does that mean they cause non-attendance?
+  why_asked: Predictive association and causal explanation are often confused.
+  answer_key: predictive_vs_causal
+  method: Report model coefficients or importances with an explicit causal boundary.
+  required_inputs: Fitted model, encoded feature names and validation data.
+  deliverable: Predictive feature table plus causal caveat.
+  risk_if_wrong: Operational action targets a proxy or protected characteristic.
+  next_action: Use experiments or causal designs for intervention claims.
+- id: Q19
+  category: appointment_and_model
+  stakeholder: Head of Data Science
+  question: Is the model better than a simple baseline?
+  why_asked: Complexity is justified only by measurable decision value.
+  answer_key: model_baseline
+  method: Compare logistic regression, tree model and operational baseline on later
+    data.
+  required_inputs: Temporal test set and capacity-relevant metrics.
+  deliverable: PR-AUC, Brier, precision and recall at outreach capacity.
+  risk_if_wrong: A complex model is adopted for negligible value.
+  next_action: Prefer the simplest model meeting decision and calibration requirements.
+- id: Q20
+  category: appointment_and_model
+  stakeholder: Model owner
+  question: Are the predicted probabilities calibrated?
+  why_asked: Capacity and expected-impact calculations use probabilities, not only
+    rankings.
+  answer_key: calibration
+  method: Compare mean predicted probability with observed rate over time and by group.
+  required_inputs: Predictions, outcomes, month and subgroup.
+  deliverable: Calibration plot, Brier score and review trigger.
+  risk_if_wrong: Expected workload and impact are systematically overstated.
+  next_action: Recalibrate, constrain use or suspend probability-based decisions.
+- id: Q21
+  category: appointment_and_model
+  stakeholder: Patient support manager
+  question: What risk threshold and weekly outreach capacity should we use?
+  why_asked: The operational team has finite contact capacity.
+  answer_key: threshold_policy
+  method: Evaluate threshold-capacity combinations on later data.
+  required_inputs: Ranked predictions, outcomes, team capacity and subgroup fields.
+  deliverable: Precision, recall, expected recoveries and selection gaps.
+  risk_if_wrong: A threshold is chosen from AUC rather than workflow constraints.
+  next_action: Choose a policy jointly with workload and equality guardrails.
+- id: Q22
+  category: appointment_and_model
+  stakeholder: Equality / clinical governance
+  question: Does the model perform and select similarly across groups?
+  why_asked: Aggregate performance can hide harmful variation.
+  answer_key: subgroup_model
+  method: Compare prevalence, calibration, Brier score and selection rates by group.
+  required_inputs: Predictions, outcomes, service and funding groups.
+  deliverable: Subgroup audit with minimum sample-size rule.
+  risk_if_wrong: Noisy small groups are overinterpreted or disparities are ignored.
+  next_action: Investigate material gaps and consider subgroup-specific safeguards.
+- id: Q23
+  category: appointment_and_model
+  stakeholder: Model owner / governance
+  question: When should we retrain, recalibrate or suspend the model?
+  why_asked: Automatic retraining can amplify bad data or workflow changes.
+  answer_key: model_action_rule
+  method: Use data, calibration, ranking, subgroup and workflow triggers.
+  required_inputs: Monitoring history, incidents and model registry.
+  deliverable: Champion-challenger decision with rollback plan.
+  risk_if_wrong: A degraded model remains active or is replaced without evidence.
+  next_action: Require human approval and reproducible validation.
+- id: Q24
+  category: appointment_and_model
+  stakeholder: Clinical governance / patient support
+  question: What actions is the model allowed to trigger?
+  why_asked: A healthcare prediction must have a bounded operational use.
+  answer_key: permitted_actions
+  method: Define permitted and prohibited actions before deployment.
+  required_inputs: Intended-use statement, governance review and workflow design.
+  deliverable: Model card and safe-use controls.
+  risk_if_wrong: Prediction influences eligibility, diagnosis or care priority.
+  next_action: Limit use to reminders, confirmation and easier rescheduling.

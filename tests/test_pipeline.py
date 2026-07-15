@@ -13,3 +13,7 @@ def test_full_pipeline(built_project):
     assert (target / "results/run_manifest.json").exists()
     assert (target / "results/queue_policy_comparison.csv").exists()
     assert (target / "results/incident_register.csv").exists()
+    assert (target / "results/root_cause_scorecard.csv").exists()
+    assert (target / "results/ds_question_catalog.csv").exists()
+    assert (target / "reports/ds_question_casebook.md").exists()
+    assert summary["ds_questions_covered"] == 42

@@ -21,6 +21,9 @@ def test_interactive_dashboard_contains_operational_views(built_project):
         "Audit, data contracts and service API",
         "Controlled API surface",
         "Operational queue-policy comparison",
+        "Data scientist scenario lab",
+        "Root-cause triage scorecard",
+        "Threshold and workload trade-off",
         "window.DASHBOARD_DATA=",
     ]:
         assert marker in html
@@ -33,7 +36,9 @@ def test_interactive_dashboard_contains_operational_views(built_project):
     assert "renderOptimisation" in html
     assert "optimisationPareto" in html
     assert "serviceLevelBoard" in html
-
     assert "renderAudit" in html
     assert "contractTable" in html
     assert "queuePolicyChart" in html
+    assert "renderScenarioLab" in html
+    assert "scenarioQuestionCard" in html
+    assert "thresholdHeatmap" in html

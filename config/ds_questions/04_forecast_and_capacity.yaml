@@ -1,0 +1,67 @@
+questions:
+- id: Q25
+  category: forecast_and_capacity
+  stakeholder: Operations planning
+  question: How many referrals should we plan for over the next 12 weeks?
+  why_asked: Clinics and administrative capacity require advance planning.
+  answer_key: forecast_volume
+  method: Compare simple baselines and statistical models with rolling-origin validation.
+  required_inputs: Weekly referral history and forecast horizon.
+  deliverable: P50 forecast, uncertainty interval and backtest.
+  risk_if_wrong: A point forecast is mistaken for certainty.
+  next_action: Plan against baseline and high-demand scenarios.
+- id: Q26
+  category: forecast_and_capacity
+  stakeholder: Executive / operations
+  question: How uncertain is the demand forecast?
+  why_asked: Staffing decisions should reflect plausible ranges.
+  answer_key: forecast_uncertainty
+  method: Use prediction intervals and rolling-origin error distributions.
+  required_inputs: Forecast residuals and recent demand history.
+  deliverable: P10/P50/P90 or equivalent planning range.
+  risk_if_wrong: Teams optimise for a single number.
+  next_action: Agree the service risk tolerance for under-forecasting.
+- id: Q27
+  category: forecast_and_capacity
+  stakeholder: Data scientist / operations
+  question: Has demand changed structurally, or is this normal variation?
+  why_asked: Historical models can fail after policy or referral-channel changes.
+  answer_key: structural_change
+  method: Combine anomaly detection, model error and operational context.
+  required_inputs: Weekly demand, source changes and forecast residuals.
+  deliverable: Change investigation with confirmed or unconfirmed structural break.
+  risk_if_wrong: A one-off spike causes unnecessary model replacement.
+  next_action: Validate source and policy changes before retraining.
+- id: Q28
+  category: forecast_and_capacity
+  stakeholder: Finance / clinical operations
+  question: Where should a fixed service-improvement budget be allocated?
+  why_asked: Assessment capacity and outreach compete for resources.
+  answer_key: budget_plan
+  method: Enumerate feasible plans and compare cost-backlog Pareto options.
+  required_inputs: Cost proxies, capacity options, demand and intervention assumptions.
+  deliverable: Best enumerated plan under each declared budget.
+  risk_if_wrong: Optimisation assumptions are hidden or infeasible.
+  next_action: Validate costs and constraints with finance and operations.
+- id: Q29
+  category: forecast_and_capacity
+  stakeholder: Finance / Head of Data Science
+  question: How sensitive is the recommendation to cost and effect assumptions?
+  why_asked: Portfolio cost proxies are not provider costs.
+  answer_key: assumption_sensitivity
+  method: Re-run plans across plausible cost and effect ranges.
+  required_inputs: Cost ranges, effect ranges and operational constraints.
+  deliverable: Tornado or scenario-sensitivity table.
+  risk_if_wrong: A fragile recommendation is presented as optimal.
+  next_action: Collect real unit costs and update the decision model.
+- id: Q30
+  category: forecast_and_capacity
+  stakeholder: Operations planning
+  question: What happens under higher demand or clinician absence?
+  why_asked: The service needs resilience planning, not only a baseline.
+  answer_key: stress_scenario
+  method: Run demand-up and capacity-down scenarios.
+  required_inputs: Forecast, absence assumptions and capacity model.
+  deliverable: Backlog, wait and utilisation stress table.
+  risk_if_wrong: A plan works only under average conditions.
+  next_action: Define contingency triggers and reserve capacity.

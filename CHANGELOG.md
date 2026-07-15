@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.6.0 — data scientist scenario lab and diagnostic playbooks
+
+- Added 42 structured healthcare data-science questions with run-specific synthetic answers.
+- Added adjacent-period comparison using common source coverage rather than sparse future events.
+- Added pathway-stage duration decomposition and waiting-time definition sensitivity.
+- Added observed DNA-rate decomposition into composition and within-segment effects.
+- Added threshold-versus-workload policy analysis with precision, recall and selection gaps.
+- Added predictive feature explanations with an explicit non-causal boundary.
+- Added source event-coverage and contract-aware missingness audits.
+- Added a root-cause triage scorecard and a generated DS scenario casebook.
+- Added a ninth interactive dashboard workspace and aggregate diagnostic API endpoints.
+- Expanded automated tests to cover diagnostic reconciliation, question completeness and API outputs.
+
 ## 0.5.0 — auditable service layer and data contracts
 
 - Added versioned source-table contracts with blocking schema, key, type, row-count, nullability, and allowed-value rules.

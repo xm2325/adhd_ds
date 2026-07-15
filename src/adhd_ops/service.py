@@ -25,7 +25,7 @@ def _read_json(path: Path) -> dict:
 def create_app(root: str | Path | None = None) -> FastAPI:
     project_root = Path(root or os.getenv("ADHD_DS_ROOT", ".")).resolve()
     results = project_root / "results"
-    app = FastAPI(title="ADHD DS synthetic operations API", version="0.5.0")
+    app = FastAPI(title="ADHD DS synthetic operations API", version="0.6.0")
 
     @app.get("/health")
     def health() -> dict:
@@ -62,6 +62,29 @@ def create_app(root: str | Path | None = None) -> FastAPI:
     @app.get("/v1/queue-policies")
     def queue_policies() -> list[dict]:
         return _records(results / "queue_policy_comparison.csv")
+
+    @app.get("/v1/ds-questions")
+    def ds_questions(category: str | None = None) -> list[dict]:
+        rows = _records(results / "ds_question_catalog.csv")
+        return [row for row in rows if category is None or row.get("category") == category]
+
+    @app.get("/v1/diagnostics/root-causes")
+    def diagnostic_root_causes() -> list[dict]:
+        return _records(results / "root_cause_scorecard.csv")
+
+    @app.get("/v1/diagnostics/threshold-policy")
+    def diagnostic_threshold_policy(
+        weekly_capacity: int | None = Query(None, ge=1, le=500),
+    ) -> list[dict]:
+        rows = _records(results / "threshold_policy_grid.csv")
+        return [
+            row for row in rows
+            if weekly_capacity is None or int(row.get("weekly_capacity", -1)) == weekly_capacity
+        ]
+
+    @app.get("/v1/diagnostics/metric-sensitivity")
+    def diagnostic_metric_sensitivity() -> list[dict]:
+        return _records(results / "metric_definition_sensitivity.csv")
 
     @app.get("/v1/appointment-support")
     def appointment_support(

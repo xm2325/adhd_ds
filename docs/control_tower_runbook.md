@@ -37,3 +37,15 @@ Weekly anomalies use a rolling median and median absolute deviation. They are re
 ## v0.5 audit and service-layer checks
 
 Before the daily huddle, confirm that both the data-contract and coded data-quality gates passed. Record the run ID used in the meeting. If a red control or anomaly is discussed, link the decision to the corresponding incident record. Patient-level API endpoints must be restricted to operational roles and should return only the minimum fields needed for the action.
+
+## Data scientist scenario review
+
+Use the scenario lab when a stakeholder asks “why”, “what should we do”, or “how do we know”. Select the relevant question and review:
+
+1. current synthetic answer;
+2. evidence class;
+3. method and required inputs;
+4. risk if wrong;
+5. next operational or analytical action.
+
+The scenario lab must not be used to turn diagnostic decompositions or model feature effects into causal claims.

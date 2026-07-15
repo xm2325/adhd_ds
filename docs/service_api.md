@@ -1,6 +1,6 @@
 # Controlled analytical API
 
-The API is created by `adhd_ops.service.create_app` and can be started with:
+Start the API after building the analytical products:
 
 ```bash
 ADHD_DS_ROOT=. adhd-ds-api
@@ -15,9 +15,17 @@ ADHD_DS_ROOT=. adhd-ds-api
 - `GET /v1/actions`
 - `GET /v1/budget-recommendation`
 - `GET /v1/queue-policies`
+- `GET /v1/ds-questions`
+- `GET /v1/ds-questions?category=appointment_and_model`
+- `GET /v1/diagnostics/root-causes`
+- `GET /v1/diagnostics/threshold-policy`
+- `GET /v1/diagnostics/threshold-policy?weekly_capacity=100`
+- `GET /v1/diagnostics/metric-sensitivity`
 - `GET /v1/audit/manifest`
 - `GET /v1/audit/incidents`
 - `GET /v1/audit/lineage`
+
+The diagnostic endpoints expose aggregate synthetic evidence and do not return patient identifiers.
 
 ## Restricted demonstration endpoint
 
@@ -33,4 +41,6 @@ or:
 X-Role: patient_support
 ```
 
-The response excludes `patient_id` and returns only the fields needed for the stated operational action. The header is a portfolio demonstration; production requires authenticated identity, server-side authorisation, audit logging, rate limits, encryption, and database-level permissions.
+The response excludes `patient_id` and returns only fields needed for the stated operational action.
+
+The role header is a portfolio demonstration, not authentication. Production requires managed identity, server-side authorisation, database permissions, encryption, immutable audit logs, rate limits, retention controls and information-governance approval.

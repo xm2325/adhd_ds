@@ -1,0 +1,95 @@
+questions:
+- id: Q01
+  category: data_and_metrics
+  stakeholder: Executive / operations lead
+  question: Can we publish today's dashboard?
+  why_asked: Leaders need to know whether the numbers are safe enough to use for decisions.
+  answer_key: publication_status
+  method: Run contract checks first, then coded quality checks, then verify metric-owner
+    approvals.
+  required_inputs: Source extracts, data contracts, quality rules, refresh timestamps.
+  deliverable: Publication gate with pass, block or formal waiver.
+  risk_if_wrong: Decisions are made from incomplete, duplicated or semantically incorrect
+    data.
+  next_action: Stop publication on blocking failures and open an incident.
+- id: Q02
+  category: data_and_metrics
+  stakeholder: Operations / data engineering
+  question: Which system is the source of truth for each metric?
+  why_asked: Referral, scheduling, CRM and clinical systems can disagree.
+  answer_key: source_of_truth
+  method: Define source-to-target lineage and assign a metric owner for each event.
+  required_inputs: Source inventory, keys, event semantics, lineage map.
+  deliverable: Metric dictionary and lineage table.
+  risk_if_wrong: The same KPI changes depending on which extract is used.
+  next_action: Reconcile conflicting records and document precedence rules.
+- id: Q03
+  category: data_and_metrics
+  stakeholder: Operations manager
+  question: Why does the dashboard not match the operational system?
+  why_asked: Small definition or refresh differences quickly reduce trust.
+  answer_key: reconciliation
+  method: Compare record grain, inclusion rules, late-arriving data, time zone and
+    refresh cut-off.
+  required_inputs: Dashboard mart, source report, query logic, refresh metadata.
+  deliverable: Record-level reconciliation and explained variance table.
+  risk_if_wrong: Teams abandon the analytical product.
+  next_action: Resolve unexplained differences before changing the KPI.
+- id: Q04
+  category: data_and_metrics
+  stakeholder: Executive / pathway manager
+  question: What exactly do we mean by waiting time?
+  why_asked: Referral receipt, acceptance, contact and booking start points answer
+    different questions.
+  answer_key: wait_definition
+  method: Calculate all defensible definitions and show sensitivity.
+  required_inputs: Referral, acceptance, contact, booking and assessment timestamps.
+  deliverable: Approved metric definition with secondary operational measures.
+  risk_if_wrong: Administrative delay is hidden or incorrectly labelled clinical wait.
+  next_action: Obtain metric-owner approval and lock automated tests.
+- id: Q05
+  category: data_and_metrics
+  stakeholder: Data scientist / clinical operations
+  question: Are recent cohorts incomplete because they have not had enough follow-up
+    time?
+  why_asked: Naive cohort rates make the newest patients look worse.
+  answer_key: right_censoring
+  method: Use maturity windows, survival methods or fixed-horizon cohort outcomes.
+  required_inputs: Cohort entry date, event dates and reporting cut-off.
+  deliverable: 30/60/90-day cohort view with maturity flags.
+  risk_if_wrong: Recent service performance is unfairly penalised.
+  next_action: Exclude immature cohorts from outcome comparisons or label them clearly.
+- id: Q06
+  category: data_and_metrics
+  stakeholder: Data engineering / operations
+  question: Is every source fresh enough for today's decision?
+  why_asked: One stale system can invalidate a cross-system KPI.
+  answer_key: freshness
+  method: Compare latest source events and expected refresh SLAs.
+  required_inputs: Event maxima, extract timestamps and source SLA.
+  deliverable: Source freshness table and stale-source alert.
+  risk_if_wrong: A current dashboard contains old capacity or appointment data.
+  next_action: Hold affected metrics or display a degraded-service banner.
+- id: Q07
+  category: data_and_metrics
+  stakeholder: Data scientist / governance
+  question: Which missing fields matter, and should we impute them?
+  why_asked: Structural missingness and data-quality failures require different responses.
+  answer_key: missingness
+  method: Compare missingness with contract nullability and business-state rules.
+  required_inputs: Field-level missingness, status values and data contract.
+  deliverable: Missingness audit with expected, investigatory and blocking classes.
+  risk_if_wrong: Imputation invents clinical or operational events.
+  next_action: Impute only model covariates with a justified strategy; do not invent
+    pathway events.
+- id: Q08
+  category: data_and_metrics
+  stakeholder: Executive / operations
+  question: What materially changed compared with the previous operating period?
+  why_asked: Teams need a concise change narrative rather than a page of KPIs.
+  answer_key: period_change
+  method: Compare adjacent fixed-length periods with absolute and relative changes.
+  required_inputs: Referrals, appointments, completions, capacity and lead times.
+  deliverable: Period comparison with materiality thresholds.
+  risk_if_wrong: Normal noise is escalated or a meaningful shift is missed.
+  next_action: Investigate the largest validated changes by segment.
