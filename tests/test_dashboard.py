@@ -15,6 +15,9 @@ def test_interactive_dashboard_contains_operational_views(built_project):
         "Operational decision register",
         "Role view",
         "Referral timeline",
+        "Resource optimisation and pilot design",
+        "Service-level control board",
+        "Champion–challenger monitoring",
         "window.DASHBOARD_DATA=",
     ]:
         assert marker in html
@@ -24,3 +27,6 @@ def test_interactive_dashboard_contains_operational_views(built_project):
     assert "exportDecisions" in html
     assert "localStorage" in html
     assert "attendanceMonitoring" in html
+    assert "renderOptimisation" in html
+    assert "optimisationPareto" in html
+    assert "serviceLevelBoard" in html
