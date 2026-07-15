@@ -35,6 +35,15 @@ def test_uncertainty_and_subgroup_reliability_outputs(built_project):
     assert len(uncertainty) >= 5
     assert (uncertainty["lower_95"] <= uncertainty["estimate"]).all()
     assert (uncertainty["estimate"] <= uncertainty["upper_95"]).all()
+
+    appointments = pd.read_csv(target / "data/synthetic/appointments.csv")
+    eligible = appointments["appointment_status"].isin(["attended", "did_not_attend"])
+    expected_events = int(appointments["appointment_status"].eq("did_not_attend").sum())
+    expected_n = int(eligible.sum())
+    dna_row = uncertainty.loc[uncertainty["metric"].eq("appointment_dna_rate")].iloc[0]
+    assert int(dna_row["events"]) == expected_events
+    assert int(dna_row["n"]) == expected_n
+    assert abs(float(dna_row["estimate"]) - expected_events / expected_n) < 1e-12
     assert set(subgroups["reliability_status"]).issubset({"adequate", "review", "insufficient"})
     assert (subgroups["lower_95"] <= subgroups["observed_rate"]).all()
     assert (subgroups["observed_rate"] <= subgroups["upper_95"]).all()
