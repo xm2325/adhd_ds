@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.4.0 — operations control tower and pilot planning
+
+- Added green/amber/red service-level controls.
+- Added robust weekly referral and DNA anomaly triage.
+- Added budget-constrained resource-plan enumeration and Pareto frontier.
+- Added budget recommendations and backlog sensitivity analysis.
+- Added reminder-pilot sample-size scenarios and guardrail specification.
+- Added champion–challenger model registry and monthly comparison.
+- Added an optimisation and pilot workspace to the interactive dashboard.
+- Expanded weekly and monthly management reports.
+- Expanded automated tests for controls, optimisation, experimentation, and model governance.
+
 ## 0.3.0 — decision controls and role workflows
 
 - Added a sixth Decision and service impact workspace.

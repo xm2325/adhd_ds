@@ -1,96 +1,71 @@
 # adhd_ds
 
-A synthetic healthcare data-science project that demonstrates how an ADHD service could monitor patient flow, plan clinical capacity, support appointments, and record operational decisions.
+A synthetic healthcare data-science project that shows how an ADHD service could monitor patient flow, plan clinical capacity, support appointment attendance, record operational decisions, and monitor analytical controls.
 
-> **Synthetic demonstration only.** This repository is not affiliated with Care ADHD or another healthcare provider. It contains no real patient or company data. Every threshold, cost proxy, alert, recommendation, model result, and identifier is generated for portfolio use.
+> **Synthetic demonstration only.** This repository is not affiliated with Care ADHD or another provider. It contains no real patient or company data. All thresholds, costs, effects, alerts, recommendations, and results are portfolio assumptions.
 
-## v0.3: from dashboard to operating workspace
+## What v0.4 adds
 
-The project now models the full path from data refresh to an owned decision:
+Version 0.4 turns the dashboard into an operations control tower:
+
+1. **Service-level control board** — patient access, backlog, pathway completion, data quality, calibration, and forecast error use declared green/amber/red rules.
+2. **Robust anomaly triage** — rolling-median and median-absolute-deviation checks flag unusual referral volume and DNA rate without assigning cause.
+3. **Budget-constrained resource planning** — enumerates assessment minutes and outreach capacity, identifies Pareto-efficient plans, and recommends the lowest-backlog option under each budget.
+4. **Pilot design** — calculates approximate sample size for reminder-effect assumptions and lists patient-experience guardrails.
+5. **Champion–challenger registry** — records model status, feature signature, test period, probability quality, and a controlled promotion flag.
+6. **Seven connected workspaces** — command centre, pathway, capacity, appointment support, decision impact, optimisation and pilot design, and data/model controls.
+
+## Decision order
 
 ```text
 source-like data
-    → blocking data-quality gate
-    → approved metric definitions
-    → patient pathway and exception review
-    → referral forecast
-    → demand/capacity scenarios
-    → appointment-support ranking
-    → resource and impact comparison
-    → owner, due date, status and decision rationale
-    → monthly model and forecast monitoring
+    → data-quality gate
+    → approved metrics
+    → service-level and anomaly review
+    → patient-pathway analysis
+    → demand forecast
+    → capacity and outreach scenarios
+    → budget-constrained plan
+    → controlled intervention pilot
+    → owner, due date, and decision record
+    → model and service monitoring
 ```
 
-The interactive HTML contains six connected workspaces:
-
-1. **Operations command centre** — filtered service KPIs, pathway conversion, backlog scenarios, and a rule-based decision queue.
-2. **Patient pathway** — Sankey flow, wait distributions, cohort heatmap, segment comparison, exception queue, and referral timeline drill-down.
-3. **Demand and capacity** — forecast intervals, stored scenarios, interactive queue planning, and comparable scenario outputs.
-4. **Appointment support** — capacity-limited ranking, calibration, group monitoring, queue export, and safe-use controls.
-5. **Decision and service impact** — resource/cost proxies, outreach assumptions, editable decision register, role matrix, CSV export, and print view.
-6. **Data and model controls** — quality gates, model comparison, monthly calibration monitoring, rolling-origin forecast monitoring, ownership, and change control.
-
-## What v0.3 adds
-
-### Decision ownership and audit path
-
-`results/operational_action_queue.csv` now records:
-
-- signal and source metric;
-- evidence;
-- owner and escalation route;
-- created and due dates;
-- status and decision note;
-- review cadence;
-- synthetic-data flag.
-
-The browser dashboard lets a reviewer edit owner, due date, status, and rationale. These changes are saved in browser `localStorage` and can be exported as CSV. This is a front-end demonstration; a production system would use an authenticated API and immutable audit history.
-
-### Role-based workflow simulation
-
-The dashboard provides Executive, Operations, Patient support, and Data/model role profiles. Each profile has an allowed view set and a patient-level access flag. Patient queues are hidden from aggregate-only roles.
-
-This is a UI simulation, not a security boundary. Real access control must be enforced by the application and data platform.
-
-### Resource and impact analysis
-
-`results/scenario_impact.csv` compares stored capacity scenarios using:
-
-- end backlog and wait proxy;
-- change from baseline;
-- weekly clinical-minute change;
-- 12-week cost proxy;
-- backlog patients avoided;
-- cost per backlog patient avoided when applicable.
-
-`results/outreach_impact.csv` compares outreach capacity using a declared relative DNA-reduction assumption. It reports expected appointments recovered and synthetic resource-value proxies. These values are not causal estimates or provider costs.
-
-### Monitoring that creates actions
-
-`results/attendance_monitoring.csv` reports monthly:
-
-- sample size;
-- observed DNA rate;
-- mean predicted probability;
-- calibration gap;
-- Brier score.
-
-`results/forecast_monitoring.csv` attaches dates to rolling-origin forecast errors. Review levels are declared in `config/operations.yaml`. When a reliable monitoring period crosses a review level, the pipeline adds an owned action to the operational register.
+Machine learning appears after data, metric, and service-flow checks because an appointment model cannot repair a referral-processing or assessment-capacity problem.
 
 ## Main outputs
 
 | Output | Purpose |
 |---|---|
-| `reports/operations_dashboard.html` | Fully self-contained interactive workspace; opens without a server |
-| `docs/index.html` | Smaller CDN-based build for a controlled static host |
-| `results/operational_action_queue.csv` | Owned action and decision register seed |
-| `results/scenario_impact.csv` | Scenario resource and cost-proxy comparison |
-| `results/outreach_impact.csv` | Outreach capacity and assumed-impact comparison |
-| `results/attendance_monitoring.csv` | Monthly appointment-model monitoring |
-| `results/forecast_monitoring.csv` | Dated rolling-origin forecast monitoring |
-| `reports/weekly_operational_brief.md` | Manager-facing headline, evidence, recommendation and decision request |
-| `reports/data_quality_report.html` | Rule-level publication gate |
-| `tableau/exports/` | Tableau-ready analytical extracts |
+| `reports/operations_dashboard.html` | Fully self-contained interactive dashboard |
+| `docs/index.html` | Smaller CDN-based dashboard build |
+| `results/service_level_status.csv` | Green/amber/red operational and analytical controls |
+| `results/weekly_anomalies.csv` | Robust weekly anomaly triage |
+| `results/resource_optimisation.csv` | Full resource-plan grid and Pareto flag |
+| `results/budget_recommendations.csv` | Best enumerated plan under each declared budget |
+| `results/experiment_design.csv` | Reminder-pilot sample-size scenarios |
+| `results/model_registry.csv` | Champion and challenger metadata |
+| `results/champion_challenger_monitoring.csv` | Monthly model comparison |
+| `results/operational_action_queue.csv` | Owner, due date, decision, and escalation |
+| `reports/weekly_operational_brief.md` | Manager-facing weekly summary |
+| `reports/monthly_control_pack.md` | Monthly service and model control pack |
+
+## Current deterministic synthetic run
+
+The fixed-seed build produces:
+
+- 4,911 referrals and 9,869 appointments;
+- median referral-to-completed-assessment time of 71.12 days;
+- P90 referral-to-completed-assessment time of 93.92 days;
+- baseline 12-week backlog of 1,121.6 patients;
+- four red service or analytical controls;
+- three amber/red weekly anomaly flags;
+- 13 Pareto-efficient resource plans from 25 enumerated plans;
+- a £10,000 synthetic budget recommendation of 540 extra assessment minutes per week and no additional outreach contacts;
+- an approximate total sample size of 9,212 appointments for a conventional two-arm test of the configured 15% relative DNA-reduction assumption;
+- logistic-regression champion PR-AUC of 0.364 and Brier score of 0.095 on later synthetic data.
+
+These values test the software and decision logic. They are not provider estimates.
 
 ## Run locally
 
@@ -106,47 +81,22 @@ Open:
 reports/operations_dashboard.html
 ```
 
-The pipeline is deterministic because `config/synthetic_data.yaml` fixes the random seed.
+## Safety boundary
 
-## Current deterministic synthetic run
+The appointment model may support only reminders, confirmation requests, and easier rescheduling. It must not be used for diagnosis, treatment selection, service eligibility, automatic cancellation, or lower care priority.
 
-The checked-in configuration produces:
-
-- 4,911 synthetic referrals;
-- 9,869 synthetic appointments;
-- median referral-to-completed-assessment time of 71.12 days;
-- P90 referral-to-completed-assessment time of 93.92 days;
-- baseline simulated backlog of 1,121.6 patients at the 12-week horizon;
-- logistic appointment-support model PR-AUC of 0.364 and Brier score of 0.095;
-- four open operational/model-review actions plus one recorded data-quality gate;
-- `add_one_assessment_clinic` as the stored scenario with the lowest synthetic end backlog.
-
-These numbers prove that the code and workflow run. They are not estimates for a real provider.
-
-## Decision and safety boundaries
-
-The appointment model may support only:
-
-- standard reminder;
-- additional reminder;
-- confirmation request;
-- easier rescheduling.
-
-It must not be used for diagnosis, treatment selection, service eligibility, automatic cancellation, or lower care priority.
-
-A real implementation would also require source reconciliation, metric approval, clinical and operational review, information-governance approval, role-based access, external validation, workflow testing, equality-impact review, audit logging, incident management, and ongoing monitoring.
+Cost fields are planning proxies. Reminder effects are untested assumptions. Scenario differences are sensitivity analyses rather than causal estimates. The role selector is a user-interface demonstration and not an access-control system.
 
 ## Repository map
 
 ```text
-config/                  synthetic data, scenarios, thresholds, roles and cost proxies
-data/synthetic/          generated source-like tables
-docs/                    operating guide, metrics, governance, roles and decisions
-sql/                     MS SQL Server-oriented warehouse examples
-src/adhd_ops/            executable analytical and dashboard pipeline
-tests/                   reproducibility, leakage, workflow, impact and monitoring tests
-results/                 analytical tables, monitoring and action register
-reports/                 self-contained dashboard and management reports
+config/                  synthetic parameters, thresholds, costs, budgets, and pilot assumptions
+docs/                    metrics, governance, runbooks, experiment and model-promotion policies
+sql/                     Microsoft SQL Server-oriented warehouse examples
+src/adhd_ops/            executable pipeline and dashboard modules
+tests/                   data, model, optimisation, experiment, workflow, and dashboard tests
+results/                 analytical products and action records
+reports/                 interactive dashboard and management packs
 tableau/exports/         dashboard-ready CSV extracts
-.github/workflows/       test, build and review-pack automation
+.github/workflows/       test and build automation
 ```

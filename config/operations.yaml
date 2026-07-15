@@ -2,12 +2,19 @@
 # These are not Care ADHD targets, costs, or clinical service standards.
 thresholds:
   p90_assessment_wait_days: 90
+  p90_assessment_wait_amber_days: 75
   backlog_review_patients: 1000
+  backlog_amber_patients: 800
   completed_per_accepted_review_rate: 0.75
+  completed_per_accepted_amber_rate: 0.80
   data_quality_error_tolerance: 0
   attendance_calibration_gap: 0.05
+  attendance_calibration_gap_amber: 0.035
   forecast_wape_review: 0.12
+  forecast_wape_amber: 0.09
   minimum_monitoring_n: 50
+  anomaly_robust_z_amber: 3.0
+  anomaly_robust_z_red: 4.5
 workflow:
   daily_refresh_time: "08:00"
   daily_huddle_time: "09:00"
@@ -36,24 +43,52 @@ planning_cost_proxies:
   horizon_weeks: 12
   # Assumption used only by the impact calculator; it is not an estimated causal effect.
   outreach_relative_dna_reduction: 0.15
+resource_optimisation:
+  budgets_gbp: [0, 5000, 10000, 20000]
+  extra_assessment_minutes_options: [0, 270, 540, 810, 1080]
+  outreach_capacity_options: [0, 50, 100, 150, 200]
+  targetable_appointments_per_week: 200
+experimentation:
+  alpha: 0.05
+  power: 0.80
+  relative_dna_reductions: [0.05, 0.10, 0.15, 0.20]
+  default_relative_dna_reduction: 0.15
+  weekly_recruitment_capacity: 200
+  minimum_pilot_weeks: 4
+  guardrails:
+    - metric: opt_out_rate
+      direction: lower_is_better
+      purpose: Patient choice and communication burden
+    - metric: late_cancellation_rate
+      direction: monitor
+      purpose: Detect substitution from DNA to late cancellation
+    - metric: complaint_rate
+      direction: lower_is_better
+      purpose: Detect unacceptable patient experience
+    - metric: subgroup_contact_rate_ratio
+      direction: close_to_one
+      purpose: Check whether operational selection differs strongly by group
+model_governance:
+  challenger_brier_improvement_required: 0.005
+  challenger_pr_auc_drop_tolerance: 0.01
 role_profiles:
   executive:
     label: Executive
     default_view: command
-    allowed_views: [command, impact, governance]
+    allowed_views: [command, impact, optimisation, governance]
     patient_level_access: false
   operations:
     label: Operations
     default_view: command
-    allowed_views: [command, pathway, capacity, impact, governance]
+    allowed_views: [command, pathway, capacity, impact, optimisation, governance]
     patient_level_access: true
   patient_support:
     label: Patient support
     default_view: attendance
-    allowed_views: [attendance, pathway]
+    allowed_views: [attendance, pathway, optimisation]
     patient_level_access: true
   data_model:
     label: Data and model
     default_view: governance
-    allowed_views: [command, capacity, attendance, impact, governance]
+    allowed_views: [command, capacity, attendance, impact, optimisation, governance]
     patient_level_access: false

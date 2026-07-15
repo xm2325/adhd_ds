@@ -1,4 +1,5 @@
 function renderCommand(){
+  renderControlTower();
   const cases=filteredCases(), appts=filteredAppointments(), counts=stageCounts(cases);
   const accepted=counts[1], completed=counts[5], treated=counts[6];
   const waits=cases.map(x=>x.days_to_assessment).filter(x=>x!==null);
@@ -28,6 +29,7 @@ function renderCommand(){
 function renderDecisions({cases,counts,waits,dqPass}){
   const p90=quantile(waits,.9), accepted=counts[1], completed=counts[5];
   const baseline=D.capacity_scenarios.filter(x=>x.scenario==='baseline').at(-1);
+  const best=D.capacity_scenarios.reduce((a,b)=>b.week_start>a.week_start&&b.backlog_patients<a.backlog_patients?b:a,D.capacity_scenarios[0]);
   const items=[];
   if(p90!==null&&p90>Number(D.meta.thresholds.p90_assessment_wait_days))items.push({level:'high',title:'Long-wait tail needs an owner',text:`Filtered P90 is ${fmt(p90,1)} days. Review the longest open cases and confirm the service threshold before escalation.`,owner:'Operations lead',due:'This week'});
   if(baseline&&baseline.backlog_patients>Number(D.meta.thresholds.backlog_review_patients))items.push({level:'high',title:'Capacity review required',text:`The baseline synthetic horizon ends with ${fmt(baseline.backlog_patients)} patients in backlog. Compare added-clinic and absence scenarios before roster sign-off.`,owner:'Clinical operations',due:'Planning meeting'});

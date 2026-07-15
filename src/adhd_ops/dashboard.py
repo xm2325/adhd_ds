@@ -177,6 +177,15 @@ def _payload(
     outreach_impact: pd.DataFrame,
     attendance_monitoring: pd.DataFrame,
     forecast_monitoring: pd.DataFrame,
+    model_registry: pd.DataFrame,
+    champion_challenger: pd.DataFrame,
+    resource_optimisation: pd.DataFrame,
+    budget_recommendations: pd.DataFrame,
+    backlog_drivers: pd.DataFrame,
+    experiment_design: pd.DataFrame,
+    experiment_guardrails: pd.DataFrame,
+    service_levels: pd.DataFrame,
+    weekly_anomalies: pd.DataFrame,
 ) -> dict[str, Any]:
     cases = _prepare_cases(pathway)
     appts = _prepare_appointments(appointments)
@@ -211,6 +220,9 @@ def _payload(
             "thresholds": operations_config["thresholds"],
             "planning_cost_proxies": operations_config["planning_cost_proxies"],
             "role_profiles": operations_config["role_profiles"],
+            "resource_optimisation": operations_config["resource_optimisation"],
+            "experimentation": operations_config["experimentation"],
+            "model_governance": operations_config["model_governance"],
             "default_outreach_capacity": int(
                 operations_config["appointment_support"]["default_weekly_outreach_capacity"]
             ),
@@ -233,10 +245,18 @@ def _payload(
         "outreach_impact": _records(outreach_impact),
         "attendance_monitoring": _records(attendance_monitoring),
         "forecast_monitoring": _records(forecast_monitoring),
+        "model_registry": _records(model_registry),
+        "champion_challenger": _records(champion_challenger),
+        "resource_optimisation": _records(resource_optimisation),
+        "budget_recommendations": _records(budget_recommendations),
+        "backlog_drivers": _records(backlog_drivers),
+        "experiment_design": _records(experiment_design),
+        "experiment_guardrails": _records(experiment_guardrails),
+        "service_levels": _records(service_levels),
+        "weekly_anomalies": _records(weekly_anomalies),
         "stage_order": STAGE_ORDER,
         "stage_labels": STAGE_LABELS,
     }
-
 
 
 ASSET_DIR = Path(__file__).with_name("assets")
@@ -286,6 +306,15 @@ def build_dashboard(
     outreach_impact: pd.DataFrame,
     attendance_monitoring: pd.DataFrame,
     forecast_monitoring: pd.DataFrame,
+    model_registry: pd.DataFrame,
+    champion_challenger: pd.DataFrame,
+    resource_optimisation: pd.DataFrame,
+    budget_recommendations: pd.DataFrame,
+    backlog_drivers: pd.DataFrame,
+    experiment_design: pd.DataFrame,
+    experiment_guardrails: pd.DataFrame,
+    service_levels: pd.DataFrame,
+    weekly_anomalies: pd.DataFrame,
     output_path: str | Path,
     plotly_mode: str = "inline",
 ) -> None:
@@ -311,6 +340,15 @@ def build_dashboard(
         outreach_impact=outreach_impact,
         attendance_monitoring=attendance_monitoring,
         forecast_monitoring=forecast_monitoring,
+        model_registry=model_registry,
+        champion_challenger=champion_challenger,
+        resource_optimisation=resource_optimisation,
+        budget_recommendations=budget_recommendations,
+        backlog_drivers=backlog_drivers,
+        experiment_design=experiment_design,
+        experiment_guardrails=experiment_guardrails,
+        service_levels=service_levels,
+        weekly_anomalies=weekly_anomalies,
     )
     path = Path(output_path)
     path.parent.mkdir(parents=True, exist_ok=True)

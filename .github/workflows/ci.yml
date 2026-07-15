@@ -24,34 +24,37 @@ jobs:
         run: |
           for file in src/adhd_ops/assets/dashboard_*.js; do node --check "$file"; done
       - name: Run automated tests
-        run: pytest
+        run: pytest -q
       - name: Build synthetic analytics products
         run: python -m adhd_ops.pipeline --root .
-      - name: Check dashboard outputs
+      - name: Check dashboard and control-tower outputs
         run: |
           test -s reports/operations_dashboard.html
           test -s docs/index.html
           test -s results/operational_action_queue.csv
-          grep -q "Interactive scenario planner" reports/operations_dashboard.html
-          grep -q "Synthetic service simulation" reports/operations_dashboard.html
-          grep -q "exportSupport" reports/operations_dashboard.html
-          grep -q "Operational decision register" reports/operations_dashboard.html
-          grep -q "exportDecisions" reports/operations_dashboard.html
-          grep -q "Role view" reports/operations_dashboard.html
-          test -s results/scenario_impact.csv
-          test -s results/attendance_monitoring.csv
+          test -s results/service_level_status.csv
+          test -s results/weekly_anomalies.csv
+          test -s results/resource_optimisation.csv
+          test -s results/budget_recommendations.csv
+          test -s results/experiment_design.csv
+          test -s results/model_registry.csv
+          test -s results/champion_challenger_monitoring.csv
+          grep -q "Resource optimisation and pilot design" reports/operations_dashboard.html
+          grep -q "Service-level control board" reports/operations_dashboard.html
+          grep -q "Champion–challenger monitoring" reports/operations_dashboard.html
+          grep -q "renderOptimisation" reports/operations_dashboard.html
       - name: Publish workflow summary
         run: |
-          echo "## ADHD DS build" >> "$GITHUB_STEP_SUMMARY"
-          echo "- Automated tests passed" >> "$GITHUB_STEP_SUMMARY"
-          echo "- Interactive dashboard generated and checked" >> "$GITHUB_STEP_SUMMARY"
-          echo "- Data-quality, pathway, forecast, capacity, impact and monitoring outputs generated" >> "$GITHUB_STEP_SUMMARY"
-          echo "- All data and results are synthetic" >> "$GITHUB_STEP_SUMMARY"
+          echo "## ADHD DS v0.4 build" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Automated tests and JavaScript checks passed" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Seven-workspace interactive dashboard generated" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Service controls, anomaly triage, optimisation, experiment and model-registry outputs generated" >> "$GITHUB_STEP_SUMMARY"
+          echo "- All data, costs, effects and results are synthetic" >> "$GITHUB_STEP_SUMMARY"
       - name: Upload compact review pack
         uses: actions/upload-artifact@v4
         continue-on-error: true
         with:
-          name: adhd-ds-review-pack
+          name: adhd-ds-v04-review-pack
           retention-days: 7
           compression-level: 9
           path: |
@@ -61,9 +64,8 @@ jobs:
             reports/data_quality_report.html
             results/run_summary.json
             results/operational_action_queue.csv
-            results/capacity_scenarios.csv
-            results/attendance_model_metrics.csv
-            results/scenario_impact.csv
-            results/outreach_impact.csv
-            results/attendance_monitoring.csv
-            results/forecast_monitoring.csv
+            results/service_level_status.csv
+            results/weekly_anomalies.csv
+            results/budget_recommendations.csv
+            results/experiment_design.csv
+            results/model_registry.csv

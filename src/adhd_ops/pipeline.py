@@ -12,8 +12,15 @@ from adhd_ops.capacity import simulate_capacity
 from adhd_ops.config import load_yaml
 from adhd_ops.dashboard import build_dashboard
 from adhd_ops.forecasting import forecast_referrals
+from adhd_ops.control_tower import build_service_level_status, build_weekly_anomalies
+from adhd_ops.experimentation import build_experiment_design, build_experiment_guardrails
+from adhd_ops.optimisation import build_backlog_driver_decomposition, build_resource_optimisation
 from adhd_ops.impact import build_outreach_impact, build_scenario_impact
-from adhd_ops.monitoring import build_attendance_monitoring, build_forecast_monitoring
+from adhd_ops.monitoring import (
+    build_attendance_monitoring,
+    build_champion_challenger_monitoring,
+    build_forecast_monitoring,
+)
 from adhd_ops.operations import append_monitoring_actions, build_operational_action_queue
 from adhd_ops.pathway import analyse_pathway
 from adhd_ops.synthetic import generate_synthetic_data
@@ -68,6 +75,8 @@ def run(root: str | Path) -> dict:
     attendance["calibration"].to_csv(root / "results/attendance_calibration.csv", index=False)
     attendance["subgroup_audit"].to_csv(root / "results/attendance_subgroup_audit.csv", index=False)
     attendance["scored_test"].to_csv(root / "results/attendance_scored_test.csv", index=False)
+    attendance["scored_models"].to_csv(root / "results/attendance_scored_models.csv", index=False)
+    attendance["model_registry"].to_csv(root / "results/model_registry.csv", index=False)
 
     scenario_impact = build_scenario_impact(capacity, operations_config)
     scenario_impact.to_csv(root / "results/scenario_impact.csv", index=False)
@@ -77,6 +86,35 @@ def run(root: str | Path) -> dict:
     attendance_monitoring.to_csv(root / "results/attendance_monitoring.csv", index=False)
     forecast_monitoring = build_forecast_monitoring(forecast["backtest"], forecast["weekly_actuals"])
     forecast_monitoring.to_csv(root / "results/forecast_monitoring.csv", index=False)
+    champion_challenger = build_champion_challenger_monitoring(
+        attendance["scored_models"], attendance["model_registry"], operations_config
+    )
+    champion_challenger.to_csv(root / "results/champion_challenger_monitoring.csv", index=False)
+    resource_grid, budget_recommendations = build_resource_optimisation(
+        capacity, operations_config, float(config["assessment_duration_minutes"])
+    )
+    resource_grid.to_csv(root / "results/resource_optimisation.csv", index=False)
+    budget_recommendations.to_csv(root / "results/budget_recommendations.csv", index=False)
+    backlog_drivers = build_backlog_driver_decomposition(capacity)
+    backlog_drivers.to_csv(root / "results/backlog_driver_decomposition.csv", index=False)
+    experiment_design = build_experiment_design(attendance["scored_test"], operations_config)
+    experiment_design.to_csv(root / "results/experiment_design.csv", index=False)
+    experiment_guardrails = build_experiment_guardrails(operations_config)
+    experiment_guardrails.to_csv(root / "results/experiment_guardrails.csv", index=False)
+    service_levels = build_service_level_status(
+        pathway["patient_pathway"],
+        capacity,
+        validation,
+        attendance_monitoring,
+        forecast_monitoring,
+        str(forecast["selected_model"]),
+        operations_config,
+    )
+    service_levels.to_csv(root / "results/service_level_status.csv", index=False)
+    weekly_anomalies = build_weekly_anomalies(
+        forecast["weekly_actuals"], tables["appointments"], operations_config
+    )
+    weekly_anomalies.to_csv(root / "results/weekly_anomalies.csv", index=False)
     action_queue = append_monitoring_actions(
         action_queue,
         attendance_monitoring,
@@ -107,6 +145,15 @@ def run(root: str | Path) -> dict:
         "outreach_impact": outreach_impact,
         "attendance_monitoring": attendance_monitoring,
         "forecast_monitoring": forecast_monitoring,
+        "model_registry": attendance["model_registry"],
+        "champion_challenger": champion_challenger,
+        "resource_optimisation": resource_grid,
+        "budget_recommendations": budget_recommendations,
+        "backlog_drivers": backlog_drivers,
+        "experiment_design": experiment_design,
+        "experiment_guardrails": experiment_guardrails,
+        "service_levels": service_levels,
+        "weekly_anomalies": weekly_anomalies,
     }
     build_dashboard(
         **dashboard_inputs,
@@ -140,6 +187,15 @@ def run(root: str | Path) -> dict:
         "outreach_impact.csv",
         "attendance_monitoring.csv",
         "forecast_monitoring.csv",
+        "model_registry.csv",
+        "champion_challenger_monitoring.csv",
+        "resource_optimisation.csv",
+        "budget_recommendations.csv",
+        "backlog_driver_decomposition.csv",
+        "experiment_design.csv",
+        "experiment_guardrails.csv",
+        "service_level_status.csv",
+        "weekly_anomalies.csv",
     ]:
         shutil.copyfile(root / "results" / filename, root / "tableau/exports" / filename)
 
@@ -159,8 +215,17 @@ def run(root: str | Path) -> dict:
         "attendance_brier": round(float(best["brier_score"]), 4),
         "open_actions": int(action_queue["status"].eq("open").sum()),
         "best_scenario": str(scenario_impact.sort_values("end_backlog").iloc[0]["scenario"]),
+        "red_service_controls": int(service_levels["status"].eq("red").sum()),
+        "anomaly_alerts": int(weekly_anomalies["status"].isin(["amber", "red"]).sum()),
+        "pareto_resource_plans": int(resource_grid["pareto_efficient"].sum()),
+        "experiment_default_total_n": int(
+            experiment_design.iloc[(experiment_design["assumed_relative_reduction"] - float(operations_config["experimentation"]["default_relative_dna_reduction"])).abs().argsort()[:1]]["total_sample_size"].iloc[0]
+        ),
     }
     (root / "results/run_summary.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
+
+    budget_10k = budget_recommendations.iloc[(budget_recommendations["budget_gbp"] - 10000).abs().argsort()[:1]].iloc[0]
+    default_experiment = experiment_design.iloc[(experiment_design["assumed_relative_reduction"] - float(operations_config["experimentation"]["default_relative_dna_reduction"])).abs().argsort()[:1]].iloc[0]
 
     brief = f"""# Weekly operational brief — synthetic demonstration
 
@@ -174,13 +239,19 @@ The generated dataset contains **{summary['synthetic_referrals']:,} referrals** 
 
 The selected appointment-support model is **{summary['attendance_model']}**, with PR-AUC **{summary['attendance_pr_auc']:.3f}** and Brier score **{summary['attendance_brier']:.3f}** on a later-time test set.
 
+The control tower contains **{summary['red_service_controls']} red service or analytical controls** and **{summary['anomaly_alerts']} amber/red weekly anomaly flags**. These flags indicate where investigation is required; they do not assign cause.
+
+Within a synthetic **£10,000** 12-week planning budget, the enumerated recommendation is **{budget_10k['plan_id']}**: **{int(budget_10k['extra_assessment_minutes_per_week'])} extra assessment minutes per week** and **{int(budget_10k['outreach_contacts_per_week'])} outreach contacts per week**, ending at **{budget_10k['end_backlog']:.0f} backlog patients**.
+
 ## Operational meaning
 
 The simulation indicates that reminders alone are unlikely to remove the assessment backlog when assessment capacity is below demand. Capacity action should be assessed before expanding model-led outreach.
 
 ## Recommendation
 
-Compare the baseline with the stored alternatives in `scenario_impact.csv`, confirm whether the synthetic resource assumptions are suitable for planning, and record the selected action, owner, due date and rationale in the decision register.
+Compare the baseline with the stored alternatives and the budget-constrained Pareto frontier, confirm whether the synthetic resource assumptions are suitable for planning, and record the selected action, owner, due date and rationale in the decision register.
+
+Do not treat the configured outreach effect as evidence. At the default assumed **{default_experiment['assumed_relative_reduction']:.0%} relative DNA reduction**, a conventional two-arm pilot would require about **{int(default_experiment['total_sample_size']):,} appointments** under the current sample-size approximation.
 
 ## Decision required
 
@@ -222,6 +293,14 @@ The configured review level is **{float(operations_config['thresholds']['attenda
 ## Forecast control
 
 The latest rolling-origin check for **{forecast['selected_model']}** has WAPE **{latest_forecast['wape']:.1%}** and under-forecast rate **{latest_forecast['underforecast_rate']:.1%}**. The configured WAPE review level is **{float(operations_config['thresholds']['forecast_wape_review']):.1%}**.
+
+## Champion–challenger control
+
+The registered champion is **{attendance['selected_model']}**. The current challenger promotion flag is **{bool(champion_challenger['challenger_promotion_candidate'].iloc[0])}** under the declared recent-Brier and PR-AUC guardrails. Promotion still requires review, reproducibility checks and workflow validation.
+
+## Resource optimisation and pilot feasibility
+
+The synthetic £10,000 budget recommendation is **{budget_10k['plan_id']}**, with **{int(budget_10k['extra_assessment_minutes_per_week'])} extra assessment minutes per week** and **{int(budget_10k['outreach_contacts_per_week'])} outreach contacts per week**. The default reminder-effect assumption would require **{int(default_experiment['total_sample_size']):,} appointments**, or **{int(default_experiment['weeks_at_recruitment_capacity'])} weeks** at the configured recruitment capacity. This indicates that a smaller pilot may estimate process feasibility but may be underpowered for the assumed outcome effect.
 
 ## Open controls
 
