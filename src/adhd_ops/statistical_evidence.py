@@ -38,8 +38,8 @@ def build_kpi_uncertainty(
     completed = patient_pathway["assessment_completed_at"].notna() & accepted
 
     rows: list[dict[str, Any]] = []
-    dna_n = int(appointments["appointment_status"].isin(["attended", "dna"]).sum())
-    dna_events = int(appointments["appointment_status"].eq("dna").sum())
+    dna_n = int(appointments["appointment_status"].isin(["attended", "did_not_attend"]).sum())
+    dna_events = int(appointments["appointment_status"].eq("did_not_attend").sum())
     dna_low, dna_high = _wilson(dna_events, dna_n)
     rows.append({
         "metric": "appointment_dna_rate",
