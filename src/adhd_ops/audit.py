@@ -92,7 +92,7 @@ def finalise_manifest(
         "quality_gate": "pass" if not validation["failure_count"].gt(0).any() else "fail",
         "source_profiles": source_profiles.to_dict(orient="records"),
         "output_sha256": output_hashes,
-        "replay_command": "python -m adhd_ops.pipeline --root .",
+        "replay_command": "python -m adhd_ops.orchestrator --root .",
     }
     (root / "results/run_manifest.json").write_text(json.dumps(manifest, indent=2, default=str), encoding="utf-8")
     return manifest
