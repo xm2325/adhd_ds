@@ -75,12 +75,12 @@ role_profiles:
   executive:
     label: Executive
     default_view: command
-    allowed_views: [command, impact, optimisation, governance]
+    allowed_views: [command, impact, optimisation, governance, audit]
     patient_level_access: false
   operations:
     label: Operations
     default_view: command
-    allowed_views: [command, pathway, capacity, impact, optimisation, governance]
+    allowed_views: [command, pathway, capacity, impact, optimisation, governance, audit]
     patient_level_access: true
   patient_support:
     label: Patient support
@@ -90,5 +90,14 @@ role_profiles:
   data_model:
     label: Data and model
     default_view: governance
-    allowed_views: [command, capacity, attendance, impact, optimisation, governance]
+    allowed_views: [command, capacity, attendance, impact, optimisation, governance, audit]
     patient_level_access: false
+
+queue_policy:
+  weekly_capacity: 120
+  overdue_days: 90
+  dashboard_assignment_rows: 100
+api:
+  default_public_role: executive
+  patient_level_roles: [operations, patient_support]
+  maximum_queue_limit: 200
