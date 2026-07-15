@@ -1,0 +1,205 @@
+policy_version: 1.0.0
+minimum_literature_sources_per_question: 1
+minimum_data_outputs_per_question: 1
+category_defaults:
+  data_and_metrics:
+    topics:
+    - data_quality
+    - missing_data
+    - reporting
+    - observational_data
+    data_outputs:
+    - results/data_contract_status.csv
+    - results/data_quality_rules.csv
+    - results/source_freshness.csv
+    - results/missingness_audit.csv
+    - results/metric_definition_sensitivity.csv
+    - results/period_comparison.csv
+    claim_type: descriptive
+    external_data_ids:
+    - NHS_DATA_DICTIONARY
+    - MHSDS_MONTHLY
+  patient_pathway:
+    topics:
+    - waiting_time
+    - survival_analysis
+    - competing_risks
+    - queueing
+    data_outputs:
+    - results/patient_pathway.csv
+    - results/stage_duration_decomposition.csv
+    - results/group_summary.csv
+    - results/queue_policy_comparison.csv
+    claim_type: descriptive
+    external_data_ids:
+    - NHS_RTT
+    - MHSDS_MONTHLY
+  appointment_and_model:
+    topics:
+    - prediction
+    - calibration
+    - class_imbalance
+    - thresholds
+    - appointments
+    data_outputs:
+    - results/attendance_scored_test.csv
+    - results/attendance_model_metrics.csv
+    - results/attendance_subgroup_audit.csv
+    - results/threshold_policy_grid.csv
+    - results/model_feature_effects.csv
+    claim_type: predictive
+    external_data_ids:
+    - GP_APPOINTMENTS
+    - MHSDS_MONTHLY
+  forecast_and_capacity:
+    topics:
+    - forecasting
+    - queueing
+    - capacity
+    - uncertainty
+    data_outputs:
+    - results/forecast.csv
+    - results/performance.csv
+    - results/capacity_scenarios.csv
+    - results/resource_optimisation.csv
+    - results/budget_recommendations.csv
+    claim_type: scenario
+    external_data_ids:
+    - NHS_RTT
+    - NHS_WORKFORCE
+    - ONS_POPULATION
+  experimentation:
+    topics:
+    - experimentation
+    - randomized_trial
+    - causal_inference
+    - protocol
+    data_outputs:
+    - results/experiment_design.csv
+    - results/experiment_guardrails.csv
+    - results/period_comparison.csv
+    claim_type: causal
+    external_data_ids:
+    - GP_APPOINTMENTS
+  governance_and_communication:
+    topics:
+    - governance
+    - clinical_safety
+    - reporting
+    - risk_management
+    data_outputs:
+    - results/run_manifest.json
+    - results/incident_register.csv
+    - results/data_lineage.csv
+    - results/operational_action_queue.csv
+    claim_type: governance
+    external_data_ids:
+    - NHS_DATA_DICTIONARY
+  statistical_inference_and_uncertainty:
+    topics:
+    - inference
+    - uncertainty
+    - multiple_testing
+    - missing_data
+    data_outputs:
+    - results/kpi_uncertainty.csv
+    - results/subgroup_reliability.csv
+    - results/period_comparison.csv
+    - results/evidence_gap_register.csv
+    claim_type: inferential
+    external_data_ids:
+    - NHS_RTT
+    - MHSDS_MONTHLY
+  causal_inference_and_policy_evaluation:
+    topics:
+    - causal_inference
+    - target_trial
+    - interrupted_time_series
+    - heterogeneous_effects
+    data_outputs:
+    - results/period_comparison.csv
+    - results/experiment_design.csv
+    - results/root_cause_scorecard.csv
+    - results/evidence_gap_register.csv
+    claim_type: causal
+    external_data_ids:
+    - NHS_RTT
+    - GP_APPOINTMENTS
+  model_development_and_validation:
+    topics:
+    - prediction
+    - validation
+    - sample_size
+    - calibration
+    - class_imbalance
+    data_outputs:
+    - results/model_registry.csv
+    - results/attendance_model_metrics.csv
+    - results/attendance_monitoring.csv
+    - results/champion_challenger_monitoring.csv
+    - results/subgroup_reliability.csv
+    claim_type: predictive
+    external_data_ids:
+    - GP_APPOINTMENTS
+    - MHSDS_MONTHLY
+  fairness_safety_and_human_factors:
+    topics:
+    - fairness
+    - human_factors
+    - safety
+    - clinical_safety
+    data_outputs:
+    - results/attendance_subgroup_audit.csv
+    - results/subgroup_reliability.csv
+    - results/threshold_policy_grid.csv
+    - results/queue_policy_comparison.csv
+    - results/incident_register.csv
+    claim_type: safety
+    external_data_ids:
+    - ONS_POPULATION
+    - ENGLISH_IMD
+    - MHSDS_MONTHLY
+  production_ml_and_monitoring:
+    topics:
+    - monitoring
+    - deployment
+    - risk_management
+    - calibration
+    data_outputs:
+    - results/attendance_monitoring.csv
+    - results/forecast_monitoring.csv
+    - results/model_registry.csv
+    - results/run_manifest.json
+    - results/incident_register.csv
+    claim_type: operational
+    external_data_ids:
+    - NHS_DATA_DICTIONARY
+  privacy_security_and_information_governance:
+    topics:
+    - privacy
+    - data_protection
+    - security
+    - governance
+    data_outputs:
+    - results/data_lineage.csv
+    - results/data_contract_status.csv
+    - results/run_manifest.json
+    - results/incident_register.csv
+    claim_type: governance
+    external_data_ids:
+    - NHS_DATA_DICTIONARY
+  product_economics_and_implementation:
+    topics:
+    - economics
+    - implementation
+    - workflow
+    - effectiveness
+    data_outputs:
+    - results/scenario_impact.csv
+    - results/budget_recommendations.csv
+    - results/experiment_design.csv
+    - results/operational_action_queue.csv
+    claim_type: decision
+    external_data_ids:
+    - NHS_WORKFORCE
+    - NHS_RTT

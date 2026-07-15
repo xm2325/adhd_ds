@@ -1,0 +1,154 @@
+questions:
+- id: Q79
+  category: production_ml_and_monitoring
+  stakeholder: Model owner
+  question: What exactly triggers monitoring review, recalibration, retraining or suspension?
+  why_asked: Vague triggers cause delayed or arbitrary response.
+  answer_key: extended_q79
+  method: Predefine thresholds across data quality, calibration, ranking, workload, subgroup harm and incidents.
+  required_inputs: Monitoring history, thresholds and action policy.
+  deliverable: Trigger matrix with owner and SLA.
+  risk_if_wrong: Model degradation continues without action.
+  next_action: Open incident and follow the predefined response.
+  claim_type: operational
+  evidence_topics:
+  - monitoring
+  - calibration
+  - risk_management
+- id: Q80
+  category: production_ml_and_monitoring
+  stakeholder: Data engineer / DS
+  question: Is drift in inputs, outcomes, workflow or labels?
+  why_asked: Different drift types need different fixes.
+  answer_key: extended_q80
+  method: Monitor population stability, missingness, prevalence, calibration and process changes separately.
+  required_inputs: Feature distributions, outcomes, labels and workflow releases.
+  deliverable: Drift diagnosis table.
+  risk_if_wrong: Retraining is used to fix a broken data pipeline or changed label.
+  next_action: Resolve root cause before retraining.
+  claim_type: operational
+  evidence_topics:
+  - monitoring
+  - data_quality
+- id: Q81
+  category: production_ml_and_monitoring
+  stakeholder: Data engineering
+  question: What happens when a source or feature is late, absent or malformed?
+  why_asked: Production systems fail partially, not only completely.
+  answer_key: extended_q81
+  method: Define fail-closed/fail-open behavior per feature, degraded mode and publication gate.
+  required_inputs: Data contracts, dependency graph and fallback values.
+  deliverable: Degraded-service runbook.
+  risk_if_wrong: Silent defaults create unmonitored bias.
+  next_action: Block or degrade visibly according to risk.
+  claim_type: operational
+  evidence_topics:
+  - deployment
+  - data_quality
+  - risk_management
+- id: Q82
+  category: production_ml_and_monitoring
+  stakeholder: Product / clinical lead
+  question: Should the model run in shadow mode before influencing work?
+  why_asked: Offline accuracy does not reveal workflow effects.
+  answer_key: extended_q82
+  method: Run predictions without changing actions, compare latency, availability, calibration and prospective workload.
+  required_inputs: Live features, timestamps, predictions and eventual outcomes.
+  deliverable: Shadow-mode evaluation.
+  risk_if_wrong: A model is deployed before operational incompatibilities are known.
+  next_action: Require shadow acceptance criteria before activation.
+  claim_type: operational
+  evidence_topics:
+  - deployment
+  - evaluation
+- id: Q83
+  category: production_ml_and_monitoring
+  stakeholder: Clinical safety officer
+  question: How do we roll back safely?
+  why_asked: Rollback must be possible before an incident.
+  answer_key: extended_q83
+  method: Version model, features, policy and data; define manual fallback and test rollback.
+  required_inputs: Deployment manifest, previous version and workflow fallback.
+  deliverable: Tested rollback procedure.
+  risk_if_wrong: The service is trapped on a harmful release.
+  next_action: Exercise rollback and record recovery time.
+  claim_type: operational
+  evidence_topics:
+  - clinical_safety
+  - deployment
+- id: Q84
+  category: production_ml_and_monitoring
+  stakeholder: Model governance
+  question: How should champion and challenger models be compared?
+  why_asked: One metric can produce unsafe promotion.
+  answer_key: extended_q84
+  method: Use locked temporal data, calibration, utility, subgroup checks, latency and operational acceptance.
+  required_inputs: Candidate versions and same evaluation cohort.
+  deliverable: Promotion decision record.
+  risk_if_wrong: Challenger improves ranking but worsens probability quality or equity.
+  next_action: Promote only after all gates and rollback readiness.
+  claim_type: operational
+  evidence_topics:
+  - validation
+  - monitoring
+- id: Q85
+  category: production_ml_and_monitoring
+  stakeholder: Audit / engineering
+  question: Can we reproduce this exact output later?
+  why_asked: Models and dashboards depend on code, data and configuration.
+  answer_key: extended_q85
+  method: Hash source snapshots, configs, model artifacts and outputs; record environment and replay command.
+  required_inputs: Run manifest, version control and package lock.
+  deliverable: Reproducible build evidence.
+  risk_if_wrong: An incident cannot be reconstructed.
+  next_action: Block release if manifest is incomplete.
+  claim_type: operational
+  evidence_topics:
+  - documentation
+  - reporting
+- id: Q86
+  category: production_ml_and_monitoring
+  stakeholder: Engineering / operations
+  question: Are latency, availability and throughput adequate?
+  why_asked: A correct model can still fail the service.
+  answer_key: extended_q86
+  method: Define service-level objectives and load-test expected and peak volume.
+  required_inputs: Request volume, latency, error rate and dependency availability.
+  deliverable: Reliability dashboard and capacity test.
+  risk_if_wrong: Slow or unavailable predictions disrupt care workflows.
+  next_action: Scale, cache or fall back before deployment.
+  claim_type: operational
+  evidence_topics:
+  - deployment
+  - robustness
+- id: Q87
+  category: production_ml_and_monitoring
+  stakeholder: Data scientist / engineer
+  question: Is there training-serving skew?
+  why_asked: Production features may be calculated differently from training.
+  answer_key: extended_q87
+  method: Use shared transformations, contract tests and sampled offline-online reconciliation.
+  required_inputs: Training features, serving features and timestamps.
+  deliverable: Skew report with tolerances.
+  risk_if_wrong: Live predictions differ despite stable raw data.
+  next_action: Unify code path and backfill validation.
+  claim_type: operational
+  evidence_topics:
+  - data_quality
+  - deployment
+- id: Q88
+  category: production_ml_and_monitoring
+  stakeholder: Executive / product
+  question: Are model metrics improving the real service outcome?
+  why_asked: Prediction improvement may not change decisions or outcomes.
+  answer_key: extended_q88
+  method: Track adoption, action rate, workflow compliance, patient outcome and unintended effects.
+  required_inputs: Model logs, user actions, outcomes and counterfactual design.
+  deliverable: End-to-end impact scorecard.
+  risk_if_wrong: A technically strong model adds no value or creates harm.
+  next_action: Redesign or stop if decision impact is absent.
+  claim_type: operational
+  evidence_topics:
+  - effectiveness
+  - implementation
+  - evaluation

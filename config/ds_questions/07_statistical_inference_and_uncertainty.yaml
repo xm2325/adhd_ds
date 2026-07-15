@@ -1,0 +1,122 @@
+questions:
+- id: Q43
+  category: statistical_inference_and_uncertainty
+  stakeholder: Executive / analyst
+  question: How uncertain is this KPI, not just what is the point estimate?
+  why_asked: Point estimates can overstate precision.
+  answer_key: extended_q43
+  method: Use Wilson intervals for proportions, bootstrap intervals for medians and sensitivity analysis for assumptions.
+  required_inputs: Numerator, denominator, patient-level rows, reporting cut-off.
+  deliverable: Estimate with interval, method and assumptions.
+  risk_if_wrong: False confidence drives premature escalation or reassurance.
+  next_action: Publish interval and decision threshold together.
+  claim_type: inferential
+  evidence_topics:
+  - uncertainty
+  - inference
+- id: Q44
+  category: statistical_inference_and_uncertainty
+  stakeholder: Operations lead
+  question: Is the recent change larger than expected random variation?
+  why_asked: Teams need to distinguish signal from noise.
+  answer_key: extended_q44
+  method: Use run charts, control limits, bootstrap differences or a pre-specified regression model.
+  required_inputs: Comparable periods, stable definitions, enough history.
+  deliverable: Change estimate with uncertainty and materiality assessment.
+  risk_if_wrong: Normal noise becomes an incident or a real shift is missed.
+  next_action: Investigate only validated material changes.
+  claim_type: inferential
+  evidence_topics:
+  - uncertainty
+  - time_series
+- id: Q45
+  category: statistical_inference_and_uncertainty
+  stakeholder: Clinical / equality lead
+  question: Are subgroup estimates stable enough to act on?
+  why_asked: Small groups produce volatile rates and misleading rankings.
+  answer_key: extended_q45
+  method: Report n, events, confidence intervals and minimum-reliability flags; consider partial pooling.
+  required_inputs: Subgroup counts, outcomes and exposure.
+  deliverable: Reliability table with suppress/review status.
+  risk_if_wrong: A noisy subgroup estimate is treated as evidence of harm or safety.
+  next_action: Pool periods, combine categories or collect more data.
+  claim_type: inferential
+  evidence_topics:
+  - fairness
+  - uncertainty
+- id: Q46
+  category: statistical_inference_and_uncertainty
+  stakeholder: Data science lead
+  question: How do we control false discoveries across many metrics and subgroups?
+  why_asked: Repeated screening creates chance findings.
+  answer_key: extended_q46
+  method: Pre-specify primary analyses and use false-discovery control for exploratory families.
+  required_inputs: Analysis plan, hypothesis families, p-values or posterior probabilities.
+  deliverable: Multiplicity-aware result table.
+  risk_if_wrong: Selective reporting produces unstable decisions.
+  next_action: Separate confirmatory from exploratory findings.
+  claim_type: inferential
+  evidence_topics:
+  - multiple_testing
+  - inference
+- id: Q47
+  category: statistical_inference_and_uncertainty
+  stakeholder: Data scientist
+  question: How sensitive is the conclusion to missing-data assumptions?
+  why_asked: Missingness may alter rankings or effects.
+  answer_key: extended_q47
+  method: Compare complete case, justified multiple imputation and MNAR sensitivity scenarios.
+  required_inputs: Missingness map, predictors of missingness and outcome timing.
+  deliverable: Sensitivity table across assumptions.
+  risk_if_wrong: One unverifiable assumption determines the decision.
+  next_action: Escalate if decision changes across plausible scenarios.
+  claim_type: inferential
+  evidence_topics:
+  - missing_data
+  - sensitivity_analysis
+- id: Q48
+  category: statistical_inference_and_uncertainty
+  stakeholder: Finance / operations
+  question: What is the correct denominator for this rate?
+  why_asked: Different denominators can reverse conclusions.
+  answer_key: extended_q48
+  method: Define eligibility, exposure time, unit of analysis and repeated-event handling before calculation.
+  required_inputs: Event grain, eligibility rules, observation window.
+  deliverable: Metric specification with numerator and denominator.
+  risk_if_wrong: A rate appears improved because the denominator changed.
+  next_action: Lock denominator tests and reconcile historical series.
+  claim_type: descriptive
+  evidence_topics:
+  - reporting
+  - data_quality
+- id: Q49
+  category: statistical_inference_and_uncertainty
+  stakeholder: Data scientist
+  question: Are outliers errors, rare valid cases or a changing service process?
+  why_asked: Removing extremes can hide safety or capacity issues.
+  answer_key: extended_q49
+  method: Trace to source, compare robust and conventional summaries, and classify before exclusion.
+  required_inputs: Record-level lineage, timestamps, values and business rules.
+  deliverable: Outlier disposition log and sensitivity analysis.
+  risk_if_wrong: Valid high-risk cases are deleted or errors distort forecasts.
+  next_action: Correct source errors and retain valid extremes with robust methods.
+  claim_type: descriptive
+  evidence_topics:
+  - data_quality
+  - uncertainty
+- id: Q50
+  category: statistical_inference_and_uncertainty
+  stakeholder: Pathway manager
+  question: Should we report mean, median, percentile or time-to-event curves?
+  why_asked: Each summary answers a different operational question.
+  answer_key: extended_q50
+  method: 'Match estimand to decision: median for typical experience, tail percentile for service risk, survival
+    curve for censoring.'
+  required_inputs: Patient-level durations and censoring status.
+  deliverable: Metric-selection rationale and complete distribution.
+  risk_if_wrong: Averages hide long waits or incomplete follow-up.
+  next_action: Publish median, P90 and maturity-aware curve.
+  claim_type: descriptive
+  evidence_topics:
+  - survival_analysis
+  - waiting_time

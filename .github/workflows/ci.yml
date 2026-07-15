@@ -1,3 +1,4 @@
+# v0.7 evidence-backed validation
 name: test-and-build
 
 on:
@@ -43,10 +44,20 @@ jobs:
           test -s results/threshold_policy_grid.csv
           test -s results/model_feature_effects.csv
           test -s results/ds_question_catalog.csv
+          test -s results/evidence_registry.csv
+          test -s results/external_data_registry.csv
+          test -s results/evidence_coverage.csv
+          test -s results/evidence_gap_register.csv
+          test -s results/method_selection_matrix.csv
+          test -s results/kpi_uncertainty.csv
+          test -s results/subgroup_reliability.csv
+          test -s reports/evidence_backed_ds_handbook.md
           grep -q "Data scientist scenario lab" reports/operations_dashboard.html
           grep -q "Root-cause triage scorecard" reports/operations_dashboard.html
           grep -q "renderScenarioLab" reports/operations_dashboard.html
-          grep -q "Q42" reports/ds_question_casebook.md
+          grep -q "Q106" reports/ds_question_casebook.md
+          grep -q "Evidence-backed methods and decision readiness" reports/operations_dashboard.html
+          grep -q "renderEvidenceLab" reports/operations_dashboard.html
           python - <<'PY'
           from pathlib import Path
           from fastapi.testclient import TestClient
@@ -54,31 +65,39 @@ jobs:
 
           client = TestClient(create_app('.'))
           assert client.get('/health').status_code == 200
-          assert len(client.get('/v1/ds-questions').json()) == 42
+          assert len(client.get('/v1/ds-questions').json()) == 106
           assert client.get('/v1/diagnostics/root-causes').status_code == 200
           assert client.get('/v1/diagnostics/threshold-policy?weekly_capacity=100').status_code == 200
+          assert len(client.get('/v1/evidence').json()) >= 30
+          assert len(client.get('/v1/evidence/coverage').json()) >= 13
+          assert client.get('/v1/statistics/kpi-uncertainty').status_code == 200
           assert client.get('/v1/appointment-support').status_code == 403
           assert client.get('/v1/appointment-support?limit=1', headers={'X-Role':'operations'}).status_code == 200
 
           html = Path('reports/operations_dashboard.html').read_text(encoding='utf-8')
-          start = html.rfind('<script>\nwindow.SCENARIO_DATA=')
-          end = html.find('</script>', start)
-          Path('/tmp/scenario_v06.js').write_text(html[start + 8:end], encoding='utf-8')
+          for marker, output in [
+              ('<script>\nwindow.SCENARIO_DATA=', '/tmp/scenario_v07.js'),
+              ('<script>\nwindow.EVIDENCE_DATA=', '/tmp/evidence_v07.js'),
+          ]:
+              start = html.rfind(marker)
+              end = html.find('</script>', start)
+              Path(output).write_text(html[start + 8:end], encoding='utf-8')
           PY
-          node --check /tmp/scenario_v06.js
+          node --check /tmp/scenario_v07.js
+          node --check /tmp/evidence_v07.js
       - name: Publish workflow summary
         run: |
-          echo "## ADHD DS v0.6 build" >> "$GITHUB_STEP_SUMMARY"
+          echo "## ADHD DS v0.7 build" >> "$GITHUB_STEP_SUMMARY"
           echo "- Python tests and JavaScript checks passed" >> "$GITHUB_STEP_SUMMARY"
-          echo "- Nine-workspace interactive dashboard generated" >> "$GITHUB_STEP_SUMMARY"
-          echo "- 42-question DS casebook and diagnostic products generated" >> "$GITHUB_STEP_SUMMARY"
-          echo "- Contracts, API access, run manifest and evidence boundaries checked" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Ten-workspace interactive dashboard generated" >> "$GITHUB_STEP_SUMMARY"
+          echo "- 106-question evidence-backed DS handbook generated" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Contracts, uncertainty, evidence coverage, API access and run manifest checked" >> "$GITHUB_STEP_SUMMARY"
           echo "- All data, costs, effects, identifiers and results are synthetic" >> "$GITHUB_STEP_SUMMARY"
       - name: Upload compact review pack
         uses: actions/upload-artifact@v4
         continue-on-error: true
         with:
-          name: adhd-ds-v06-review-pack
+          name: adhd-ds-v07-review-pack
           retention-days: 7
           compression-level: 9
           path: |
@@ -96,3 +115,11 @@ jobs:
             results/dna_change_decomposition.csv
             results/threshold_policy_grid.csv
             results/ds_question_catalog.csv
+            results/evidence_registry.csv
+            results/external_data_registry.csv
+            results/evidence_coverage.csv
+            results/evidence_gap_register.csv
+            results/method_selection_matrix.csv
+            results/kpi_uncertainty.csv
+            results/subgroup_reliability.csv
+            reports/evidence_backed_ds_handbook.md

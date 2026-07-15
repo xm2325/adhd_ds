@@ -1,0 +1,138 @@
+questions:
+- id: Q89
+  category: privacy_security_and_information_governance
+  stakeholder: Information governance
+  question: Are we using the minimum data necessary?
+  why_asked: Extra fields increase risk without improving decisions.
+  answer_key: extended_q89
+  method: Map every field to purpose, user and retention need; test performance without high-risk fields.
+  required_inputs: Data dictionary, model features and API responses.
+  deliverable: Data-minimisation register.
+  risk_if_wrong: Sensitive data is retained without justification.
+  next_action: Remove fields lacking a documented purpose.
+  claim_type: governance
+  evidence_topics:
+  - privacy
+  - data_protection
+- id: Q90
+  category: privacy_security_and_information_governance
+  stakeholder: Information governance / legal
+  question: What is the lawful basis and purpose for this processing?
+  why_asked: Healthcare data use requires explicit governance.
+  answer_key: extended_q90
+  method: Document purpose, lawful basis, special-category condition, controller roles and compatibility of secondary
+    use.
+  required_inputs: Data flow, users, purpose and legal review.
+  deliverable: Processing record and DPIA inputs.
+  risk_if_wrong: A technically valid analysis is unlawful or incompatible with consent expectations.
+  next_action: Obtain qualified IG/legal approval before use.
+  claim_type: governance
+  evidence_topics:
+  - privacy
+  - data_protection
+- id: Q91
+  category: privacy_security_and_information_governance
+  stakeholder: Data owner
+  question: How long should data, predictions and logs be retained?
+  why_asked: Retention should follow purpose and safety needs.
+  answer_key: extended_q91
+  method: Define retention by artifact, legal need, incident investigation and model monitoring requirement.
+  required_inputs: Artifact inventory and governance policy.
+  deliverable: Retention schedule and deletion verification.
+  risk_if_wrong: Data is kept indefinitely or deleted before audit needs expire.
+  next_action: Automate deletion and exception approval.
+  claim_type: governance
+  evidence_topics:
+  - privacy
+  - security
+- id: Q92
+  category: privacy_security_and_information_governance
+  stakeholder: Security / product
+  question: Who can access patient-level outputs and why?
+  why_asked: Role labels in a UI are not access control.
+  answer_key: extended_q92
+  method: Enforce managed identity, server-side authorization, least privilege and audit logging.
+  required_inputs: Role matrix, endpoint fields and database permissions.
+  deliverable: Access-control test evidence.
+  risk_if_wrong: Unauthorized users see sensitive records.
+  next_action: Block release until technical controls are tested.
+  claim_type: governance
+  evidence_topics:
+  - security
+  - data_protection
+- id: Q93
+  category: privacy_security_and_information_governance
+  stakeholder: Privacy engineer
+  question: Can individuals be re-identified from exports or small groups?
+  why_asked: De-identification can fail when records are linkable.
+  answer_key: extended_q93
+  method: Assess direct identifiers, quasi-identifiers, uniqueness, small cells and external linkage risk.
+  required_inputs: Export schema, population sizes and release context.
+  deliverable: Disclosure-risk assessment.
+  risk_if_wrong: A public or shared output exposes individuals.
+  next_action: Aggregate, suppress, perturb or restrict access.
+  claim_type: governance
+  evidence_topics:
+  - privacy
+  - security
+- id: Q94
+  category: privacy_security_and_information_governance
+  stakeholder: Procurement / IG
+  question: What data and model risks arise from third-party vendors?
+  why_asked: Vendor services add subprocessors and opaque changes.
+  answer_key: extended_q94
+  method: Review data flows, hosting, retention, training use, incident terms, model updates and exit plan.
+  required_inputs: Contract, architecture and security evidence.
+  deliverable: Vendor assurance checklist.
+  risk_if_wrong: Data is reused or the service changes without control.
+  next_action: Add contractual controls or reject vendor.
+  claim_type: governance
+  evidence_topics:
+  - privacy
+  - governance
+  - deployment
+- id: Q95
+  category: privacy_security_and_information_governance
+  stakeholder: Audit / safety
+  question: What must be logged for accountability?
+  why_asked: Without logs, decisions and incidents cannot be reconstructed.
+  answer_key: extended_q95
+  method: Log model version, input snapshot, output, user action, override, timestamp and policy version.
+  required_inputs: Decision workflow and retention rules.
+  deliverable: Immutable audit event schema.
+  risk_if_wrong: No one can explain why an action occurred.
+  next_action: Test completeness and tamper resistance.
+  claim_type: governance
+  evidence_topics:
+  - documentation
+  - risk_management
+- id: Q96
+  category: privacy_security_and_information_governance
+  stakeholder: Information governance
+  question: How are data correction and individual rights handled?
+  why_asked: Incorrect data can affect ongoing operational support.
+  answer_key: extended_q96
+  method: Trace corrections through source, marts, predictions and exports; define reprocessing policy.
+  required_inputs: Record identifiers, lineage and correction events.
+  deliverable: Correction and reprocessing runbook.
+  risk_if_wrong: Known errors persist in downstream decisions.
+  next_action: Recompute affected outputs and notify owners.
+  claim_type: governance
+  evidence_topics:
+  - data_protection
+  - data_quality
+- id: Q97
+  category: privacy_security_and_information_governance
+  stakeholder: Security / incident lead
+  question: What happens after a data or model security incident?
+  why_asked: Containment and evidence preservation must be immediate.
+  answer_key: extended_q97
+  method: Define severity, containment, credential rotation, notification, forensic preservation and safe restoration.
+  required_inputs: Incident signals, owners, dependencies and backups.
+  deliverable: Security incident playbook.
+  risk_if_wrong: Response is delayed or destroys evidence.
+  next_action: Exercise the playbook and document lessons.
+  claim_type: governance
+  evidence_topics:
+  - security
+  - risk_management

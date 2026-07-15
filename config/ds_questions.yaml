@@ -1,4 +1,4 @@
-question_set_version: 1.0.0
+question_set_version: 2.0.0
 synthetic_only: true
 includes:
 - ds_questions/01_data_and_metrics.yaml
@@ -7,3 +7,10 @@ includes:
 - ds_questions/04_forecast_and_capacity.yaml
 - ds_questions/05_experimentation.yaml
 - ds_questions/06_governance_and_communication.yaml
+- ds_questions/07_statistical_inference_and_uncertainty.yaml
+- ds_questions/08_causal_inference_and_policy_evaluation.yaml
+- ds_questions/09_model_development_and_validation.yaml
+- ds_questions/10_fairness_safety_and_human_factors.yaml
+- ds_questions/11_production_ml_and_monitoring.yaml
+- ds_questions/12_privacy_security_and_information_governance.yaml
+- ds_questions/13_product_economics_and_implementation.yaml

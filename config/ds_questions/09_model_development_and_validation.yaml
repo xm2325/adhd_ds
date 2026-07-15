@@ -1,0 +1,154 @@
+questions:
+- id: Q59
+  category: model_development_and_validation
+  stakeholder: Data science lead
+  question: Could the model be leaking future information?
+  why_asked: Leakage creates unrealistic performance.
+  answer_key: extended_q59
+  method: Build a feature-availability table at decision time and perform temporal split tests.
+  required_inputs: Feature timestamps, prediction time and outcome time.
+  deliverable: Leakage audit with blocked features.
+  risk_if_wrong: Production performance collapses.
+  next_action: Remove unavailable features and retrain from scratch.
+  claim_type: predictive
+  evidence_topics:
+  - prediction
+  - validation
+- id: Q60
+  category: model_development_and_validation
+  stakeholder: Data scientist
+  question: What train, validation and test split matches deployment?
+  why_asked: Random splits can mix future workflow into training.
+  answer_key: extended_q60
+  method: Use patient-level and temporal separation with a genuinely later test period.
+  required_inputs: Patient IDs, event dates and deployment cadence.
+  deliverable: Split specification and leakage tests.
+  risk_if_wrong: Performance is optimistic and not transportable.
+  next_action: Freeze a later test set before tuning.
+  claim_type: predictive
+  evidence_topics:
+  - validation
+  - prediction
+- id: Q61
+  category: model_development_and_validation
+  stakeholder: Operations / model owner
+  question: How should class imbalance be handled?
+  why_asked: Accuracy can look high while missing most DNA events.
+  answer_key: extended_q61
+  method: Use PR-AUC, calibration, class weighting only when justified, and capacity-based metrics.
+  required_inputs: Event prevalence, predicted probabilities and team capacity.
+  deliverable: Imbalance-aware metric pack.
+  risk_if_wrong: The model optimizes the majority class and provides little operational value.
+  next_action: Select threshold based on workload and consequence.
+  claim_type: predictive
+  evidence_topics:
+  - class_imbalance
+  - precision_recall
+- id: Q62
+  category: model_development_and_validation
+  stakeholder: Data scientist
+  question: Which features are legitimate, stable and actionable?
+  why_asked: Available variables may be proxies, unstable or post-outcome.
+  answer_key: extended_q62
+  method: Assess timing, provenance, missingness, stability, fairness risk and intended action for each feature.
+  required_inputs: Feature dictionary, lineage and monitoring history.
+  deliverable: Feature review register.
+  risk_if_wrong: The model depends on brittle or inappropriate proxies.
+  next_action: Remove or quarantine features that fail review.
+  claim_type: predictive
+  evidence_topics:
+  - prediction
+  - fairness
+  - data_quality
+- id: Q63
+  category: model_development_and_validation
+  stakeholder: Executive / DS lead
+  question: What simple baseline must the model beat?
+  why_asked: Complexity without incremental value is hard to justify.
+  answer_key: extended_q63
+  method: Compare against prevalence, simple rules, logistic regression and naive time-series baselines.
+  required_inputs: Same split, same outcomes and same decision metrics.
+  deliverable: Incremental-value comparison.
+  risk_if_wrong: A complex model wins only against a weak benchmark.
+  next_action: Keep the simplest model that meets decision needs.
+  claim_type: predictive
+  evidence_topics:
+  - baseline
+  - validation
+- id: Q64
+  category: model_development_and_validation
+  stakeholder: Data scientist
+  question: How should hyperparameters be tuned without overfitting?
+  why_asked: Repeated tuning can consume the test set.
+  answer_key: extended_q64
+  method: Use nested or internal cross-validation within training data and one final locked test evaluation.
+  required_inputs: Training folds, tuning space and pre-specified objective.
+  deliverable: Tuning log and final locked evaluation.
+  risk_if_wrong: Test performance becomes part of training.
+  next_action: Reset the test set if it influenced choices.
+  claim_type: predictive
+  evidence_topics:
+  - validation
+  - sample_size
+- id: Q65
+  category: model_development_and_validation
+  stakeholder: Model owner
+  question: Are predicted probabilities calibrated enough for workload decisions?
+  why_asked: Ranking alone cannot support expected workload or benefit calculations.
+  answer_key: extended_q65
+  method: Assess calibration plot, intercept, slope and Brier score; recalibrate on appropriate recent data.
+  required_inputs: Probabilities, outcomes and time period.
+  deliverable: Calibration report and recalibration decision.
+  risk_if_wrong: Expected volumes and benefits are systematically wrong.
+  next_action: Recalibrate or suspend probability-based policies.
+  claim_type: predictive
+  evidence_topics:
+  - calibration
+  - monitoring
+- id: Q66
+  category: model_development_and_validation
+  stakeholder: Clinical / external partner
+  question: Will performance transfer to another site or later period?
+  why_asked: Internal test performance may not generalize.
+  answer_key: extended_q66
+  method: Validate temporally and externally, report case mix, calibration and subgroup performance.
+  required_inputs: Independent site or time period with compatible outcome definition.
+  deliverable: External validation report.
+  risk_if_wrong: Model fails when workflow or population changes.
+  next_action: Do not deploy beyond validated scope.
+  claim_type: predictive
+  evidence_topics:
+  - validation
+  - reporting
+- id: Q67
+  category: model_development_and_validation
+  stakeholder: Data science lead
+  question: Is there enough data to develop and validate this model?
+  why_asked: Too few events create unstable coefficients and optimistic estimates.
+  answer_key: extended_q67
+  method: Plan sample size using outcome prevalence, parameter complexity, anticipated fit and validation precision.
+  required_inputs: Event count, candidate parameters and anticipated R-squared.
+  deliverable: Development and validation sample-size justification.
+  risk_if_wrong: Model instability is hidden by one split.
+  next_action: Reduce complexity or collect more data.
+  claim_type: predictive
+  evidence_topics:
+  - sample_size
+  - prediction
+- id: Q68
+  category: model_development_and_validation
+  stakeholder: Product / DS lead
+  question: Why this model rather than a more complex alternative?
+  why_asked: Model choice must reflect workflow, risk and maintenance.
+  answer_key: extended_q68
+  method: Compare discrimination, calibration, utility, subgroup stability, latency and explainability under the
+    same test.
+  required_inputs: Candidate predictions, operational costs and constraints.
+  deliverable: Model selection decision record.
+  risk_if_wrong: A marginal metric gain creates disproportionate operational risk.
+  next_action: Choose on total decision value, not leaderboard rank.
+  claim_type: predictive
+  evidence_topics:
+  - decision_analysis
+  - prediction
+  - deployment

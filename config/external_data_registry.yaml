@@ -1,0 +1,59 @@
+registry_version: 1.0.0
+datasets:
+- id: NHS_RTT
+  name: Consultant-led Referral to Treatment Waiting Times
+  publisher: NHS England
+  url: https://www.england.nhs.uk/statistics/statistical-work-areas/rtt-waiting-times/
+  grain: Provider, specialty and waiting-time aggregate
+  project_use: External context for waiting-list definitions, long-wait distributions
+    and trend benchmarking.
+  limitations: Not ADHD-specific and may not match private-provider pathways, inclusion
+    rules or case mix.
+- id: MHSDS_MONTHLY
+  name: Mental Health Services Monthly Statistics
+  publisher: NHS England
+  url: https://digital.nhs.uk/data-and-information/publications/statistical/mental-health-services-monthly-statistics
+  grain: Monthly mental-health service activity and access aggregates
+  project_use: Context for mental-health access, activity, demographics and outcome
+    reporting.
+  limitations: Coverage, coding and service scope differ from a specialist ADHD provider.
+- id: GP_APPOINTMENTS
+  name: Appointments in General Practice
+  publisher: NHS England
+  url: https://digital.nhs.uk/data-and-information/publications/statistical/appointments-in-general-practice
+  grain: Appointment activity, mode, staff group and status aggregates
+  project_use: Benchmark appointment status, mode and attendance reporting patterns.
+  limitations: Primary-care workflows and denominators differ from specialist assessment
+    services.
+- id: NHS_WORKFORCE
+  name: NHS Workforce Statistics
+  publisher: NHS England
+  url: https://digital.nhs.uk/data-and-information/publications/statistical/nhs-workforce-statistics
+  grain: Monthly workforce full-time-equivalent and headcount aggregates
+  project_use: External context for staffing, capacity and vacancy assumptions.
+  limitations: National workforce categories do not identify provider-level productive
+    clinical minutes.
+- id: ONS_POPULATION
+  name: Population estimates
+  publisher: Office for National Statistics
+  url: https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationestimates
+  grain: Population by age, sex and geography
+  project_use: Demand-rate denominators and geographic standardisation.
+  limitations: Population denominators do not represent referral eligibility or diagnosed
+    prevalence.
+- id: ENGLISH_IMD
+  name: English indices of deprivation
+  publisher: Ministry of Housing, Communities and Local Government
+  url: https://www.gov.uk/government/collections/english-indices-of-deprivation
+  grain: Small-area relative deprivation indices
+  project_use: Equity and access stratification with careful interpretation.
+  limitations: Area-level measures are not individual socioeconomic status and can
+    create ecological bias.
+- id: NHS_DATA_DICTIONARY
+  name: NHS Data Model and Dictionary
+  publisher: NHS England
+  url: https://www.datadictionary.nhs.uk/
+  grain: National data definitions and business rules
+  project_use: Terminology, event definitions, data types and interoperability review.
+  limitations: Local provider systems may use additional fields and workflow-specific
+    semantics.
