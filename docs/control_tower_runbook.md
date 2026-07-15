@@ -33,3 +33,7 @@ Thresholds are declared in `config/operations.yaml`. They are demonstration valu
 ## Anomaly interpretation
 
 Weekly anomalies use a rolling median and median absolute deviation. They are resistant to a small number of extreme observations but do not adjust for holidays, policy changes, data refresh failures, or service redesign. Every alert requires source and workflow checks before a business explanation is accepted.
+
+## v0.5 audit and service-layer checks
+
+Before the daily huddle, confirm that both the data-contract and coded data-quality gates passed. Record the run ID used in the meeting. If a red control or anomaly is discussed, link the decision to the corresponding incident record. Patient-level API endpoints must be restricted to operational roles and should return only the minimum fields needed for the action.

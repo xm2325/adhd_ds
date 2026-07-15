@@ -9,3 +9,7 @@ def test_full_pipeline(built_project):
     assert (target / "results/experiment_design.csv").exists()
     assert (target / "results/service_level_status.csv").exists()
     assert summary["pareto_resource_plans"] >= 1
+    assert summary["contract_rules_failed"] == 0
+    assert (target / "results/run_manifest.json").exists()
+    assert (target / "results/queue_policy_comparison.csv").exists()
+    assert (target / "results/incident_register.csv").exists()

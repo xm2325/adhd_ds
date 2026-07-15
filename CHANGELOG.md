@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.5.0 — auditable service layer and data contracts
+
+- Added versioned source-table contracts with blocking schema, key, type, row-count, nullability, and allowed-value rules.
+- Added source SHA-256 fingerprints and a run manifest containing config hashes, package version, output hashes, and replay command.
+- Added a FastAPI service with aggregate endpoints and a restricted, field-minimised appointment-support endpoint.
+- Added four same-capacity operational queue policies and comparison metrics for wait and group-selection gaps.
+- Added run-linked incident records with owners, playbooks, and rollback triggers.
+- Added source-to-decision lineage evidence.
+- Added an Audit and service API dashboard workspace.
+- Expanded automated tests to cover contracts, fingerprints, manifests, incidents, queue policies, and API access behaviour.
+
 ## 0.4.0 — operations control tower and pilot planning
 
 - Added green/amber/red service-level controls.
