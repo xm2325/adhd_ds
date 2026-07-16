@@ -1,0 +1,44 @@
+name: apply-v08-transparent-patches
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    if: github.head_ref == 'agent/resilience-lab-v08'
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/resilience-lab-v08
+          fetch-depth: 0
+          show-progress: false
+      - name: Validate transparent patches
+        run: |
+          set -euxo pipefail
+          echo "cf1143a214870cf3fb725ae3dc249b9f5c8cde55895ec74d9e57bb08c4c58aaf  .v08_patch/orchestrator.patch" | sha256sum -c -
+          echo "f578555fb5ccab77cde5e26cd92d06aacf6b984dd124a7939349d15f4482b88c  .v08_patch/ci.patch" | sha256sum -c -
+          echo "9b71ae458b8abaee73e389fd46d5baf92dd4a4aea2c1f67ad757462ae01f7863  .v08_patch/changelog.patch" | sha256sum -c -
+          echo "ba0d07fdcbea1af4cb48654bf397e7be6bba59b90814e4018bf3e9bd741a307f  .v08_patch/readme.patch" | sha256sum -c -
+          git apply --check .v08_patch/orchestrator.patch
+          git apply --check .v08_patch/ci.patch
+          git apply --check .v08_patch/changelog.patch
+          git apply --check .v08_patch/readme.patch
+      - name: Apply and commit remaining v0.8 source
+        run: |
+          set -euxo pipefail
+          git apply .v08_patch/orchestrator.patch
+          git apply .v08_patch/ci.patch
+          git apply .v08_patch/changelog.patch
+          git apply .v08_patch/readme.patch
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .github/workflows/ci.yml CHANGELOG.md README.md src/adhd_ops/orchestrator.py
+          git diff --cached --quiet && { echo "no source changes"; exit 1; }
+          git commit -m "Complete v0.8 resilience integration"
+          git push origin HEAD:agent/resilience-lab-v08
