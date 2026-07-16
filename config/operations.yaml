@@ -77,22 +77,22 @@ role_profiles:
   executive:
     label: Executive
     default_view: command
-    allowed_views: [command, impact, optimisation, governance, audit, scenario]
+    allowed_views: [command, impact, optimisation, governance, audit, scenario, evidence, resilience]
     patient_level_access: false
   operations:
     label: Operations
     default_view: command
-    allowed_views: [command, pathway, capacity, impact, optimisation, governance, audit, scenario]
+    allowed_views: [command, pathway, capacity, impact, optimisation, governance, audit, scenario, evidence, resilience]
     patient_level_access: true
   patient_support:
     label: Patient support
     default_view: attendance
-    allowed_views: [attendance, pathway, optimisation, scenario]
+    allowed_views: [attendance, pathway, optimisation, scenario, resilience]
     patient_level_access: true
   data_model:
     label: Data and model
     default_view: governance
-    allowed_views: [command, capacity, attendance, impact, optimisation, governance, audit, scenario]
+    allowed_views: [command, capacity, attendance, impact, optimisation, governance, audit, scenario, evidence, resilience]
     patient_level_access: false
 
 queue_policy:
