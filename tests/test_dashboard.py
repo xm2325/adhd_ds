@@ -27,6 +27,10 @@ def test_interactive_dashboard_contains_operational_views(built_project):
         "Evidence-backed methods and decision readiness",
         "Method selection matrix",
         "KPI uncertainty",
+        "Operational resilience and incident simulation",
+        "Incident exercise console",
+        "Stress-test risk frontier",
+        "Early-warning exercise",
         "window.DASHBOARD_DATA=",
     ]:
         assert marker in html
@@ -49,3 +53,7 @@ def test_interactive_dashboard_contains_operational_views(built_project):
     assert "renderEvidenceLab" in html
     assert "window.EVIDENCE_DATA=" in html
     assert "evidenceCoverageChart" in html
+    assert "renderResilienceLab" in html
+    assert "window.RESILIENCE_DATA=" in html
+    assert "stressFrontierChart" in html
+    assert "earlyWarningChart" in html
