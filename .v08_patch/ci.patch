@@ -1,0 +1,85 @@
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+index 39ef48d..e48a152 100644
+--- a/.github/workflows/ci.yml
++++ b/.github/workflows/ci.yml
+@@ -50,6 +50,13 @@ jobs:
+           test -s results/method_selection_matrix.csv
+           test -s results/kpi_uncertainty.csv
+           test -s results/subgroup_reliability.csv
++          test -s results/incident_simulation_results.csv
++          test -s results/incident_timeline.csv
++          test -s results/stress_test_summary.csv
++          test -s results/stress_test_samples.csv
++          test -s results/early_warning_signals.csv
++          test -s results/response_decision_matrix.csv
++          test -s results/resilience_scorecard.csv
+           test -s reports/evidence_backed_ds_handbook.md
+           grep -q "Data scientist scenario lab" reports/operations_dashboard.html
+           grep -q "Root-cause triage scorecard" reports/operations_dashboard.html
+@@ -57,6 +64,8 @@ jobs:
+           grep -q "Q106" reports/ds_question_casebook.md
+           grep -q "Evidence-backed methods and decision readiness" reports/operations_dashboard.html
+           grep -q "renderEvidenceLab" reports/operations_dashboard.html
++          grep -q "Operational resilience and incident simulation" reports/operations_dashboard.html
++          grep -q "renderResilienceLab" reports/operations_dashboard.html
+           python - <<'PY'
+           from pathlib import Path
+           from fastapi.testclient import TestClient
+@@ -70,33 +79,39 @@ jobs:
+           assert len(client.get('/v1/evidence').json()) >= 30
+           assert len(client.get('/v1/evidence/coverage').json()) >= 13
+           assert client.get('/v1/statistics/kpi-uncertainty').status_code == 200
++          assert len(client.get('/v1/resilience/incidents').json()) == 12
++          assert len(client.get('/v1/resilience/stress-tests').json()) == 5
++          assert client.get('/v1/resilience/early-warning?signal=red').status_code == 200
++          assert len(client.get('/v1/resilience/scorecard?status=pass').json()) >= 8
+           assert client.get('/v1/appointment-support').status_code == 403
+           assert client.get('/v1/appointment-support?limit=1', headers={'X-Role':'operations'}).status_code == 200
+ 
+           html = Path('reports/operations_dashboard.html').read_text(encoding='utf-8')
+           for marker, output in [
+-              ('<script>\nwindow.SCENARIO_DATA=', '/tmp/scenario_v07.js'),
+-              ('<script>\nwindow.EVIDENCE_DATA=', '/tmp/evidence_v07.js'),
++              ('<script>\nwindow.SCENARIO_DATA=', '/tmp/scenario_v08.js'),
++              ('<script>\nwindow.EVIDENCE_DATA=', '/tmp/evidence_v08.js'),
++              ('<script>\nwindow.RESILIENCE_DATA=', '/tmp/resilience_v08.js'),
+           ]:
+               start = html.rfind(marker)
+               end = html.find('</script>', start)
+               Path(output).write_text(html[start + 8:end], encoding='utf-8')
+           PY
+-          node --check /tmp/scenario_v07.js
+-          node --check /tmp/evidence_v07.js
++          node --check /tmp/scenario_v08.js
++          node --check /tmp/evidence_v08.js
++          node --check /tmp/resilience_v08.js
+       - name: Publish workflow summary
+         run: |
+-          echo "## ADHD DS v0.7 build" >> "$GITHUB_STEP_SUMMARY"
++          echo "## ADHD DS v0.8 build" >> "$GITHUB_STEP_SUMMARY"
+           echo "- Python tests and JavaScript checks passed" >> "$GITHUB_STEP_SUMMARY"
+-          echo "- Ten-workspace interactive dashboard generated" >> "$GITHUB_STEP_SUMMARY"
++          echo "- Eleven-workspace interactive dashboard generated" >> "$GITHUB_STEP_SUMMARY"
+           echo "- 106-question evidence-backed DS handbook generated" >> "$GITHUB_STEP_SUMMARY"
+-          echo "- Contracts, uncertainty, evidence coverage, API access and run manifest checked" >> "$GITHUB_STEP_SUMMARY"
++          echo "- Contracts, uncertainty, evidence coverage, resilience exercises, API access and run manifest checked" >> "$GITHUB_STEP_SUMMARY"
+           echo "- All data, costs, effects, identifiers and results are synthetic" >> "$GITHUB_STEP_SUMMARY"
+       - name: Upload compact review pack
+         uses: actions/upload-artifact@v4
+         continue-on-error: true
+         with:
+-          name: adhd-ds-v07-review-pack
++          name: adhd-ds-v08-review-pack
+           retention-days: 7
+           compression-level: 9
+           path: |
+@@ -122,3 +137,9 @@ jobs:
+             results/kpi_uncertainty.csv
+             results/subgroup_reliability.csv
+             reports/evidence_backed_ds_handbook.md
++            results/incident_simulation_results.csv
++            results/incident_timeline.csv
++            results/stress_test_summary.csv
++            results/early_warning_signals.csv
++            results/response_decision_matrix.csv
++            results/resilience_scorecard.csv
