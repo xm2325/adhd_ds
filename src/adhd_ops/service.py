@@ -25,7 +25,7 @@ def _read_json(path: Path) -> dict:
 def create_app(root: str | Path | None = None) -> FastAPI:
     project_root = Path(root or os.getenv("ADHD_DS_ROOT", ".")).resolve()
     results = project_root / "results"
-    app = FastAPI(title="ADHD DS synthetic operations API", version="0.7.0")
+    app = FastAPI(title="ADHD DS synthetic operations API", version="0.8.0")
 
     @app.get("/health")
     def health() -> dict:
@@ -108,6 +108,26 @@ def create_app(root: str | Path | None = None) -> FastAPI:
     def subgroup_reliability(status: str | None = None) -> list[dict]:
         rows = _records(results / "subgroup_reliability.csv")
         return [row for row in rows if status is None or row.get("reliability_status") == status]
+
+    @app.get("/v1/resilience/incidents")
+    def resilience_incidents(severity: str | None = None) -> list[dict]:
+        rows = _records(results / "incident_simulation_results.csv")
+        return [row for row in rows if severity is None or row.get("severity") == severity]
+
+    @app.get("/v1/resilience/stress-tests")
+    def resilience_stress_tests(policy: str | None = None) -> list[dict]:
+        rows = _records(results / "stress_test_summary.csv")
+        return [row for row in rows if policy is None or row.get("policy") == policy]
+
+    @app.get("/v1/resilience/early-warning")
+    def resilience_early_warning(signal: str | None = None) -> list[dict]:
+        rows = _records(results / "early_warning_signals.csv")
+        return [row for row in rows if signal is None or row.get("signal") == signal]
+
+    @app.get("/v1/resilience/scorecard")
+    def resilience_scorecard(status: str | None = None) -> list[dict]:
+        rows = _records(results / "resilience_scorecard.csv")
+        return [row for row in rows if status is None or row.get("status") == status]
 
     @app.get("/v1/appointment-support")
     def appointment_support(
