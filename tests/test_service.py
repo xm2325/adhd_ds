@@ -42,3 +42,7 @@ def test_api_exposes_ds_questions_and_diagnostics(built_project):
     assert len(client.get("/v1/evidence").json()) >= 30
     assert len(client.get("/v1/evidence/coverage").json()) >= 13
     assert client.get("/v1/statistics/kpi-uncertainty").status_code == 200
+    assert len(client.get("/v1/resilience/incidents").json()) == 12
+    assert len(client.get("/v1/resilience/stress-tests").json()) == 5
+    assert client.get("/v1/resilience/early-warning?signal=red").status_code == 200
+    assert len(client.get("/v1/resilience/scorecard?status=pass").json()) >= 8
