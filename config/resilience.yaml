@@ -1,0 +1,225 @@
+# Synthetic portfolio controls. These are not provider SLAs or clinical safety thresholds.
+resilience_version: 1.0.0
+seed: 20260716
+stress_test:
+  simulations: 1000
+  horizon_weeks: 12
+  demand_shock_mean: 0.10
+  demand_shock_sd: 0.10
+  capacity_shock_mean: -0.05
+  capacity_shock_sd: 0.07
+  dna_shock_mean: 0.00
+  dna_shock_sd: 0.03
+  backlog_red_threshold: 1200
+  policies:
+    - policy: no_action
+      extra_assessment_minutes_per_week: 0
+      outreach_contacts_per_week: 0
+    - policy: outreach_only
+      extra_assessment_minutes_per_week: 0
+      outreach_contacts_per_week: 100
+    - policy: one_extra_clinic
+      extra_assessment_minutes_per_week: 540
+      outreach_contacts_per_week: 0
+    - policy: combined_response
+      extra_assessment_minutes_per_week: 540
+      outreach_contacts_per_week: 100
+    - policy: surge_protocol
+      extra_assessment_minutes_per_week: 1080
+      outreach_contacts_per_week: 200
+early_warning:
+  ewma_lambda: 0.30
+  control_limit_width: 2.70
+  future_weeks: 12
+  injected_shift_week: 5
+  injected_demand_shift: 18
+incident_scenarios:
+  - scenario_id: INC-SIM-001
+    incident_type: source_freshness
+    title: Referral feed arrives 36 hours late
+    affected_asset: referral ingestion
+    severity: P1
+    observed_value: 36
+    threshold: 24
+    unit: hours
+    detection_method: freshness contract
+    immediate_action: block publication and use the last approved aggregate pack
+    owner_role: data engineering
+    escalation_route: Head of Data and service operations lead
+    rollback_or_fallback: restore the last validated source snapshot
+    evidence_boundary: Simulated freshness breach; no real source outage is represented.
+  - scenario_id: INC-SIM-002
+    incident_type: duplicate_keys
+    title: Duplicate referral identifiers reach 3%
+    affected_asset: referral table
+    severity: P1
+    observed_value: 0.03
+    threshold: 0.005
+    unit: proportion
+    detection_method: primary-key contract
+    immediate_action: stop metric publication and quarantine the affected batch
+    owner_role: data engineering
+    escalation_route: Data product owner
+    rollback_or_fallback: replay the previous clean batch after deduplication review
+    evidence_boundary: Synthetic duplicate rate used to exercise a blocking contract.
+  - scenario_id: INC-SIM-003
+    incident_type: schema_drift
+    title: Unknown appointment status appears in 5% of rows
+    affected_asset: appointment outcome feed
+    severity: P1
+    observed_value: 0.05
+    threshold: 0.0
+    unit: proportion
+    detection_method: allowed-value contract
+    immediate_action: block downstream DNA and utilisation metrics
+    owner_role: data engineering
+    escalation_route: Source system owner and analytics lead
+    rollback_or_fallback: map only after signed definition approval; otherwise use prior release
+    evidence_boundary: The unknown category is injected and has no provider-specific meaning.
+  - scenario_id: INC-SIM-004
+    incident_type: demand_surge
+    title: Referrals rise 25% for the planning horizon
+    affected_asset: capacity plan
+    severity: P2
+    observed_value: 0.25
+    threshold: 0.10
+    unit: proportion
+    detection_method: EWMA demand warning plus forecast scenario
+    immediate_action: open surge-capacity review and publish uncertainty range
+    owner_role: operations analytics
+    escalation_route: Service operations director
+    rollback_or_fallback: revert temporary capacity only after demand returns within control limits
+    evidence_boundary: Scenario response is not a forecast or staffing commitment.
+  - scenario_id: INC-SIM-005
+    incident_type: capacity_loss
+    title: Available clinical capacity falls 20%
+    affected_asset: assessment capacity
+    severity: P1
+    observed_value: 0.20
+    threshold: 0.10
+    unit: proportion
+    detection_method: roster-to-capacity reconciliation
+    immediate_action: reforecast backlog and activate declared surge options
+    owner_role: clinical operations
+    escalation_route: Clinical operations director
+    rollback_or_fallback: manual scheduling plan with protected urgent-care process
+    evidence_boundary: Synthetic capacity loss; clinical priority is outside this model.
+  - scenario_id: INC-SIM-006
+    incident_type: calibration_drift
+    title: Attendance-model calibration gap reaches 10 percentage points
+    affected_asset: attendance support model
+    severity: P1
+    observed_value: 0.10
+    threshold: 0.05
+    unit: proportion
+    detection_method: monthly observed-versus-predicted calibration
+    immediate_action: suspend model-led prioritisation and retain standard reminders
+    owner_role: model owner
+    escalation_route: Head of Data Science and service safety lead
+    rollback_or_fallback: previous approved policy or non-model workflow
+    evidence_boundary: A synthetic gap demonstrates a suspension trigger, not model harm.
+  - scenario_id: INC-SIM-007
+    incident_type: feature_missingness
+    title: A required serving feature is missing for 30% of appointments
+    affected_asset: online feature pipeline
+    severity: P1
+    observed_value: 0.30
+    threshold: 0.10
+    unit: proportion
+    detection_method: serving-feature completeness monitor
+    immediate_action: enter visible degraded mode and stop personalised ranking
+    owner_role: ML engineering
+    escalation_route: Model owner and data engineering lead
+    rollback_or_fallback: rules-based standard reminder process
+    evidence_boundary: Missingness is injected; no real patient records are affected.
+  - scenario_id: INC-SIM-008
+    incident_type: subgroup_harm_signal
+    title: Under-18 calibration gap reaches 12 percentage points
+    affected_asset: subgroup model performance
+    severity: P1
+    observed_value: 0.12
+    threshold: 0.05
+    unit: proportion
+    detection_method: subgroup reliability and calibration monitor
+    immediate_action: suspend subgroup-specific use and conduct safety review
+    owner_role: model governance
+    escalation_route: Clinical safety and equality review
+    rollback_or_fallback: common non-model support policy
+    evidence_boundary: This is a statistical signal requiring review, not proof of discrimination or harm.
+  - scenario_id: INC-SIM-009
+    incident_type: experiment_guardrail
+    title: Late-cancellation rate increases by 4 percentage points
+    affected_asset: reminder pilot
+    severity: P1
+    observed_value: 0.04
+    threshold: 0.02
+    unit: proportion
+    detection_method: pre-specified experiment guardrail
+    immediate_action: pause treatment assignment and review adverse workflow substitution
+    owner_role: experiment owner
+    escalation_route: Product, operations and safety review group
+    rollback_or_fallback: return all eligible appointments to standard communication
+    evidence_boundary: Synthetic guardrail breach; no causal adverse effect is estimated.
+  - scenario_id: INC-SIM-010
+    incident_type: service_latency
+    title: Prediction API p95 latency reaches 900 ms
+    affected_asset: decision-support API
+    severity: P2
+    observed_value: 0.90
+    threshold: 0.50
+    unit: seconds
+    detection_method: service-level telemetry
+    immediate_action: switch to cached or batch output and investigate dependencies
+    owner_role: platform engineering
+    escalation_route: Engineering incident commander
+    rollback_or_fallback: previous stable service image or no-model workflow
+    evidence_boundary: Synthetic latency exercise; the portfolio API is not a production service.
+  - scenario_id: INC-SIM-011
+    incident_type: audit_gap
+    title: Eight percent of decision events lack an audit record
+    affected_asset: decision audit log
+    severity: P0
+    observed_value: 0.08
+    threshold: 0.0
+    unit: proportion
+    detection_method: decision-to-audit reconciliation
+    immediate_action: stop decision automation and preserve available logs
+    owner_role: information governance
+    escalation_route: Senior responsible owner and security lead
+    rollback_or_fallback: manual reviewed decisions with contemporaneous records
+    evidence_boundary: Synthetic audit gap used to demonstrate a fail-closed control.
+  - scenario_id: INC-SIM-012
+    incident_type: metric_definition_change
+    title: Waiting-time definition changes without approval
+    affected_asset: executive KPI layer
+    severity: P1
+    observed_value: 1
+    threshold: 0
+    unit: unapproved_changes
+    detection_method: metric-contract hash comparison
+    immediate_action: block publication and produce an old-versus-new definition bridge
+    owner_role: analytics governance
+    escalation_route: Metric owner and executive sponsor
+    rollback_or_fallback: restore the last approved metric contract
+    evidence_boundary: Definition sensitivity is descriptive and does not identify service deterioration.
+response_levels:
+  - severity: P0
+    acknowledgement_minutes: 15
+    containment_hours: 1
+    target_resolution_hours: 4
+    required_decision: stop automation and invoke senior incident command
+  - severity: P1
+    acknowledgement_minutes: 30
+    containment_hours: 4
+    target_resolution_hours: 24
+    required_decision: block, suspend or roll back the affected decision path
+  - severity: P2
+    acknowledgement_minutes: 120
+    containment_hours: 8
+    target_resolution_hours: 72
+    required_decision: degrade visibly, investigate and monitor
+  - severity: P3
+    acknowledgement_minutes: 480
+    containment_hours: 24
+    target_resolution_hours: 120
+    required_decision: record, prioritise and resolve through normal change control
