@@ -4,18 +4,20 @@ An evidence-backed synthetic healthcare data-science platform showing how an ADH
 
 > **Synthetic demonstration only.** The repository contains no real patient or company data and is not affiliated with Care ADHD or another provider. All costs, thresholds, effects, identifiers and results are portfolio assumptions.
 
-## v0.7: evidence-backed DS operating handbook
+## v0.8: operational resilience and incident simulation
 
-Version 0.7 expands the project from a 42-question scenario lab to a **106-question, 13-category operating handbook**. Each question is attached to:
+Version 0.8 turns the evidence-backed handbook into an **operational resilience and incident simulation platform**. It retains the 106-question, 13-category casebook and adds:
 
-- a run-specific synthetic answer;
-- one or more generated project data products;
-- peer-reviewed methods papers, reporting guidelines or official standards;
-- an explicit claim type: descriptive, inferential, predictive, scenario, causal, safety, operational, governance or decision;
-- a decision-readiness state and evidence gap;
-- a named output, risk if wrong and next action.
+- 12 deterministic data, model, fairness, experiment, capacity, service and audit incident exercises;
+- P0–P3 acknowledgement, containment and target-resolution decisions;
+- fail-closed publication controls and visible non-model degraded modes;
+- 1,000-draw Monte Carlo stress tests for five capacity and outreach response policies;
+- mean, P90 and CVaR95 backlog risk plus probability of exceeding a declared red threshold;
+- an EWMA early-warning exercise with an injected demand shift;
+- named owners, escalation routes, rollback paths, human-approval gates and evidence boundaries;
+- an eleventh dashboard workspace and resilience API endpoints.
 
-The build fails when a question has no literature support or no project-data support.
+Every incident exercise cites methods or standards already held in the evidence registry. The sources support the control design; they do not validate the injected values, provider-specific impact or portfolio response targets.
 
 ## Question coverage
 
@@ -33,7 +35,7 @@ The build fails when a question has no literature support or no project-data sup
 12. Privacy, security and information governance
 13. Product economics and implementation
 
-## Ten connected dashboard workspaces
+## Eleven connected dashboard workspaces
 
 1. Operations command centre
 2. Patient pathway
@@ -45,8 +47,9 @@ The build fails when a question has no literature support or no project-data sup
 8. Audit and service API
 9. Data scientist scenario lab
 10. Evidence and methods
+11. Operational resilience lab
 
-The tenth workspace includes literature coverage, method selection, KPI uncertainty, subgroup reliability, evidence gaps and official external-data sources.
+The eleventh workspace adds incident selection, severity and SLA decisions, stress-test risk frontiers, EWMA early warning and a resilience control scorecard.
 
 ## Main evidence outputs
 
@@ -62,7 +65,11 @@ The tenth workspace includes literature coverage, method selection, KPI uncertai
 | `results/method_selection_matrix.csv` | Decision question → method → assumptions → avoid rules |
 | `results/kpi_uncertainty.csv` | KPI point estimates with 95% intervals |
 | `results/subgroup_reliability.csv` | Sample size, event count, intervals and reliability status |
-| `reports/operations_dashboard.html` | Self-contained ten-workspace interactive dashboard |
+| `results/incident_simulation_results.csv` | Detection, severity, response, ownership, fallback and evidence boundary for 12 exercises |
+| `results/stress_test_summary.csv` | Monte Carlo mean, P90, CVaR95, red-threshold probability and cost proxy by policy |
+| `results/early_warning_signals.csv` | EWMA control-limit exercise after an injected demand shift |
+| `results/resilience_scorecard.csv` | Control-presence checks for fail-closed, suspension, fallback, ownership and human approval |
+| `reports/operations_dashboard.html` | Self-contained eleven-workspace interactive dashboard |
 
 All v0.6 diagnostic, audit, model, capacity and experiment outputs remain.
 
@@ -81,7 +88,10 @@ The fixed-seed build produces:
 - median referral-to-assessment time of 71.12 days and P90 of 93.92 days;
 - capacity pressure as the strongest descriptive diagnostic hypothesis;
 - baseline 12-week backlog of approximately 1,122 patients;
-- logistic-regression champion PR-AUC of 0.364 and Brier score of 0.095.
+- logistic-regression champion PR-AUC of 0.364 and Brier score of 0.095;
+- 12 synthetic incident exercises and nine resilience control-presence checks;
+- 5,000 stress-test simulations across five response policies;
+- a deterministic EWMA warning after the injected referral-demand shift.
 
 These values test the software and analytical logic. They are not estimates for a real provider.
 
@@ -130,6 +140,10 @@ GET /v1/evidence/coverage
 GET /v1/evidence/gaps
 GET /v1/statistics/kpi-uncertainty
 GET /v1/statistics/subgroup-reliability
+GET /v1/resilience/incidents
+GET /v1/resilience/stress-tests
+GET /v1/resilience/early-warning
+GET /v1/resilience/scorecard
 GET /v1/diagnostics/root-causes
 GET /v1/appointment-support
 ```
@@ -145,15 +159,17 @@ The patient-level endpoint remains restricted to declared operational roles and 
 - Small subgroup estimates may be unreliable even when aggregate performance is stable.
 - Scenario savings are conditional planning outputs, not realised financial impact.
 - External NHS aggregates are contextual benchmarks, not automatically comparable controls.
+- Stress-test distributions, thresholds, costs and response targets are synthetic assumptions rather than forecasts or provider SLAs.
+- A control-presence pass is not production assurance; real tabletop, failover, restore and rollback exercises remain necessary.
 - Real deployment requires managed identity, clinical safety, information governance, human-factors evaluation and ongoing monitoring.
 
 ## Repository map
 
 ```text
-config/                  contracts, questions, evidence and external-data registries
+config/                  contracts, questions, evidence, resilience and external-data registries
 docs/                    metric, evidence, API, safety and operating guidance
 sql/                     Microsoft SQL Server warehouse and diagnostic examples
-src/adhd_ops/            analytics, evidence, diagnostics, API and dashboard modules
+src/adhd_ops/            analytics, evidence, diagnostics, resilience, API and dashboard modules
 tests/                   data, evidence, model, API, workflow and dashboard tests
 results/                 generated analytical, evidence and audit products
 reports/                 generated dashboards, casebooks and management packs
